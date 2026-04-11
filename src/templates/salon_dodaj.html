@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dodajanje v sistem</h1>
+<form method="POST">
+    <label>Izberi tip:</label>
+    <select name="tip" id="tip-select" onchange="toggleFields()">
+        <option value="stranka">Stranka</option>
+        <option value="frizer">Frizer</option>
+    </select><br><br>
+
+    Ime: <input type="text" name="ime" required><br>
+
+    <div id="stranka-fields">
+        Priimek: <input type="text" name="priimek"><br>
+        Email: <input type="email" name="mail"><br>
+        Telefon: <input type="text" name="telefon"><br>
+        Najljubši frizer:
+        <select name="id_naj_frizer">
+            <option value="">-- Ni izbire --</option>
+            {% for f in frizerji %}
+            <option value="{{ f[0] }}">{{ f[2] }}</option>
+            {% endfor %}
+        </select><br>
+    </div>
+
+    <div id="frizer-fields" style="display:none;">
+        Kontakt: <input type="text" name="kontakt"><br>
+        Salon:
+        <select name="salon_id">
+            <option value="">-- Ni izbire --</option>
+            {% for s in saloni %}
+            <option value="{{ s[0] }}">{{ s[1] }}</option>
+            {% endfor %}
+        </select><br>
+    </div>
+
+    <br><input type="submit" value="Shrani v bazo">
+</form>
+
+<script>
+    function toggleFields() {
+        var tip = document.getElementById('tip-select').value;
+        document.getElementById('stranka-fields').style.display = (tip === 'stranka') ? 'block' : 'none';
+        document.getElementById('frizer-fields').style.display = (tip === 'frizer') ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

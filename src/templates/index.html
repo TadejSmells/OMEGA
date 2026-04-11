@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Sistem za upravljanje frizerskega salona</h1>
+    
+    <h3>Administracija</h3>
+    <ul>
+        <li>[SISTEM] <a href="/setup">Nastavi/Osveži tabele baze</a></li>
+    </ul>
+
+    <h3>Upravljanje salona</h3>
+    <ul>
+        <li><a href="/salon">Pregled (Frizerji, Stranke, Rezervacije)</a></li>
+        <li><a href="/salon/dodaj">Dodaj novega frizerja ali stranko</a></li>
+        <li><a href="/salon/rezerviraj">Naroči stranko na termin</a></li>
+    </ul>
+
+    <hr>
+{% endblock %}

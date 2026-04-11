@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Urnik{% endblock %}
+{% block content %}
+<h1>Upravljanje urnika</h1>
+
+<h2>Dodaj termin</h2>
+<form method="POST">
+    Frizer:
+    <select name="frizer_id">
+        {% for f in frizerji %}
+        <option value="{{ f[0] }}">{{ f[2] }}</option>
+        {% endfor %}
+    </select><br>
+    Dan: <input type="date" name="dan" required><br>
+    Ura: <input type="time" name="ura" required><br>
+    <br><input type="submit" value="Dodaj termin">
+</form>
+
+<hr>
+
+<h2>Urnik</h2>
+<table border="1" style="width:100%; border-collapse: collapse;">
+    <tr><th>Frizer</th><th>Dan</th><th>Ura</th></tr>
+    {% for u in urnik %}
+    <tr><td>{{ u[0] }}</td><td>{{ u[1] }}</td><td>{{ u[2] }}</td></tr>
+    {% else %}
+    <tr><td colspan="3">Urnik je prazen.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
