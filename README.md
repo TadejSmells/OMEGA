@@ -6,10 +6,15 @@ Projekt Omega (Managment frizerskih salonov)
 Kako zagnati ta projekt:
 
 
-1. kloniraj reposetorij na računalnik
+0. Nujno rabi bit na računalniku PREJ nameščeno:
+          - Docker Engine
+          - VsCode
+
+
+2. kloniraj reposetorij na računalnik
        git clone https://github.com/TadejSmells/OMEGA
 
-2. v root mapi projekta (torej tam kjer vidis DockerFile, dockercompose...) odpreš terminal in zaženeš ukaz:
+3. v root mapi projekta (torej tam kjer vidis DockerFile, dockercompose...) odpreš terminal in zaženeš ukaz:
        docker compose up --build
-3. v brskalniku odpreš http://localhost:8080/
-4. klikneš na  [SISTEM] Nastavi/Osveži tabele baze, da postaviš bazo
+4. v brskalniku odpreš http://localhost:8080/
+5. klikneš na  [SISTEM] Nastavi/Osveži tabele baze, da postaviš bazo
