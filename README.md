@@ -7,7 +7,7 @@ Kako zagnati ta projekt:
 
 
 0. Nujno rabi bit na računalniku PREJ nameščeno:
-          - Docker Engine
+          - Docker Desktop
           - VsCode
 
 
