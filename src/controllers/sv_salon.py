@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect
 from models import model_salon
+  # was: from models import model_salon
 
 
 def pregled():
