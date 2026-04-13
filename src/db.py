@@ -1,11 +1,19 @@
-import os
-import psycopg2
+# db.py
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-def get_connection():
-    conn = psycopg2.connect(
-        dbname = os.environ['DBNAME'],
-        user = os.environ['DBUSER'],
-        password = os.environ['DBPASS'],
-        host = os.environ['DBHOST']
-    )
-    return conn
+import os
+
+
+DATABASE_URL = (
+    f"postgresql+psycopg2://"
+    f"{os.getenv('DBUSER')}:{os.getenv('DBPASS')}"
+    f"@{os.getenv('DBHOST', 'localhost')}:{os.getenv('DBPORT', '5432')}"
+    f"/{os.getenv('DBNAME')}"
+)
+
+engine = create_engine(DATABASE_URL, echo=False)
+Session = sessionmaker(bind=engine)
+
+def get_session():
+    return Session()
