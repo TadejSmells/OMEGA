@@ -1,23 +1,26 @@
+version: "3.9"
+
 services:
 
   db:
-    image: postgres
+    image: postgres:18
     restart: always
     environment:
-      POSTGRES_PASSWORD: ${DBPASS:?db password not set}
-      POSTGRES_USER: ${DBUSER:?db user not set}
-      POSTGRES_DB: ${DBNAME:?db name not set}
+      POSTGRES_USER: ${DBUSER}
+      POSTGRES_PASSWORD: ${DBPASS}
+      POSTGRES_DB: ${DBNAME}
     volumes:
       - postgres-data:/var/lib/postgresql
+      - ./src/creation.sql:/docker-entrypoint-initdb.d/creation.sql
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DBUSER} -d ${DBNAME}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${DBUSER} -d ${DBNAME}"]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
       - postgres-net
-    ports: 
-      - 5432:5432
+    ports:
+      - "5432:5432"
 
   web-app:
     build: .
@@ -32,11 +35,10 @@ services:
         condition: service_healthy
     networks:
       - postgres-net
-    command: [ "gunicorn", "--bind", "0.0.0.0:5000", "--reload", "app:f_app" ]
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--reload", "app:f_app"]
 
 volumes:
   postgres-data:
-
 
 networks:
   postgres-net:
