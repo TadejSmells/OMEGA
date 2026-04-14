@@ -51,5 +51,10 @@ def urnik():
     return controllers.sv_salon.urnik()
 
 
+@f_app.get('/stranke')
+def stranke_page():
+    return controllers.index.stranke()
+
+
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)

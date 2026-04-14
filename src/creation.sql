@@ -50,6 +50,11 @@ CREATE TABLE IF NOT EXISTS public.stranka
     CONSTRAINT stranka_pkey PRIMARY KEY (id_stranke)
 );
 
+INSERT INTO stranka (ime, priimek, mail, telefon) VALUES
+('Damjan', 'Test', 'test@test.com', '123456'),
+('Simon', 'Test1', 'test@test.com', '323456'),
+('Jonatan', 'Test2', 'test@test.com', '2443456');
+
 CREATE TABLE IF NOT EXISTS public.urnik
 (
     id_frizerja integer,

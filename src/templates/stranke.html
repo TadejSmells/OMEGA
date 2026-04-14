@@ -1,0 +1,7 @@
+<h2>Seznam strank</h2>
+
+<select>
+    {% for s in stranke %}
+        <option>{{ s.ime }} {{ s.priimek }}</option>
+    {% endfor %}
+</select>

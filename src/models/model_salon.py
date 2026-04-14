@@ -1,5 +1,5 @@
 from db import get_session, engine
-from models import Base, Frizer, Stranka, Rezervacija, Salon, Storitev, Urnik
+from models.models import Base, Frizer, Stranka, Rezervacija, Salon, Storitev, Urnik
 
 def setup_db():
     Base.metadata.create_all(engine)
