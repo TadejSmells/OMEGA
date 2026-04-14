@@ -6,9 +6,11 @@ Projekt Omega (Managment frizerskih salonov)
 Kako zagnati ta projekt:
 
 
-0. Nujno rabi bit na računalniku PREJ nameščeno:
-          - Docker Desktop
-          - VsCode
+1. Nujno rabi bit na računalniku PREJ nameščeno:
+   - Python
+   - Docker Desktop
+   - VsCode
+             
 
 
 2. kloniraj reposetorij na računalnik
