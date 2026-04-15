@@ -7,6 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 import controllers.sv_setup
 import controllers.sv_salon
 import controllers.index
+import controllers.auth
 
 f_app = Flask(__name__, template_folder='templates')
 
@@ -50,6 +51,13 @@ def storitve():
 def urnik():
     return controllers.sv_salon.urnik()
 
+@f_app.route("/register", methods=["GET", "POST"])
+def register():
+    return controllers.auth.register()
+
+@f_app.route("/login", methods=["GET", "POST"])
+def login():
+    return controllers.auth.login()
 
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)
