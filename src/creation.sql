@@ -49,6 +49,11 @@ CREATE TABLE IF NOT EXISTS public.stranka
     priimek character varying(100) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT stranka_pkey PRIMARY KEY (id_stranke)
 );
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(200) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS public.urnik
 (
