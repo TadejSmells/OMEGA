@@ -62,6 +62,13 @@ CREATE TABLE IF NOT EXISTS public.urnik
     ura time without time zone
 );
 
+CREATE TABLE IF NOT EXISTS faq (
+    id_faq       SERIAL PRIMARY KEY,
+    vprasanje    TEXT NOT NULL,   -- question
+    odgovor      TEXT NOT NULL,   -- answer
+    vrstni_red   INT DEFAULT 0,   -- sort order
+    aktiven      BOOLEAN DEFAULT TRUE
+);
 ALTER TABLE IF EXISTS public.frizer
     ADD CONSTRAINT frizer_salon_id_fkey FOREIGN KEY (salon_id)
     REFERENCES public.salon (id) MATCH SIMPLE
