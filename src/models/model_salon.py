@@ -4,21 +4,34 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 
+# ── DB SETUP ────────────────────────────────────────────────────────────────────
 
 def setup_db():
+    #povežemo se z bazo in ustvarimo tabele, če še ne obstajajo
     conn = db.get_connection()
     cursor = conn.cursor()
 
+    #pove pot do sql datoteke, ki vsebuje ukaze za ustvarjanje tabele
     sql_path = os.path.join(os.path.dirname(__file__), '..', 'creation.sql')
     with open(sql_path, 'r') as f:
         sql = f.read()
     cursor.execute(sql)
 
+    #polnimo tabele z začetnimi podatki, če so prazne
     cursor.execute("SELECT COUNT(*) FROM frizer")
     if cursor.fetchone()[0] == 0:
         cursor.execute(
             "INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s), (%s, %s, %s)",
-            (None, 'Marko Matos', '041-111-222', None, 'Špela Škarje', '040-333-444')
+            (1, 'Marko Matos', '041-111-222', None, 'Špela Škarje', '040-333-444')
+
+            "INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
+            (1, 'Ana Kovač', '031-555-666')
+
+            "INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
+            (2, 'Tina Zupan', '041-777-888')
+
+            " INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
+            (3, 'Miha Novak', '040-999-000')
         )
 
     cursor.execute("SELECT COUNT(*) FROM stranka")
@@ -26,6 +39,34 @@ def setup_db():
         cursor.execute(
             "INSERT INTO stranka (ime, priimek, mail, telefon) VALUES (%s, %s, %s, %s)",
             ('Luka', 'Novak', 'luka@test.si', '031-999-888')
+
+            "INSERT INTO stranka (ime, priimek, mail, telefon) VALUES (%s, %s, %s, %s)",
+            ('Maja', 'Kralj', 'maja@test.si', '031-111-222')
+        )
+
+    cursor.execute("SELECT COUNT(*) FROM salon")
+    if cursor.fetchone()[0] == 0:
+        cursor.execute(
+            "INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
+            ('Salon Lepote', 'Glavna ulica 1', 'Ljubljana', '01-123-456')
+
+            "INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
+            ('Frizerski Studio', 'Cesta 2', 'Maribor', '02-654-321')
+
+            "INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
+            ('Salon Elegance', 'Ulica 3', 'Celje', '03-789-012')
+        )
+    
+    
+    
+    cursor.execute("SELECT COUNT(*) FROM storitev")
+    if cursor.fetchone()[0] == 0:
+        cursor.execute(
+            "INSERT INTO storitev (ime_storitve, cena, trajanje) VALUES (%s, %s, %s)",
+            ('Upravljanje s kosmetskimi izdelki', 50.0, 60)
+
+            "INSERT INTO storitev (ime_storitve, cena, trajanje) VALUES (%s, %s, %s)",
+            ('Barvanje las', 70.0, 90)
         )
 
     conn.commit()
@@ -81,7 +122,7 @@ def get_vse(tip):
 
 
 # ── INSERTS ────────────────────────────────────────────────────────────────────
-
+#vse to gre stran, posebi user storyji vsaka stvar
 def dodaj_frizerja(ime, kontakt, salon_id=None):
     conn = db.get_connection()
     cursor = conn.cursor()
