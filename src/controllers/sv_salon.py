@@ -26,24 +26,7 @@ def dodaj_osebe():
     frizerji = model_salon.get_vse('frizer')
     saloni = model_salon.get_vse('salon')
     return render_template("salon_dodaj.html", frizerji=frizerji, saloni=saloni)
-
-
-def nova_rezervacija():
-    if request.method == 'POST':
-        model_salon.dodaj_rezervacijo(
-            request.form.get('stranka_id'),
-            request.form.get('frizer_id'),
-            request.form.get('salon_id'),
-            request.form.get('storitev_id')
-        )
-        return redirect('/salon')
-    return render_template("salon_rezervacija.html",
-                           stranke=model_salon.get_vse('stranka'),
-                           frizerji=model_salon.get_vse('frizer'),
-                           saloni=model_salon.get_vse('salon'),
-                           storitve=model_salon.get_vse('storitev'))
-
-
+    
 def saloni():
     if request.method == 'POST':
         model_salon.dodaj_salon(

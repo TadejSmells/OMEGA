@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import db
 
-
+#get_vse_rezervacije() odstranimo, del drugega user storija
 def get_vse_rezervacije():
     conn = db.get_connection()
     cursor = conn.cursor()
