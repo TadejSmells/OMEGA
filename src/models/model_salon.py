@@ -21,8 +21,6 @@ def setup_db():
     cursor.execute("SELECT COUNT(*) FROM frizer")
     if cursor.fetchone()[0] == 0:
         cursor.execute(
-            "INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s), (%s, %s, %s)",
-            (1, 'Marko Matos', '041-111-222', None, 'Špela Škarje', '040-333-444')
 
             "INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
             (1, 'Ana Kovač', '031-555-666')
