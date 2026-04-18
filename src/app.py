@@ -22,6 +22,10 @@ def home():
 def setup():
     return controllers.sv_setup.setup_db()
 
+@f_app.get('/polni_db')
+def polni_db():
+    return controllers.sv_setup.polni_db()
+
 
 @f_app.route('/salon')
 def salon_pregled():

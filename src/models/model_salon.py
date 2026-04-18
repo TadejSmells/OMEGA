@@ -18,46 +18,22 @@ def setup_db():
     conn.autocommit = False
 
 
-    cursor.execute("SELECT COUNT(*) FROM salon")
-    if cursor.fetchone()[0] == 0:
-        cursor.execute("INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
-                       ('Salon Lepote', 'Glavna ulica 1', 'Ljubljana', '01-123-456'))
-        cursor.execute("INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
-                       ('Frizerski Studio', 'Cesta 2', 'Maribor', '02-654-321'))
-        cursor.execute("INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
-                       ('Salon Elegance', 'Ulica 3', 'Celje', '03-789-012'))
-        
+   
 
-    cursor.execute("SELECT COUNT(*) FROM frizer")
-    if cursor.fetchone()[0] == 0:
-        cursor.execute("INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
-                       (1, 'Ana Kovač', '031-555-666'))
-        cursor.execute("INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
-                       (2, 'Tina Zupan', '041-777-888'))
-        cursor.execute("INSERT INTO frizer (salon_id, ime, kontakt) VALUES (%s, %s, %s)",
-                       (3, 'Miha Novak', '040-999-000'))
+def polni_db():
+    conn = db.get_connection()
+    conn.autocommit = False
+    cursor = conn.cursor()
 
-    cursor.execute("SELECT COUNT(*) FROM stranka")
-    if cursor.fetchone()[0] == 0:
-        cursor.execute("INSERT INTO stranka (ime, priimek, mail, telefon) VALUES (%s, %s, %s, %s)",
-                       ('Luka', 'Novak', 'luka@test.si', '031-999-888'))
-        cursor.execute("INSERT INTO stranka (ime, priimek, mail, telefon) VALUES (%s, %s, %s, %s)",
-                       ('Maja', 'Kralj', 'maja@test.si', '031-111-222'))
-
-
-    cursor.execute("SELECT COUNT(*) FROM storitev")
-    if cursor.fetchone()[0] == 0:
-        cursor.execute("INSERT INTO storitev (ime_storitve, cena, trajanje) VALUES (%s, %s, %s)",
-                       ('Upravljanje s kosmetskimi izdelki', 50.0, '01:00:00'))
-        cursor.execute("INSERT INTO storitev (ime_storitve, cena, trajanje) VALUES (%s, %s, %s)",
-                       ('Barvanje las', 70.0, '01:30:00'))
-        
+    sql_path = os.path.join(os.path.dirname(__file__), '..', 'testni_podatki.sql')
+    with open(sql_path, 'r') as f:
+        sql = f.read()
+    cursor.execute(sql)
 
     conn.commit()
     cursor.close()
     conn.close()
     return True
-
 # ── GETTERS ────────────────────────────────────────────────────────────────────
 
 def get_vse(tip):

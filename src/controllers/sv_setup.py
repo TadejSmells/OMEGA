@@ -13,3 +13,16 @@ def setup_db():
         "rezervacija": success
     }
     return render_template("sv_setup.html", tables=tables)
+
+def polni_db():
+    success = model_salon.polni_db()
+    tabless={
+        "salon": success,
+        "frizer": success,
+        "stranka": success,
+        "storitev": success,
+        "urnik": success,
+        "rezervacija": success
+    }
+    return render_template("sv_setup.html", tables=tabless)
+    
