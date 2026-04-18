@@ -1,3 +1,10 @@
+TRUNCATE salon,
+frizer,
+stranka,
+storitev,
+rezervacija,
+urnik RESTART IDENTITY CASCADE;
+
 INSERT INTO
     salon (ime, naslov, mesto, telefon)
 VALUES (
