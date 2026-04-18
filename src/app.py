@@ -8,6 +8,7 @@ import controllers.sv_setup
 import controllers.sv_salon
 import controllers.index
 import controllers.auth
+import controllers.rezervacije          # ← new
 
 f_app = Flask(__name__, template_folder='templates')
 
@@ -32,9 +33,11 @@ def salon_dodaj():
     return controllers.sv_salon.dodaj_osebe()
 
 
+# ── OLD route kept for backwards-compat, redirects to /rezervacije ──────────
 @f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
-def salon_rezerviraj():
-    return controllers.sv_salon.nova_rezervacija()
+def salon_rezerviraj_old():
+    from flask import redirect
+    return redirect('/rezervacije')
 
 
 @f_app.route('/saloni', methods=['GET', 'POST'])
@@ -51,6 +54,19 @@ def storitve():
 def urnik():
     return controllers.sv_salon.urnik()
 
+
+# ── RESERVATIONS ─────────────────────────────────────────────────────────────
+@f_app.route('/rezervacije', methods=['GET', 'POST'])
+def rezervacije():
+    return controllers.rezervacije.nova_rezervacija()
+
+
+@f_app.route('/rezervacije/izbrisi/<int:id_rezervacije>', methods=['POST'])
+def rezervacije_izbrisi(id_rezervacije):
+    return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
+
+
+# ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
 def register():
     return controllers.auth.register()
@@ -58,6 +74,7 @@ def register():
 @f_app.route("/login", methods=["GET", "POST"])
 def login():
     return controllers.auth.login()
+
 
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)
