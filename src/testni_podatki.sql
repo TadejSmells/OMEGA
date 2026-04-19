@@ -51,6 +51,18 @@ VALUES (
         '031-999-888'
     ),
     (
+        'Damjan',
+        'Kovac',
+        'damjan@test.si',
+        '031-777-858'
+    ),
+    (
+        'Zoja',
+        'Luč',
+        'zoja@test.si',
+        '041-342-678'
+    ),
+    (
         'Maja',
         'Kralj',
         'maja@test.si',

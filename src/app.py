@@ -31,6 +31,9 @@ def polni_db():
 def salon_pregled():
     return controllers.sv_salon.pregled()
 
+@f_app.route('/stranke')
+def stranke():
+    return controllers.sv_salon.seznam_stranke()
 
 @f_app.route('/salon/dodaj', methods=['GET', 'POST'])
 def salon_dodaj():
