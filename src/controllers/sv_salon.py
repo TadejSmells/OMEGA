@@ -38,6 +38,9 @@ def saloni():
         return redirect('/saloni')
     return render_template("saloni.html", saloni=model_salon.get_vse('salon'))
 
+def seznam_stranke():
+    stranke = model_salon.get_vse('stranka')
+    return render_template("seznam_stranke.html", stranke=stranke)
 
 def storitve():
     if request.method == 'POST':
