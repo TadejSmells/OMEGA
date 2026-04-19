@@ -82,3 +82,7 @@ def login():
 
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)
+
+@app.route("/saloni_view")
+def saloni_view():
+    return sv_salon.saloni_view()
