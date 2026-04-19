@@ -3,7 +3,8 @@ frizer,
 stranka,
 storitev,
 rezervacija,
-urnik RESTART IDENTITY CASCADE;
+urnik,
+saloni_in_storitve RESTART IDENTITY CASCADE;
 
 INSERT INTO
     salon (ime, naslov, mesto, telefon)
@@ -82,4 +83,13 @@ VALUES (
         70.0,
         '01:30:00'
     )
+ON CONFLICT DO NOTHING;
+
+INSERT INTO
+    saloni_in_storitve (salon_id, storitev_id)
+VALUES (1, 1),
+    (1, 2),
+    (2, 2),
+    (3, 1),
+    (3, 2)
 ON CONFLICT DO NOTHING;
