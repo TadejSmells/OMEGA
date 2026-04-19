@@ -35,9 +35,6 @@ def salon_pregled():
 def stranke():
     return controllers.sv_salon.seznam_stranke()
 
-@f_app.route('/salon/dodaj', methods=['GET', 'POST'])
-def salon_dodaj():
-    return controllers.sv_salon.dodaj_osebe()
 
 
 # ── OLD route kept for backwards-compat, redirects to /rezervacije ──────────
@@ -50,17 +47,6 @@ def salon_rezerviraj_old():
 @f_app.route('/saloni', methods=['GET', 'POST'])
 def saloni():
     return controllers.sv_salon.saloni()
-
-
-@f_app.route('/storitve', methods=['GET', 'POST'])
-def storitve():
-    return controllers.sv_salon.storitve()
-
-
-@f_app.route('/urnik', methods=['GET', 'POST'])
-def urnik():
-    return controllers.sv_salon.urnik()
-
 
 # ── RESERVATIONS ─────────────────────────────────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
