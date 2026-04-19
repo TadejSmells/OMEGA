@@ -31,6 +31,9 @@ def polni_db():
 def salon_pregled():
     return controllers.sv_salon.pregled()
 
+@f_app.route('/stranke')
+def stranke():
+    return controllers.sv_salon.seznam_stranke()
 
 @f_app.route('/salon/dodaj', methods=['GET', 'POST'])
 def salon_dodaj():
@@ -82,3 +85,7 @@ def login():
 
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)
+
+@app.route("/saloni_view")
+def saloni_view():
+    return sv_salon.saloni_view()
