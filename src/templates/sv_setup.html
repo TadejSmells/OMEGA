@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Nastavitev baze{% endblock %}
+
+{% block content %}
+<h1>Nastavitev podatkovne baze</h1>
+<p>Spodaj je seznam tabel, ki so bile preverjene ali ustvarjene v bazi po tvojem ER diagramu.</p>
+
+<table border="1" cellpadding="10" style="border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th>Ime komponente / tabele</th>
+            <th>Status (Uspešno?)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for table, success in tables.items() %}
+        <tr>
+            <td>{{ table }}</td>
+            <td>
+                {% if success %}
+                <span style="color: green;">✔ Da</span>
+                {% else %}
+                <span style="color: red;">✘ Napaka</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p style="margin-top: 20px;">
+    <a href="/salon">Pojdi na pregled salona</a>
+</p>
+{% endblock %}

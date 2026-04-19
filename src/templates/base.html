@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="sl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Frizerski Salon{% endblock %}</title>
+</head>
+
+<body>
+    <nav>
+        <p>
+            <strong>Navigacija:</strong>
+            <a href="/">Domov</a> |
+            <a href="/salon/rezerviraj">Nova rezervacija</a>
+            <a href="/login">Prijava</a>
+            <a href="/register">Registracija</a>
+            <a href="/stranke">Seznam strank</a>
+        </p>
+    </nav>
+    <hr>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <hr>
+    <footer>
+        <p>&copy; 2024 Upravljanje Salona | [<a href="/">nazaj na začetek</a>]</p>
+    </footer>
+</body>
+
+</html>

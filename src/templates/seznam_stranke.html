@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Dropdown tabela strank</h1>
+
+<form method="POST">
+
+    <label>Stranka:</label><br><br>
+
+    <select name="stranka_id" required>
+        <option value="" disabled selected>-- izberi stranko --</option>
+
+        {% for s in stranke %}
+            <option value="{{ s[0] }}">
+                {{ s[1] }} {{ s[2] }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <button type="submit">Potrdi</button>
+
+</form>
+
+{% endblock %}
