@@ -36,7 +36,18 @@ CREATE TABLE IF NOT EXISTS public.storitev
     ime_storitve character varying(100) COLLATE pg_catalog."default",
     cena double precision,
     trajanje time without time zone,
+<<<<<<< HEAD
     CONSTRAINT storitev_pkey PRIMARY KEY (id_storitve)
+=======
+    CONSTRAINT storitev_pkey PRIMARY KEY (id_storitve),
+);
+
+CREATE TABLE IF NOT EXISTS public.salon_storitev
+(
+    salon_id    integer NOT NULL,
+    storitev_id integer NOT NULL,
+    CONSTRAINT salon_storitev_pkey PRIMARY KEY (salon_id, storitev_id)
+>>>>>>> c0d652a4ab9a41386e283acf15f50a9483acf7d7
 );
 
 CREATE TABLE IF NOT EXISTS public.stranka
