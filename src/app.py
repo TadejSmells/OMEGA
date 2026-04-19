@@ -8,7 +8,8 @@ import controllers.sv_setup
 import controllers.sv_salon
 import controllers.index
 import controllers.auth
-import controllers.rezervacije          # ← new
+import controllers.rezervacije      
+import controllers.storitve    # ← new
 
 f_app = Flask(__name__, template_folder='templates')
 
@@ -34,6 +35,10 @@ def salon_pregled():
 @f_app.route('/stranke')
 def stranke():
     return controllers.sv_salon.seznam_stranke()
+
+@f_app.route('/cenik')
+def cenik():
+    return controllers.storitve.pridobi_storitve()
 
 
 

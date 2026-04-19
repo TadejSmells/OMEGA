@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Cenik storitev</h1>
+<table style="border-collapse: collapse; border: 1px solid black;">
+    <thead>
+        <tr>
+            <th style="border-collapse: collapse; border: 1px solid black;">Storitev</th>
+            <th style="border-collapse: collapse; border: 1px solid black;">Cena storitve</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in podatki %}
+        <tr>
+            <td style="border-collapse: collapse; border: 1px solid black;">{{row[1]}}</td>
+            <td style="border-collapse: collapse; border: 1px solid black;">{{row[2]}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        
+    <br><br>
+
+{% endblock %}
