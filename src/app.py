@@ -12,6 +12,7 @@ import controllers.index
 import controllers.auth
 import controllers.rezervacije      
 import controllers.storitve 
+import controllers.ab_rezervacije
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
@@ -67,6 +68,12 @@ def rezervacije_izbrisi(id_rezervacije):
 @f_app.route("/saloni_view")
 def saloni_view():
     return controllers.sv_salon.saloni_view()
+
+# ──SV_REZERVACIJE ──────────────────────────────────────────────────────────────────────
+
+@f_app.get('/vse_rezervacije')
+def vse_rezervacije():
+    return controllers.ab_rezervacije.pregled_rezervacij()
 
 #──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ, ZMERAJ POD NAJNOVEJSO SPODAJ────────────────────────────
 @f_app.route('/salon')

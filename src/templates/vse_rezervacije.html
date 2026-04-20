@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Vse rezervacije{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"> Vse rezervacije</h2>
+    <a href="/" class="btn btn-outline-secondary btn-sm">← Domov</a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">Rezervacije
+        <span class="badge bg-primary ms-2">{{ rezervacije | length }}</span>
+      </h5>
+    </div>
+    <div class="card-body p-0">
+      {% if rezervacije %}
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Stranka</th>
+              <th>Frizer</th>
+              <th>Salon</th>
+              <th>Storitev</th>
+              <th>Cena</th>
+              <th>Trajanje</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in rezervacije %}
+            <tr>
+              <td class="text-muted small">{{ r[0] }}</td>
+              <td>{{ r[1] or '—' }}</td>
+              <td>{{ r[2] or '—' }}</td>
+              <td>{{ r[3] or '—' }}</td>
+              <td>{{ r[4] if r[4] else 'Ni podatka' }}</td>
+              <td>{% if r[5] and r[5] != None %}{{ r[5] }} €{% else %}—{% endif %}</td>
+              <td>{{ r[6] if r[6] else '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="text-center text-muted py-5">
+        <p class="fs-5">Ni še nobene rezervacije.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
