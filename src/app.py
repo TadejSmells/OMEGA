@@ -12,7 +12,7 @@ import controllers.index
 import controllers.auth
 import controllers.rezervacije      
 import controllers.storitve 
-import controllers.primer_controller
+#import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
 
