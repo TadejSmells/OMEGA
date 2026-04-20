@@ -2,6 +2,11 @@ from flask import render_template, request, redirect
 from models import model_salon
 
 
+
+#tukaj se bodo funkcije odstranile
+#za vsak user sotry se naredi posebi datotekoo v mapi controllers, kjer se definira funkcijo.
+
+
 def pregled():
     return render_template("sv_pregled.html",
                            frizerji=model_salon.get_vse('frizer'),
