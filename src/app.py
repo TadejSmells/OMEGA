@@ -63,9 +63,9 @@ def rezervacije():
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
-@f_app.route("/saloni_view")
+@f_app.route("/saloni_view_info")
 def saloni_view():
-    return controllers.sv_salon.saloni_view()
+    return controllers.sv_salon.saloni_view_info()
 
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])

@@ -65,8 +65,8 @@ def urnik():
                            urnik=model_salon.get_vse('urnik'),
                            frizerji=model_salon.get_vse('frizer'))
 
-def saloni_view():
+def saloni_view_info():
     return render_template(
-        "saloni_javno.html",
+        "saloni_info.html",
         saloni=model_salon.get_vse('salon')
     )

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Saloni{% endblock %}
+
+{% block content %}
+<h1>Pregled salonov</h1>
+
+{% if saloni %}
+    <table style="border-collapse: collapse; border: 1px solid black; width: 100%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid black; padding: 6px;">Ime salona</th>
+                <th style="border: 1px solid black; padding: 6px;">Naslov</th>
+                <th style="border: 1px solid black; padding: 6px;">Mesto</th>
+                <th style="border: 1px solid black; padding: 6px;">Telefon</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in saloni %}
+            <tr>
+                <td style="border: 1px solid black; padding: 6px;">{{ s[1] }}</td>
+                <td style="border: 1px solid black; padding: 6px;">{{ s[2] }}</td>
+                <td style="border: 1px solid black; padding: 6px;">{{ s[3] }}</td>
+                <td style="border: 1px solid black; padding: 6px;">{{ s[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Trenutno ni na voljo nobenega salona.</p>
+{% endif %}
+
+{% endblock %}
