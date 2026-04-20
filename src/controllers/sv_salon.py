@@ -36,6 +36,6 @@ def storitve():
 #premakne v datoteko salon_info.py
 def saloni_view_info():
     return render_template(
-        "saloni_info.html",
+        "saloni_view.html",
         saloni=model_salon.get_vse('salon')
     )
