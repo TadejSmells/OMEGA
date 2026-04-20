@@ -14,10 +14,10 @@ import controllers.storitve    # ← new
 f_app = Flask(__name__, template_folder='templates')
 
 
+#───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────────
 @f_app.get('/')
 def home():
     return controllers.index.home()
-
 
 @f_app.get('/setup')
 def setup():
@@ -26,20 +26,18 @@ def setup():
 @f_app.get('/polni_db')
 def polni_db():
     return controllers.sv_setup.polni_db()
+#───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────────
 
 
-@f_app.route('/salon')
-def salon_pregled():
-    return controllers.sv_salon.pregled()
+# ─────────────────────────────────AUTH───────────────────────────────────────
+@f_app.route("/register", methods=["GET", "POST"])
+def register():
+    return controllers.auth.register()
 
-@f_app.route('/stranke')
-def stranke():
-    return controllers.sv_salon.seznam_stranke()
-
-@f_app.route('/cenik')
-def cenik():
-    return controllers.storitve.pridobi_storitve()
-
+@f_app.route("/login", methods=["GET", "POST"])
+def login():
+    return controllers.auth.login()
+# ─────────────────────────────────AUTH───────────────────────────────────────
 
 
 # ── OLD route kept for backwards-compat, redirects to /rezervacije ──────────
@@ -67,16 +65,28 @@ def rezervacije_izbrisi(id_rezervacije):
 def saloni_view():
     return controllers.sv_salon.saloni_view()
 
-# ── AUTH ──────────────────────────────────────────────────────────────────────
-@f_app.route("/register", methods=["GET", "POST"])
-def register():
-    return controllers.auth.register()
+#──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ────────────────────────────
+@f_app.route('/salon')
+def salon_pregled():
+    return controllers.sv_salon.pregled()
 
-@f_app.route("/login", methods=["GET", "POST"])
-def login():
-    return controllers.auth.login()
+@f_app.route('/stranke')
+def stranke():
+    return controllers.sv_salon.seznam_stranke()
+
+@f_app.route('/cenik')
+def cenik():
+    return controllers.storitve.pridobi_storitve()
 
 
+
+
+
+
+
+
+
+# ─────────────────────────────────KAR JE SPODAJ PUSTI PRI MIRU───────────────────────────────────────
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)
 
