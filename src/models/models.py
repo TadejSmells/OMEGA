@@ -3,6 +3,8 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
+
+#zacetek pretovrbe v SQLAlchemy modele
 class Salon(Base):
     __tablename__ = 'salon'
     id_salona = Column(Integer, primary_key=True)

@@ -5,7 +5,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 
 # ── DB SETUP ────────────────────────────────────────────────────────────────────
-
+#ta del je potreben, ker se tuki ustvari baza sql in se napolni
+#ostale stvari pod DB SETUP grejo ven, ker se bodo delale v user storyjih, 
+# vsak user story bo imel svojo funkcijo za dodajanje podatkov
 def setup_db():
     conn = db.get_connection()
     conn.autocommit = True
@@ -82,29 +84,6 @@ def get_vse(tip):
 
 # ── INSERTS ────────────────────────────────────────────────────────────────────
 #vse to gre stran, posebi user storyji vsaka stvar
-def dodaj_frizerja(ime, kontakt, salon_id=None):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO frizer (ime, kontakt, salon_id) VALUES (%s, %s, %s)",
-        (ime, kontakt, salon_id or None)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-
-def dodaj_stranko(ime, priimek, mail, telefon, id_naj_frizer=None):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO stranka (ime, priimek, mail, telefon, id_naj_frizer) VALUES (%s, %s, %s, %s, %s)",
-        (ime, priimek or '', mail, telefon, id_naj_frizer or None)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
-
 
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):
     conn = db.get_connection()
@@ -118,37 +97,6 @@ def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):
     conn.close()
 
 
-def dodaj_salon(ime, naslov, mesto, telefon):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO salon (ime, naslov, mesto, telefon) VALUES (%s, %s, %s, %s)",
-        (ime, naslov, mesto, telefon)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
 
 
-def dodaj_storitev(ime_storitve, cena, trajanje):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO storitev (ime_storitve, cena, trajanje) VALUES (%s, %s, %s)",
-        (ime_storitve, cena, trajanje)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
 
-
-def dodaj_urnik(frizer_id, dan, ura):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO urnik (id_frizerja, dan, ura) VALUES (%s, %s, %s)",
-        (frizer_id, dan, ura)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
