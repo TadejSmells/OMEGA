@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block title %}{{ salon[1] }}{% endblock %}
+
+{% block body %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    .page-header {
+        background: var(--beige);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .page-header-title {
+        font-family: var(--font-head);
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: var(--dark);
+    }
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .header-username { font-size: 13px; color: var(--dark); }
+    .user-avatar {
+        width: 42px; height: 42px; border-radius: 50%;
+        background: rgba(255,255,255,0.6);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px; color: var(--beige); text-decoration: none;
+    }
+    .back-wrap {
+        padding: 10px 32px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .back-btn {
+        background: none; border: none; cursor: pointer;
+        font-size: 22px; color: var(--rose); text-decoration: none;
+    }
+
+    .vsebina {
+        padding: 16px 32px 32px;
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+        background: var(--light);
+    }
+    .salon-levo {
+        display: flex;
+        gap: 24px;
+        flex: 1.2;
+        align-items: flex-start;
+    }
+    .salon-slika {
+        width: 200px; height: 220px;
+        background: var(--beige);
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+    .salon-info h2 {
+        font-family: var(--font-head);
+        font-size: 1.2rem;
+        color: var(--dark);
+        margin-bottom: 14px;
+    }
+    .salon-info .oznaka {
+        font-size: 13px;
+        color: var(--dark);
+        margin-bottom: 6px;
+    }
+    .salon-info .opis-text {
+        font-size: 12px;
+        color: #7A958F;
+        line-height: 1.7;
+        margin-top: 14px;
+    }
+    .gumb {
+        background: var(--beige);
+        border: none;
+        border-radius: 30px;
+        padding: 12px 48px;
+        font-size: 14px;
+        font-family: var(--font-body);
+        color: var(--dark);
+        cursor: pointer;
+        margin-top: 28px;
+        display: inline-block;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+    .gumb:hover { background: var(--rose); color: var(--white); }
+
+    .salon-desno {
+        flex: 1;
+        border-left: 1px solid var(--peach);
+        padding-left: 32px;
+    }
+    .ratings-header {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    .ratings-header h3 {
+        font-family: var(--font-head);
+        font-size: 1rem;
+        color: var(--dark);
+        letter-spacing: 0.04em;
+    }
+    .ratings-score {
+        font-size: 14px;
+        color: var(--dark);
+        font-weight: 600;
+    }
+    .review-card {
+        background: var(--white);
+        border: 1px solid var(--peach);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .review-avatar {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: var(--beige);
+        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 14px; color: var(--white);
+    }
+    .review-content { flex: 1; }
+    .review-username {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--dark);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .review-date {
+        font-size: 10px;
+        color: var(--rose);
+        margin-bottom: 4px;
+    }
+    .review-stars {
+        color: var(--brown);
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+    .review-text {
+        font-size: 11px;
+        color: #7A958F;
+        line-height: 1.5;
+    }
+
+    .nav-footer {
+        background: var(--beige);
+        padding: 14px 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .nav-footer a { font-size: 13px; color: var(--dark); text-decoration: none; font-style: italic; }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">SALON</div>
+    <div class="header-right">
+        <span class="header-username">Ime priimek</span>
+        <a href="/profil" class="user-avatar">&#128100;</a>
+    </div>
+</div>
+
+<div class="back-wrap">
+    <a href="/saloni" class="back-btn">&#8617;</a>
+</div>
+
+<div class="vsebina">
+    <!-- LEFT: info -->
+    <div class="salon-levo">
+        <div class="salon-slika"></div>
+        <div class="salon-info">
+            <h2>{{ salon[1] }}</h2>
+            <div class="oznaka">Lokacija: {{ salon[2] }}, {{ salon[3] }}</div>
+            <div class="oznaka">Okvirna cena: [cena]</div>
+            <div class="oznaka">Storitve:
+                {% for st in storitve %}{{ st[1] }}{% if not loop.last %}, {% endif %}{% endfor %}
+            </div>
+            <div class="oznaka">Frizerji: [frizerji]</div>
+            <div class="opis-text">
+                Mauris nisl mauris, ultrices eget mauris vitae, pellentesque porta nisl. Nam ut mollis risus.
+                Pellentesque faucibus risus eu ligula suscipit, eu tempor nisl rhoncus. Morbi nec aliquam mi.
+                Sed ut sem a arcu consequat euismod. Integer sem lacus, rhoncus a elit at, posuere tincidunt metus.
+            </div>
+            <a href="/salon/rezerviraj" class="gumb">Naroči se</a>
+        </div>
+    </div>
+
+    <div class="salon-desno">
+        <div class="ratings-header">
+            <h3>RATINGS</h3>
+            <span class="ratings-score">4.7 / 5</span>
+        </div>
+
+        {% if ocene is defined and ocene %}
+            {% for o in ocene %}
+            <div class="review-card">
+                <div class="review-avatar">&#128100;</div>
+                <div class="review-content">
+                    <div class="review-username">{{ o[0] }}</div>
+                    <div class="review-date">{{ o[1] }}</div>
+                    <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <div class="review-text">{{ o[3] }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            {# placeholder ocene #}
+            {% for i in range(3) %}
+            <div class="review-card">
+                <div class="review-avatar">&#128100;</div>
+                <div class="review-content">
+                    <div class="review-username">USERNAME1</div>
+                    <div class="review-date">22.4.2025</div>
+                    <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <div class="review-text">Mauris nisl mauris, ultrices eget mauris vitae, pellentesque porta nisl. Nam ut mollis risus.</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="nav-footer">
+    <a href="#">News</a>
+    <a href="#">Vaši termini</a>
+    <a href="#">Informacije</a>
+</div>
+{% endblock %}

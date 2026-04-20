@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Prijava / Registracija{% endblock %}
+
+{% block body %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: #e8ddd5; color: var(--dark); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .outer {
+        background: #e8ddd5;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    .back-btn {
+        position: absolute;
+        top: 20px; right: 20px;
+        font-size: 24px; color: var(--rose);
+        text-decoration: none;
+        background: none; border: none; cursor: pointer;
+    }
+    .okvir {
+        background: var(--light);
+        border-radius: 16px;
+        padding: 40px 48px 48px;
+        width: 600px;
+        max-width: 95vw;
+        position: relative;
+        box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    }
+    .profil-ikona {
+        width: 110px; height: 110px;
+        border-radius: 50%;
+        background: var(--beige);
+        margin: 0 auto 32px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 52px;
+        color: var(--white);
+    }
+    .obrazci {
+        display: flex;
+        gap: 0;
+    }
+    .prijava, .registracija {
+        flex: 1;
+        padding: 0 24px;
+    }
+    .registracija {
+        border-left: 1.5px solid var(--rose);
+    }
+
+    h2 {
+        font-family: var(--font-head);
+        font-size: 1rem;
+        color: var(--dark);
+        margin-bottom: 20px;
+        letter-spacing: 0.05em;
+        text-align: center;
+    }
+
+    .polje { margin-bottom: 16px; }
+    .polje div {
+        font-size: 11px;
+        color: var(--dark);
+        margin-bottom: 4px;
+        letter-spacing: 0.02em;
+    }
+    .polje input {
+        width: 100%;
+        border: none;
+        border-bottom: 1.5px solid var(--beige);
+        background: transparent;
+        padding: 6px 0;
+        font-size: 13px;
+        outline: none;
+        font-family: var(--font-body);
+        color: var(--dark);
+        transition: border-color 0.2s;
+    }
+    .polje input:focus { border-bottom-color: var(--brown); }
+
+    .zapomni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--dark);
+        margin-top: 8px;
+    }
+    .zapomni input[type="checkbox"] { accent-color: var(--brown); }
+
+    .gumb-wrap {
+        text-align: center;
+        margin-top: 36px;
+    }
+    .gumb {
+        background: var(--brown);
+        border: none;
+        border-radius: 30px;
+        padding: 13px 56px;
+        font-size: 14px;
+        font-family: var(--font-body);
+        color: var(--white);
+        cursor: pointer;
+        letter-spacing: 0.02em;
+        transition: background 0.2s;
+    }
+    .gumb:hover { background: var(--rose); }
+    .shared-submit { margin-top: 32px; text-align: center; }
+</style>
+
+<div class="outer">
+    <a href="/" class="back-btn">&#8617;</a>
+
+    <div class="okvir">
+        <div class="profil-ikona">&#128100;</div>
+
+        <div class="obrazci">
+            <div class="prijava">
+                <h2>PRIJAVA</h2>
+                <form method="POST" action="/login" id="form-prijava">
+                    <div class="polje">
+                        <div>Uporabniško ime ali e-poštni naslov</div>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="polje">
+                        <div>Geslo</div>
+                        <input type="password" name="password" required>
+                    </div>
+                    <div class="zapomni">
+                        <input type="checkbox" name="remember"> Zapomni se me
+                    </div>
+                </form>
+            </div>
+
+            <div class="registracija">
+                <h2>REGISTRACIJA</h2>
+                <form method="POST" action="/register" id="form-registracija">
+                    <div class="polje">
+                        <div>Uporabniško ime</div>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="polje">
+                        <div>E-poštni naslov</div>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="polje">
+                        <div>Geslo</div>
+                        <input type="password" name="password" required>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="shared-submit">
+            <button class="gumb" onclick="submitActive()">potrdi</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let activeForm = 'form-prijava';
+    document.getElementById('form-prijava').addEventListener('focusin', () => activeForm = 'form-prijava');
+    document.getElementById('form-registracija').addEventListener('focusin', () => activeForm = 'form-registracija');
+    function submitActive() {
+        document.getElementById(activeForm).submit();
+    }
+</script>
+{% endblock %}
