@@ -4,12 +4,14 @@ from flask import Flask
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
+
+# ──────!!!!!!!!!!!!!!!!IMPORTI SVOJ CONTROLLER FILE (SAMO controllers.ime_datoteke)!!!!!!!!!!─────────────
 import controllers.sv_setup
 import controllers.sv_salon
 import controllers.index
 import controllers.auth
 import controllers.rezervacije      
-import controllers.storitve    # ← new
+import controllers.storitve 
 
 f_app = Flask(__name__, template_folder='templates')
 
