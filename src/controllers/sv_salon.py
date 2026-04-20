@@ -16,36 +16,11 @@ def pregled():
                            storitve=model_salon.get_vse('storitev'),
                            urnik=model_salon.get_vse('urnik'))
 
-
-def dodaj_osebe():
-    if request.method == 'POST':
-        tip = request.form.get('tip')
-        ime = request.form.get('ime')
-        if tip == 'frizer':
-            model_salon.dodaj_frizerja(ime, request.form.get('kontakt'), request.form.get('salon_id'))
-        else:
-            model_salon.dodaj_stranko(ime, request.form.get('priimek'),
-                                      request.form.get('mail'), request.form.get('telefon'),
-                                      request.form.get('id_naj_frizer'))
-        return redirect('/salon')
-    frizerji = model_salon.get_vse('frizer')
-    saloni = model_salon.get_vse('salon')
-    return render_template("salon_dodaj.html", frizerji=frizerji, saloni=saloni)
-    
-def saloni():
-    if request.method == 'POST':
-        model_salon.dodaj_salon(
-            request.form.get('ime'),
-            request.form.get('naslov'),
-            request.form.get('mesto'),
-            request.form.get('telefon')
-        )
-        return redirect('/saloni')
-    return render_template("saloni.html", saloni=model_salon.get_vse('salon'))
-
+#naredi novo datoteko pirkaz_stranke.py in controllers, kjer se definira funkcija prikaz_stranke, ki bo prikazala seznam strank
 def seznam_stranke():
     stranke = model_salon.get_vse('stranka')
     return render_template("seznam_stranke.html", stranke=stranke)
+
 
 def storitve():
     if request.method == 'POST':
@@ -58,18 +33,7 @@ def storitve():
     return render_template("storitve.html", storitve=model_salon.get_vse('storitev'))
 
 
-def urnik():
-    if request.method == 'POST':
-        model_salon.dodaj_urnik(
-            request.form.get('frizer_id'),
-            request.form.get('dan'),
-            request.form.get('ura')
-        )
-        return redirect('/urnik')
-    return render_template("urnik.html",
-                           urnik=model_salon.get_vse('urnik'),
-                           frizerji=model_salon.get_vse('frizer'))
-
+#premakne v datoteko salon_info.py
 def saloni_view_info():
     return render_template(
         "saloni_info.html",
