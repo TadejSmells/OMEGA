@@ -1,10 +1,9 @@
 import sys
 import os
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 
-# ── DB SETUP ────────────────────────────────────────────────────────────────────
+# ── DB SETUP ─────────────────────────────────────────────────────────────────
 
 def setup_db():
     conn = db.get_connection()
@@ -15,10 +14,10 @@ def setup_db():
     with open(sql_path, 'r') as f:
         sql = f.read()
     cursor.execute(sql)
-    conn.autocommit = False
+    cursor.close()
+    conn.close()
+    return True
 
-
-   
 
 def polni_db():
     conn = db.get_connection()
@@ -34,7 +33,8 @@ def polni_db():
     cursor.close()
     conn.close()
     return True
-# ── GETTERS ────────────────────────────────────────────────────────────────────
+
+# ── GETTERS ───────────────────────────────────────────────────────────────────
 
 def get_vse(tip):
     conn = db.get_connection()
@@ -79,9 +79,8 @@ def get_vse(tip):
     conn.close()
     return rows
 
+# ── INSERTS ───────────────────────────────────────────────────────────────────
 
-# ── INSERTS ────────────────────────────────────────────────────────────────────
-#vse to gre stran, posebi user storyji vsaka stvar
 def dodaj_frizerja(ime, kontakt, salon_id=None):
     conn = db.get_connection()
     cursor = conn.cursor()

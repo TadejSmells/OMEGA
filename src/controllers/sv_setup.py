@@ -1,6 +1,6 @@
 from flask import render_template
 import models.model_salon as model_salon
-
+from models.model_salon import setup_db
 
 def setup_db():
     success = model_salon.setup_db()
