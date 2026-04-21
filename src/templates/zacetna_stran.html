@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Hairscultures{% endblock %}
 
-{% block body %}
+{% block content %}
 <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -151,14 +151,26 @@
 <div class="vsebina">
     <div class="vsebina-levo">
         <h2>O NAS</h2>
-        <p>non quis non dignissim, est. ex volutpat ex efficitur. faucibus In lacus, tincidunt placerat quis dignissim, eu Ut ipsum massa non Cras amet, sollicitudin. at</p>
-        <p>leo. commodo Quisque placerat. faucibus urna. eget Donec Ut eget facilisis vitae quam faucibus elit id est. non, Sed risus diam nibh at, non Nam placerat. nec</p>
-        <p>efficitur. non laoreet Sed turpis amet, maximus cursus Morbi gravida Ut nec turpis ex. urna convallis. amet, adipiscing sit laoreet non quis Vestibulum nulla,</p>
+        {% if saloni %}
+        <p>Dobrodošli v najširšo mrežo frizerskih salonov. Ponujamo storitve v {{ saloni|length }} različnih lokacijah, kjer vas čakajo izkušeni frizerji in stilisti. Vsak salon je opremljen z najnovejšo tehnologijo in ponuja prijazno atmosfero.</p>
+        <p>V naših salonih lahko izberete iz {{ storitve|length }} različnih storitev, od klasičnih oblik do najnovejših trendov. Naš tim strokovnjakov je vedno pripravljen vam pomagati pri izbiri idealne storitve za vašo transformacijo.</p>
+        <p>Rezervirajte svoj termin danes in doživite profesionalno oskrbo na najvišji ravni. Zadovoljstvo naših strank je naša prva prioriteta.</p>
+        {% else %}
+        <p>Dobrodošli v našo mrežo frizerskih salonov, kjer se lepe stvari dogajajo. Naš tim strokovnjakov je pripravljen, da vas vodi skozi vašo lepotno pot.</p>
+        <p>Ponujamo širok spekter storitev, prilagojenih vašim potrebam in željam. Od klasičnih oblik do najnovejših trendov, imamo vse, kar potrebujete.</p>
+        <p>Pridružite se nam in doživite razliko, ki jo može narediti pravi strokovnjak.</p>
+        {% endif %}
         <div class="podnaslov">Še niste član/ica? Pridružite se zdaj!</div>
         <ul>
-            <li><a href="/saloni">Pregled salonov!</a></li>
+            {% if saloni %}
+                {% for salon in saloni[:3] %}
+                <li><a href="/saloni">{{ salon[1] }} - {{ salon[3] }}</a></li>
+                {% endfor %}
+            {% else %}
+                <li><a href="/saloni">Pregled salonov!</a></li>
+            {% endif %}
             <li>Izberite storitev, ki jo želite!</li>
-            <li>Q &amp; A</li>
+            <li><a href="#">Q &amp; A</a></li>
         </ul>
     </div>
     <div class="vsebina-desno"></div>

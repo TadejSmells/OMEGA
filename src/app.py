@@ -22,6 +22,9 @@ f_app = Flask(__name__, template_folder='templates')
 @f_app.get('/')
 def home():
     return controllers.index.home()
+@f_app.get('/zacetna_stran')
+def zacetna_stran_alias():
+    return controllers.index.home()
 
 @f_app.get('/setup')
 def setup():
@@ -41,6 +44,10 @@ def register():
 @f_app.route("/login", methods=["GET", "POST"])
 def login():
     return controllers.auth.login()
+
+@f_app.get('/profil')
+def profil():
+    return controllers.auth.profil()
 # ─────────────────────────────────AUTH───────────────────────────────────────
 
 
@@ -54,6 +61,13 @@ def salon_rezerviraj_old():
 @f_app.route('/saloni', methods=['GET', 'POST'])
 def saloni():
     return controllers.sv_salon.saloni()
+@f_app.get('/seznam_salonov')
+def seznam_salonov_alias():
+    return controllers.sv_salon.saloni()
+
+@f_app.route('/salon/<int:salon_id>')
+def salon_detail(salon_id):
+    return controllers.sv_salon.salon_detail(salon_id)
 
 # ── RESERVATIONS ─────────────────────────────────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
@@ -86,6 +100,14 @@ def stranke():
 
 @f_app.route('/cenik')
 def cenik():
+    return controllers.storitve.pridobi_storitve()
+
+@f_app.route('/storitve')
+def seznam_storitev():
+    return controllers.storitve.pridobi_storitve()
+
+@f_app.get('/seznam_storitev')
+def seznam_storitev_alias():
     return controllers.storitve.pridobi_storitve()
 
 #PRIMER KAKO DODAT SOVJO FUNKCIJO

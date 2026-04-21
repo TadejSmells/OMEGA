@@ -81,7 +81,20 @@ def get_vse(tip):
     conn.close()
     return rows
 
-
+def get_storitve_za_salon(salon_id):
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT st.id_storitve, st.ime_storitve, st.cena, st.trajanje
+        FROM storitev st
+        INNER JOIN saloni_in_storitve sis ON st.id_storitve = sis.storitev_id
+        WHERE sis.salon_id = %s
+        ORDER BY st.ime_storitve
+    """, (salon_id,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
 # ── INSERTS ────────────────────────────────────────────────────────────────────
 #vse to gre stran, posebi user storyji vsaka stvar
 

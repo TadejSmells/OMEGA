@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Seznam salonov{% endblock %}
 
-{% block body %}
+{% block content %}
 <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -253,20 +253,24 @@
     <button class="arrow-btn" onclick="prevPage()">&#8592;</button>
     <div class="cards" id="cardsContainer">
         {# model_salon.get_vse('salon') -> s[0]=id, s[1]=ime, s[2]=naslov, s[3]=mesto, s[4]=telefon #}
-        {% for s in saloni %}
+        {% for item in saloni %}
+        {% set s = item.salon %}
+        {% set storitve = item.storitve %}
         <div class="card" data-name="{{ s[1]|lower }}">
             <div class="card-img"></div>
             <h2>{{ s[1] }}</h2>
             <div class="oznaka">Okvirna cena storitev:</div>
-            <div class="opis">[cena]</div>
+            <div class="opis">{% if storitve %}{{ storitve[0][2]|round(2) }}€{% else %}N/A{% endif %}</div>
             <div class="oznaka">Lokacija:</div>
             <div class="opis">{{ s[2] }}, {{ s[3] }}</div>
             <div class="oznaka">Storitve:</div>
-            <div class="opis">non quis non dignissim, est. ex volutpat ex efficitur. faucibus In lacus, tincidunt placerat quis dignissim, eu Ut ipsum massa non Cras amet, sollicitudin. at</div>
+            <div class="opis">{% for st in storitve %}{{ st[1] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
             <a href="/salon/{{ s[0] }}">Poglej salon &rarr;</a>
         </div>
         {% else %}
-        <div class="opis" style="padding:20px;">Ni vpisanih salonov.</div>
+        <div class="card">
+            <div class="opis">Ni vpisanih salonov.</div>
+        </div>
         {% endfor %}
     </div>
     <button class="arrow-btn" onclick="nextPage()">&#8594;</button>

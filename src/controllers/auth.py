@@ -48,3 +48,5 @@ def login():
         return "Napačni podatki!"
 
     return render_template("login.html")
+def profil():
+    return render_template("profil.html")
