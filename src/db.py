@@ -16,14 +16,19 @@ def get_connection():
         conn.close()
         return rows
     """
-    conn = psycopg2.connect(
-        dbname=os.environ['DBNAME'],
-        user=os.environ['DBUSER'],
-        password=os.environ['DBPASS'],
-        host=os.environ['DBHOST'],
-        port=os.environ.get('DBPORT', '5432')
-    )
-    return conn
+    for attempt in range(5):
+        try:
+            return psycopg2.connect(
+                dbname=os.environ['DBNAME'],
+                user=os.environ['DBUSER'],
+                password=os.environ['DBPASS'],
+                host=os.environ['DBHOST'],
+                port=os.environ.get('DBPORT', '5432'),
+            )
+        except psycopg2.OperationalError:
+            print(f"DB not ready, retrying ({attempt+1}/5)...")
+            time.sleep(2)
+    raise RuntimeError("Could not connect to database after 5 attempts")
 
 @contextmanager
 def get_cursor():
@@ -38,18 +43,4 @@ def get_cursor():
     finally:
         cursor.close()
         conn.close()
-
-def get_connection():
-    for attempt in range(5):
-        try:
-            return psycopg2.connect(
-                dbname=os.environ['DBNAME'],
-                user=os.environ['DBUSER'],
-                password=os.environ['DBPASS'],
-                host=os.environ['DBHOST'],
-                port=os.environ.get('DBPORT', '5432')
-            )
-        except psycopg2.OperationalError:
-            print(f"DB not ready, retrying ({attempt+1}/5)...")
-            time.sleep(2)
-    raise Exception("Could not connect to database after 5 attempts")
+        
