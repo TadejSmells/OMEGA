@@ -1,5 +1,8 @@
 # OMEGA
 
+!!! PRED DELANJEM USER STORYJA SPOROČITE VODJI TISTEGA DELA !!!
+Za vse modele in controllerje kontaktirajte vodji podatkovne baze in SQLAlchemy!
+
 Repozitorij za skupino Omega
 
 Projekt Omega (Managment frizerskih salonov)
@@ -29,3 +32,4 @@ KAKO DELAT FUNKCIJE:
    5. dodat pot v app.py
 
 "Vse model datoteke morajo uporabljati db.get_session() in try/finally. Primer je v models/model_frizer.py."
+
