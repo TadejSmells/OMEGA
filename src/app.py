@@ -38,6 +38,33 @@ def polni_db():
 
 
 # ─────────────────────────────────AUTH───────────────────────────────────────
+@f_app.route('/salon/dodaj', methods=['GET', 'POST'])
+def salon_dodaj():
+    return controllers.sv_salon.dodaj_osebe()
+
+
+@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
+def salon_rezerviraj():
+    return controllers.sv_salon.nova_rezervacija()
+
+
+@f_app.route('/saloni', methods=['GET', 'POST'])
+def saloni():
+    return controllers.sv_salon.saloni()
+
+
+@f_app.route('/storitve', methods=['GET', 'POST'])
+def storitve():
+    return controllers.sv_salon.storitve()
+
+@f_app.route('/zgodovina')
+def zgodovina():
+    return controllers.sv_salon.zgodovina()
+
+@f_app.route('/urnik', methods=['GET', 'POST'])
+def urnik():
+    return controllers.sv_salon.urnik()
+
 @f_app.route("/register", methods=["GET", "POST"])
 def register():
     return controllers.auth.register()
@@ -49,7 +76,7 @@ def login():
 @f_app.get('/profil')
 def profil():
     return controllers.auth.profil()
-# ─────────────────────────────────AUTH───────────────────────────────────────
+
 
 
 # ── OLD route kept for backwards-compat, redirects to /rezervacije ──────────

@@ -70,6 +70,7 @@ def storitve():
     return render_template("storitve.html", storitve=model_salon.get_vse('storitev'))
 
 
+<<<<<<< HEAD
 #premakne v datoteko salon_info.py
 def saloni_view_info():
     return render_template(
@@ -79,3 +80,20 @@ def saloni_view_info():
 
 def saloni_view():
     return saloni_view_info()
+=======
+def urnik():
+    if request.method == 'POST':
+        model_salon.dodaj_urnik(
+            request.form.get('frizer_id'),
+            request.form.get('dan'),
+            request.form.get('ura')
+        )
+        return redirect('/urnik')
+    return render_template("urnik.html",
+                           urnik=model_salon.get_vse('urnik'),
+                           frizerji=model_salon.get_vse('frizer'))
+
+def zgodovina():
+    rezervacije = model_salon.get_vse('rezervacija')
+    return render_template("zgodovina.html", rezervacije=rezervacije)
+>>>>>>> 5bc26f8 (Dodana zgodovina rezervacij)
