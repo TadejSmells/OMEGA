@@ -2,6 +2,7 @@
 
 !!! PRED DELANJEM USER STORYJA SPOROČITE VODJI TISTEGA DELA !!!
 Za vse modele in controllerje kontaktirajte vodji podatkovne baze in SQLAlchemy!
+Preden v app.py dodajate svoje funkcije poglejte če funckija že osbtaja!
 
 Repozitorij za skupino Omega
 
