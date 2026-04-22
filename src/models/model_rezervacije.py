@@ -1,55 +1,62 @@
 import sys
 import os
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import db
+from models.models import Rezervacija, Stranka, Frizer, Salon, Storitev
 
-#get_vse_rezervacije() odstranimo, del drugega user storija
 def get_vse_rezervacije():
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT
-            r.id_rezervacije,
-            s.ime || ' ' || s.priimek  AS stranka,
-            f.ime                       AS frizer,
-            sa.ime                      AS salon,
-            st.ime_storitve             AS storitev,
-            st.cena                     AS cena,
-            st.trajanje                 AS trajanje
-        FROM rezervacija r
-        LEFT JOIN stranka  s  ON r.id_stranke  = s.id_stranke
-        LEFT JOIN frizer   f  ON r.id_frizerja = f.id_frizer
-        LEFT JOIN salon    sa ON r.id_salona   = sa.id
-        LEFT JOIN storitev st ON r.id_storitve = st.id_storitve
-        ORDER BY r.id_rezervacije DESC
-    """)
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return rows
+    session = db.get_session()
+    try:
+        rows = (
+            session.query(
+                Rezervacija.id_rezervacije,
+                (Stranka.ime + ' ' + Stranka.priimek).label('stranka'),
+                Frizer.ime.label('frizer'),
+                Salon.ime.label('salon'),
+                Storitev.ime_storitve.label('storitev'),
+                Storitev.cena.label('cena'),
+                Storitev.trajanje.label('trajanje')
+            )
+            .outerjoin(Stranka, Rezervacija.id_stranke == Stranka.id_stranke)
+            .outerjoin(Frizer, Rezervacija.id_frizerja == Frizer.id_frizer)
+            .outerjoin(Salon, Rezervacija.id_salona == Salon.id)
+            .outerjoin(Storitev, Rezervacija.id_storitve == Storitev.id_storitve)
+            .order_by(Rezervacija.id_rezervacije.desc())
+            .all()
+        )
+        return rows
+    finally:
+        session.close()
 
 
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        """INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve)
-           VALUES (%s, %s, %s, %s)""",
-        (stranka_id, frizer_id, salon_id or None, storitev_id or None)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
+    session = db.get_session()
+    try:
+        session.add(Rezervacija(
+            id_stranke=stranka_id,
+            id_frizerja=frizer_id,
+            id_salona=salon_id or None,
+            id_storitve=storitev_id or None
+        ))
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 
 def izbrisi_rezervacijo(id_rezervacije):
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "DELETE FROM rezervacija WHERE id_rezervacije = %s",
-        (id_rezervacije,)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
+    session = db.get_session()
+    try:
+        r = session.query(Rezervacija).filter(
+            Rezervacija.id_rezervacije == id_rezervacije
+        ).first()
+        if r:
+            session.delete(r)
+            session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()

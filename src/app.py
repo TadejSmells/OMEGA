@@ -13,6 +13,7 @@ import controllers.auth
 import controllers.rezervacije      
 import controllers.storitve 
 import controllers.ab_rezervacije
+#import controllers.frizer
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')

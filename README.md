@@ -27,3 +27,5 @@ KAKO DELAT FUNKCIJE:
    3. "ime_datoteke.html v mapi src/templates
    4. dodat import controller datoteke v app.py
    5. dodat pot v app.py
+
+"Vse model datoteke morajo uporabljati db.get_session() in try/finally. Primer je v models/model_frizer.py."
