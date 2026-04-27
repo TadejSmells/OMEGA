@@ -15,28 +15,6 @@ def seznam_stranke():
     stranke = model_salon.get_vse('stranka')
     return render_template("seznam_stranke.html", stranke=stranke)
  
-def saloni():
-    try:
-        saloni_list = model_salon.get_vse('salon')
-    except Exception:
-        saloni_list = []
-    saloni_with_storitve = []
-    
-    for salon in saloni_list:
-        salon_id = salon[0]
-        try:
-            storitve = model_salon.get_storitve_za_salon(salon_id)
-        except Exception:
-            storitve = []
-        saloni_with_storitve.append({
-            'salon': salon,
-            'storitve': storitve
-        })
-    
-    return render_template(
-        "seznam_salonov.html",
-        saloni=saloni_with_storitve
-    )
  
 def salon_detail(salon_id):
     try:

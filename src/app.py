@@ -12,6 +12,7 @@ import controllers.rezervacije
 import controllers.storitve
 import controllers.ab_rezervacije
 import controllers.faq 
+import controllers.saloni_controller
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
@@ -51,7 +52,7 @@ def profil():
 # ─────────────────────────────────SALONI─────────────────────────────────────
 @f_app.route('/saloni', methods=['GET', 'POST'])
 def saloni():
-    return controllers.sv_salon.saloni()
+    return controllers.saloni_controller.saloni()
 
 @f_app.get('/seznam_salonov')
 def seznam_salonov_alias():
