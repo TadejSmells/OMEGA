@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Pogosto zastavljena vprašanja</h1>
+
+{% for f in faqi %}
+    <div>
+        <h3>{{ f.vprasanje }}</h3>
+        <p>{{ f.odgovor }}</p>
+    </div>
+{% endfor %}
+
+{% endblock %}

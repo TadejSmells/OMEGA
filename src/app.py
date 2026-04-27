@@ -11,6 +11,7 @@ import controllers.auth
 import controllers.rezervacije
 import controllers.storitve
 import controllers.ab_rezervacije
+import controllers.faq 
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
@@ -113,6 +114,11 @@ def stranke():
 @f_app.route('/urnik', methods=['GET', 'POST'])
 def urnik():
     return controllers.sv_salon.urnik()
+
+@f_app.route('/faq', methods=['GET', 'POST'])
+def faq():
+    return controllers.faq.faq()
+
 
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ──────────────────────────
 #@f_app.route('/"tvoja_pot"')
