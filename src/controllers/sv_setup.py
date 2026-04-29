@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, session, redirect
 import models.model_salon as model_salon
 
 
@@ -26,3 +26,12 @@ def polni_db():
     }
     return render_template("sv_setup.html", tables=tabless)
     
+
+def admin():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session["role"] != "admin":
+        return "Nimaš dostopa"
+
+    return "Admin panel"

@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, abort
+from flask import render_template, request, redirect, abort, session
 from models import model_salon
  
  
@@ -73,3 +73,13 @@ def urnik():
 def zgodovina():
     rezervacije = model_salon.get_vse('rezervacija')
     return render_template("zgodovina.html", rezervacije=rezervacije)
+
+
+def frizer():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session["role"] != "frizer":
+        return "Nimaš dostopa"
+
+    return "Frizer panel"

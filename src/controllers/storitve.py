@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, session, redirect
 from models import model_cenikstoritev
 
 
@@ -12,3 +12,13 @@ def pridobi_storitve():
         "seznam_storitev.html",
         podatki=podatki
     )
+    
+
+def stranka():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session["role"] != "stranka":
+        return "Nimaš dostopa"
+
+    return "Stranka panel"

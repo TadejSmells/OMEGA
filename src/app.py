@@ -120,6 +120,25 @@ def urnik():
 def faq():
     return controllers.faq.faq()
 
+@f_app.route("/register", methods=["POST"])
+def register_user():
+    return controllers.auth.register()
+
+@f_app.route("/login", methods=["POST"])
+def login_user():
+    return controllers.auth.login()
+
+@f_app.route("/admin")
+def admin():
+    return controllers.sv_setup.admin()
+
+@f_app.route("/frizer")
+def frizer():
+    return controllers.sv_setup.frizer()
+
+@f_app.route("/stranka")
+def stranka():
+    return controllers.storitve.stranka()
 
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ──────────────────────────
 #@f_app.route('/"tvoja_pot"')
