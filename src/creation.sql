@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS users (
     vloga VARCHAR(50) DEFAULT 'stranka'
 );
 
+ALTER TABLE users ADD COLUMN IF NOT EXISTS vloga VARCHAR(50) DEFAULT 'stranka';
+
 CREATE TABLE IF NOT EXISTS public.urnik (
     id_frizerja integer,
     dan date,
@@ -71,22 +73,46 @@ CREATE TABLE IF NOT EXISTS faq (
     aktiven BOOLEAN DEFAULT TRUE
 );
 
-ALTER TABLE IF EXISTS public.frizer
-ADD CONSTRAINT frizer_salon_id_fkey FOREIGN KEY (salon_id) REFERENCES public.salon (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'frizer_salon_id_fkey') THEN
+        ALTER TABLE public.frizer ADD CONSTRAINT frizer_salon_id_fkey
+            FOREIGN KEY (salon_id) REFERENCES public.salon (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
 
-ALTER TABLE IF EXISTS public.rezervacija
-ADD CONSTRAINT rezervacija_id_frizerja_fkey FOREIGN KEY (id_frizerja) REFERENCES public.frizer (id_frizer) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'rezervacija_id_frizerja_fkey') THEN
+        ALTER TABLE public.rezervacija ADD CONSTRAINT rezervacija_id_frizerja_fkey
+            FOREIGN KEY (id_frizerja) REFERENCES public.frizer (id_frizer) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
 
-ALTER TABLE IF EXISTS public.rezervacija
-ADD CONSTRAINT rezervacija_id_salona_fkey FOREIGN KEY (id_salona) REFERENCES public.salon (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'rezervacija_id_salona_fkey') THEN
+        ALTER TABLE public.rezervacija ADD CONSTRAINT rezervacija_id_salona_fkey
+            FOREIGN KEY (id_salona) REFERENCES public.salon (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
 
-ALTER TABLE IF EXISTS public.rezervacija
-ADD CONSTRAINT rezervacija_id_storitve_fkey FOREIGN KEY (id_storitve) REFERENCES public.storitev (id_storitve) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'rezervacija_id_storitve_fkey') THEN
+        ALTER TABLE public.rezervacija ADD CONSTRAINT rezervacija_id_storitve_fkey
+            FOREIGN KEY (id_storitve) REFERENCES public.storitev (id_storitve) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
 
-ALTER TABLE IF EXISTS public.rezervacija
-ADD CONSTRAINT rezervacija_id_stranke_fkey FOREIGN KEY (id_stranke) REFERENCES public.stranka (id_stranke) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'rezervacija_id_stranke_fkey') THEN
+        ALTER TABLE public.rezervacija ADD CONSTRAINT rezervacija_id_stranke_fkey
+            FOREIGN KEY (id_stranke) REFERENCES public.stranka (id_stranke) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
 
-ALTER TABLE IF EXISTS public.urnik
-ADD CONSTRAINT urnik_id_frizerja_fkey FOREIGN KEY (id_frizerja) REFERENCES public.frizer (id_frizer) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION;
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'urnik_id_frizerja_fkey') THEN
+        ALTER TABLE public.urnik ADD CONSTRAINT urnik_id_frizerja_fkey
+            FOREIGN KEY (id_frizerja) REFERENCES public.frizer (id_frizer) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
 
 END;
