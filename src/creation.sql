@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS public.stranka (
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(200) NOT NULL
+    password VARCHAR(200) NOT NULL,
+    vloga VARCHAR(50) DEFAULT 'stranka'
 );
 
 CREATE TABLE IF NOT EXISTS public.urnik (
@@ -64,9 +65,9 @@ CREATE TABLE IF NOT EXISTS public.urnik (
 
 CREATE TABLE IF NOT EXISTS faq (
     id_faq SERIAL PRIMARY KEY,
-    vprasanje TEXT NOT NULL, -- question
-    odgovor TEXT NOT NULL, -- answer
-    vrstni_red INT DEFAULT 0, -- sort order
+    vprasanje TEXT NOT NULL,
+    odgovor TEXT NOT NULL,
+    vrstni_red INT DEFAULT 0,
     aktiven BOOLEAN DEFAULT TRUE
 );
 
