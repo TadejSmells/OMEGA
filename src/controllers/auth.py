@@ -5,12 +5,21 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 from models.models import Uporabnik
 
+MIN_PASSWORD_LENGTH = 6
+
 
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
-        vloga = request.form.get('vloga', 'stranka')  # default je stranka
+        vloga = request.form.get('vloga', 'stranka')
+
+        # password length validation
+        if len(password) < MIN_PASSWORD_LENGTH:
+            return f"Geslo mora imeti vsaj {MIN_PASSWORD_LENGTH} znakov."
+
+        if not username:
+            return "Uporabniško ime ne sme biti prazno."
 
         db_session = db.get_session()
         try:
@@ -41,7 +50,7 @@ def register():
 
 def login():
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form["username"].strip()
         password = request.form["password"]
 
         db_session = db.get_session()
@@ -55,9 +64,8 @@ def login():
         if user and check_password_hash(user.password, password):
             session["user_id"] = user.id
             session["username"] = user.username
-            session["role"] = user.vloga  # shranjeno v Flask session
+            session["role"] = user.vloga
 
-            # redirect glede na vlogo
             if user.vloga == 'admin':
                 return redirect('/admin')
             elif user.vloga == 'frizer':
@@ -68,6 +76,11 @@ def login():
         return "Napačni podatki!"
 
     return render_template("login.html")
+
+
+def logout():
+    session.clear()
+    return redirect('/')
 
 
 def profil():

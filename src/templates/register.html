@@ -1,17 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="sl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registracija</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+            --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+            --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body); background: #e8ddd5;
+            color: var(--dark); min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .outer { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+        .back-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--rose); text-decoration: none; }
+        .okvir {
+            background: var(--light); border-radius: 16px;
+            padding: 40px 48px 48px; width: 380px; max-width: 95vw;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+        }
+        .profil-ikona {
+            width: 80px; height: 80px; border-radius: 50%; background: var(--beige);
+            margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
+            font-size: 36px; color: var(--white);
+        }
+        h2 {
+            font-family: var(--font-head); font-size: 1rem; color: var(--dark);
+            margin-bottom: 24px; letter-spacing: 0.05em; text-align: center;
+        }
+        .polje { margin-bottom: 16px; }
+        .polje label { font-size: 11px; color: var(--dark); display: block; margin-bottom: 4px; letter-spacing: 0.02em; }
+        .polje input, .polje select {
+            width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
+            background: transparent; padding: 6px 0; font-size: 13px;
+            outline: none; font-family: var(--font-body); color: var(--dark); transition: border-color 0.2s;
+        }
+        .polje input:focus, .polje select:focus { border-bottom-color: var(--brown); }
+        .gumb {
+            width: 100%; background: var(--brown); border: none; border-radius: 30px;
+            padding: 12px; font-size: 14px; font-family: var(--font-body);
+            color: var(--white); cursor: pointer; margin-top: 24px;
+            letter-spacing: 0.02em; transition: background 0.2s;
+        }
+        .gumb:hover { background: var(--rose); }
+        .link { text-align: center; margin-top: 16px; font-size: 12px; color: #7A958F; }
+        .link a { color: var(--brown); text-decoration: none; }
+        .link a:hover { text-decoration: underline; }
+        .hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+    </style>
 </head>
 <body>
-    <h2>Registracija</h2>
-
-    <form method="POST">
-        <input type="text" name="username" placeholder="Uporabniško ime" required><br>
-        <input type="password" name="password" placeholder="Geslo" required><br>
-        <button type="submit">Registriraj se</button>
-    </form>
-
-    <a href="/login">Že imaš račun? Prijava</a>
+<div class="outer">
+    <a href="/" class="back-btn">&#8617;</a>
+    <div class="okvir">
+        <div class="profil-ikona">&#128100;</div>
+        <h2>REGISTRACIJA</h2>
+        <form method="POST" action="/register">
+            <div class="polje">
+                <label>Uporabniško ime</label>
+                <input type="text" name="username" required autofocus>
+            </div>
+            <div class="polje">
+                <label>Geslo</label>
+                <input type="password" name="password" required minlength="6">
+                <div class="hint">Najmanj 6 znakov</div>
+            </div>
+            <div class="polje">
+                <label>Vloga</label>
+                <select name="vloga">
+                    <option value="stranka">Stranka</option>
+                    <option value="frizer">Frizer</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="gumb">Registracija</button>
+        </form>
+        <div class="link">
+            Že imaš račun? <a href="/login">Prijava</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

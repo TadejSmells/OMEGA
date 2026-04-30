@@ -1,6 +1,7 @@
 import sys
 import os
-from flask import Flask, redirect
+from flask import Flask, redirect, render_template
+from db import login_required, admin_required, frizer_required
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
@@ -45,6 +46,10 @@ def register():
 def login():
     return controllers.auth.login()
 
+@f_app.get('/logout')
+def logout():
+    return controllers.auth.logout()
+
 @f_app.get('/profil')
 def profil():
     return controllers.auth.profil()
@@ -57,7 +62,7 @@ def saloni():
 
 @f_app.get('/seznam_salonov')
 def seznam_salonov_alias():
-    return controllers.sv_salon.saloni() if hasattr(controllers.sv_salon, 'saloni') else redirect('/saloni')
+    return redirect('/saloni')
 
 @f_app.route('/salon/<int:salon_id>')
 def salon_detail(salon_id):
@@ -74,10 +79,12 @@ def saloni_view():
 
 # ─────────────────────────────────REZERVACIJE────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
+@login_required
 def rezervacije():
     return controllers.rezervacije.nova_rezervacija()
 
 @f_app.route('/rezervacije/izbrisi/<int:id_rezervacije>', methods=['POST'])
+@login_required
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
@@ -86,10 +93,12 @@ def salon_rezerviraj_old():
     return redirect('/rezervacije')
 
 @f_app.get('/vse_rezervacije')
+@login_required
 def vse_rezervacije():
     return controllers.ab_rezervacije.pregled_rezervacij()
 
 @f_app.route('/zgodovina')
+@login_required
 def zgodovina():
     return controllers.sv_salon.zgodovina()
 # ─────────────────────────────────REZERVACIJE────────────────────────────────
@@ -110,6 +119,7 @@ def seznam_storitev_alias():
 
 # ─────────────────────────────────OSTALO─────────────────────────────────────
 @f_app.route('/stranke')
+@login_required
 def stranke():
     return controllers.sv_salon.seznam_stranke()
 
@@ -122,20 +132,28 @@ def faq():
     return controllers.faq.faq()
 
 @f_app.route("/admin")
+@admin_required
 def admin():
     return controllers.sv_setup.admin()
 
 @f_app.route("/frizer")
+@frizer_required
 def frizer():
     return controllers.sv_salon.frizer()
 
 @f_app.route("/stranka")
+@login_required
 def stranka():
     return controllers.storitve.stranka()
+
+@f_app.get('/termini')
+def termini():
+    return render_template('termini.html')
 # ─────────────────────────────────OSTALO─────────────────────────────────────
 
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ─────────────────────────
 #@f_app.route('/"tvoja_pot"')
+#@login_required  # dodaj ce je stran zasčitena
 #def "tvoja_pot"():
 #    return controllers.ime_controllerja.funkcija()
 

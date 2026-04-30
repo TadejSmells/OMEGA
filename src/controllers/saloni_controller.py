@@ -1,29 +1,13 @@
 from flask import render_template
-from models import model_salon  # fixed: was 'saloni_model' which doesn't exist
+from models import model_salon
 
 
 def saloni():
-    saloni_list = []
-
     try:
-        saloni_list = model_salon.get_vse('salon')
+        # uses optimised single query instead of N+1
+        rezultat = model_salon.get_saloni_s_storitvami()
     except Exception:
-        saloni_list = []
-
-    rezultat = []
-
-    for salon in saloni_list:
-        salon_id = salon[0]
-
-        try:
-            storitve = model_salon.get_storitve_za_salon(salon_id)
-        except Exception:
-            storitve = []
-
-        rezultat.append({
-            "salon": salon,
-            "storitve": storitve
-        })
+        rezultat = []
 
     return render_template(
         "seznam_salonov.html",

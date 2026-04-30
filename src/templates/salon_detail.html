@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}{{ salon[1] if salon else 'Salon' }}{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    .page-header {
+        background: var(--beige); padding: 14px 32px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-header-title {
+        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
+        letter-spacing: 0.06em; color: var(--dark);
+    }
+    .back-wrap { padding: 10px 32px 0; display: flex; justify-content: flex-end; }
+    .back-btn { font-size: 22px; color: var(--rose); text-decoration: none; }
+    .vsebina { padding: 20px 32px 40px; display: flex; gap: 32px; align-items: flex-start; }
+    .salon-levo { display: flex; gap: 24px; flex: 1.2; align-items: flex-start; }
+    .salon-slika {
+        width: 200px; height: 220px; background: var(--beige);
+        border-radius: 10px; flex-shrink: 0;
+    }
+    .salon-info h2 {
+        font-family: var(--font-head); font-size: 1.2rem; color: var(--dark); margin-bottom: 14px;
+    }
+    .oznaka { font-size: 13px; color: var(--dark); margin-bottom: 6px; }
+    .oznaka strong { color: var(--rose); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+    .gumb {
+        background: var(--beige); border: none; border-radius: 30px;
+        padding: 12px 48px; font-size: 14px; font-family: var(--font-body);
+        color: var(--dark); cursor: pointer; margin-top: 28px;
+        display: inline-block; text-decoration: none; transition: background 0.2s;
+    }
+    .gumb:hover { background: var(--rose); color: var(--white); }
+    .salon-desno { flex: 1; border-left: 1px solid var(--peach); padding-left: 32px; }
+    .storitve-list { list-style: none; }
+    .storitve-list li {
+        background: var(--white); border: 1px solid var(--peach);
+        border-radius: 10px; padding: 12px 16px; margin-bottom: 8px;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .storitev-ime { font-size: 13px; color: var(--dark); }
+    .storitev-cena { font-size: 13px; color: var(--brown); font-weight: 600; }
+    .storitev-trajanje { font-size: 11px; color: #7A958F; }
+    .nav-footer {
+        background: var(--beige); padding: 14px 60px;
+        display: flex; justify-content: space-between;
+    }
+    .nav-footer a { font-size: 13px; color: var(--dark); text-decoration: none; font-style: italic; }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">{{ salon[1] if salon else 'SALON' }}</div>
+    <a href="/profil" style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;">&#128100;</a>
+</div>
+
+<div class="back-wrap">
+    <a href="/saloni" class="back-btn">&#8617;</a>
+</div>
+
+{% if salon %}
+<div class="vsebina">
+    <div class="salon-levo">
+        <div class="salon-slika"></div>
+        <div class="salon-info">
+            <h2>{{ salon[1] }}</h2>
+            <div class="oznaka"><strong>Naslov</strong>{{ salon[2] }}</div>
+            <div class="oznaka"><strong>Mesto</strong>{{ salon[3] }}</div>
+            <div class="oznaka"><strong>Telefon</strong>{{ salon[4] }}</div>
+            <a href="/rezervacije" class="gumb">Naroči se</a>
+        </div>
+    </div>
+
+    <div class="salon-desno">
+        <h3 style="font-family:var(--font-head);font-size:1rem;color:var(--dark);margin-bottom:16px;letter-spacing:0.04em;">STORITVE</h3>
+        {% if storitve %}
+        <ul class="storitve-list">
+            {% for st in storitve %}
+            <li>
+                <div>
+                    <div class="storitev-ime">{{ st[1] }}</div>
+                    <div class="storitev-trajanje">{{ st[3] }}</div>
+                </div>
+                <div class="storitev-cena">{{ st[2] }} €</div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p style="color:#aaa;font-style:italic;font-size:13px;">Ni storitev za ta salon.</p>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<div style="padding:40px;text-align:center;color:#aaa;font-style:italic;">Salon ni bil najden.</div>
+{% endif %}
+
+<div class="nav-footer">
+    <a href="#">News</a>
+    <a href="#">Vaši termini</a>
+    <a href="#">Informacije</a>
+</div>
+{% endblock %}

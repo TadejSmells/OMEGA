@@ -2,21 +2,18 @@ from flask import render_template, request, redirect, abort, session
 from models import model_salon
 
 
-#tukaj se bodo funkcije odstranile
-#za vsak user story se naredi posebi datoteko v mapi controllers, kjer se definira funkcijo.
-
-
 def pregled():
     return redirect('/saloni')
 
+
 def seznam_stranke():
-    stranke = model_salon.get_vse('stranka')
+    stranke = model_salon.get_stranke()
     return render_template("seznam_stranke.html", stranke=stranke)
 
 
 def salon_detail(salon_id):
     try:
-        salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)
+        salon = next((s for s in model_salon.get_salone() if s[0] == salon_id), None)
     except Exception:
         salon = None
 
@@ -35,25 +32,17 @@ def salon_detail(salon_id):
         ocene=[]
     )
 
-def storitve():
-    if request.method == 'POST':
-        model_salon.dodaj_storitev(
-            request.form.get('ime_storitve'),
-            request.form.get('cena'),
-            request.form.get('trajanje')
-        )
-        return redirect('/storitve')
-    return render_template("storitve.html", storitve=model_salon.get_vse('storitev'))
-
 
 def saloni_view_info():
     return render_template(
         "saloni_view.html",
-        saloni=model_salon.get_vse('salon')
+        saloni=model_salon.get_salone()
     )
+
 
 def saloni_view():
     return saloni_view_info()
+
 
 def urnik():
     if request.method == 'POST':
@@ -64,17 +53,18 @@ def urnik():
         )
         return redirect('/urnik')
     return render_template("urnik.html",
-                           urnik=model_salon.get_vse('urnik'),
-                           frizerji=model_salon.get_vse('frizer'))
+                           urnik=model_salon.get_urnik(),
+                           frizerji=model_salon.get_frizerje())
+
 
 def zgodovina():
-    rezervacije = model_salon.get_vse('rezervacija')
+    rezervacije = model_salon.get_rezervacije()
     return render_template("zgodovina.html", rezervacije=rezervacije)
 
 
 def frizer():
     if "user_id" not in session:
         return redirect("/login")
-    if session.get("role") != "frizer":
-        return "Nimaš dostopa"
+    if session.get("role") not in ("frizer", "admin"):
+        return "Nimaš dostopa.", 403
     return "Frizer panel"
