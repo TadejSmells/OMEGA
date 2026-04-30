@@ -1,6 +1,7 @@
 import os
+import secrets
 from functools import wraps
-from flask import session, redirect
+from flask import session, redirect, request, abort
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from urllib.parse import quote_plus
@@ -12,14 +13,13 @@ DATABASE_URL = (
     f"/{os.environ['DBNAME']}"
 )
 
-# Connection pool configured for better performance under load
 engine = create_engine(
     DATABASE_URL,
     echo=False,
-    pool_size=5,           # keep 5 connections open
-    max_overflow=10,       # allow up to 10 extra connections under load
-    pool_pre_ping=True,    # test connections before using them (prevents stale connection errors)
-    pool_recycle=300,      # recycle connections every 5 minutes
+    pool_size=5,
+    max_overflow=10,
+    pool_pre_ping=True,
+    pool_recycle=300,
 )
 
 Session = sessionmaker(bind=engine)
@@ -29,29 +29,55 @@ def get_session():
     """
     Vrne SQLAlchemy sejo za delo z bazo.
     Vedno zapri sejo po uporabi z session.close() v finally bloku.
-
-    Primer uporabe:
-        db_session = db.get_session()
-        try:
-            rows = db_session.query(Frizer).all()
-            return rows
-        finally:
-            db_session.close()
     """
     return Session()
+
+
+# ── CSRF PROTECTION ───────────────────────────────────────────────────────────
+
+def generate_csrf_token():
+    """
+    Generira CSRF token in ga shrani v Flask session.
+    Pokliče se avtomatsko v base.html prek csrf_token().
+    """
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_hex(32)
+    return session['csrf_token']
+
+
+def validate_csrf():
+    """
+    Preveri CSRF token pri POST zahtevah.
+    Pokliče se avtomatsko prek @csrf_protect dekoratorja.
+    """
+    if request.method == 'POST':
+        token = request.form.get('csrf_token')
+        if not token or token != session.get('csrf_token'):
+            abort(403)
+
+
+def csrf_protect(f):
+    """
+    Dekorator ki zaščiti route pred CSRF napadi.
+    Dodaj nad vsak POST route.
+
+    Uporaba:
+        @f_app.route('/login', methods=['GET', 'POST'])
+        @csrf_protect
+        def login():
+            ...
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        validate_csrf()
+        return f(*args, **kwargs)
+    return decorated
 
 
 # ── SECURITY DECORATORS ───────────────────────────────────────────────────────
 
 def login_required(f):
-    """
-    Zaščiti route pred neprijavljenimi uporabniki.
-    Uporaba:
-        @f_app.route('/zaščitena-stran')
-        @login_required
-        def zasčitena_stran():
-            ...
-    """
+    """Zaščiti route pred neprijavljenimi uporabniki."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if "user_id" not in session:
@@ -61,9 +87,7 @@ def login_required(f):
 
 
 def admin_required(f):
-    """
-    Zaščiti route — dostop samo za admine.
-    """
+    """Zaščiti route — dostop samo za admine."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if "user_id" not in session:
@@ -75,9 +99,7 @@ def admin_required(f):
 
 
 def frizer_required(f):
-    """
-    Zaščiti route — dostop samo za frizerje.
-    """
+    """Zaščiti route — dostop samo za frizerje in admine."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if "user_id" not in session:

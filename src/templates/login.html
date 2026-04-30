@@ -45,8 +45,7 @@
         .toggle-pw {
             position: absolute; right: 0; top: 50%; transform: translateY(-50%);
             background: none; border: none; cursor: pointer;
-            font-size: 16px; color: #aaa; padding: 0 2px;
-            line-height: 1;
+            font-size: 16px; color: #aaa; padding: 0 2px; line-height: 1;
         }
         .toggle-pw:hover { color: var(--brown); }
         .gumb {
@@ -59,6 +58,12 @@
         .link { text-align: center; margin-top: 16px; font-size: 12px; color: #7A958F; }
         .link a { color: var(--brown); text-decoration: none; }
         .link a:hover { text-decoration: underline; }
+
+        /* Flash messages */
+        .flash { padding: 10px 14px; border-radius: 8px; font-size: 12px;
+                 margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .flash-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
     </style>
 </head>
 <body>
@@ -67,7 +72,18 @@
     <div class="okvir">
         <div class="profil-ikona">&#128100;</div>
         <h2>PRIJAVA</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+                {% if category == 'error' %}❌{% else %}✅{% endif %}
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endwith %}
+
         <form method="POST" action="/login">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="polje">
                 <label>Uporabniško ime</label>
                 <div class="input-wrap">

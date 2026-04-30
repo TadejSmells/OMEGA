@@ -68,6 +68,7 @@
         <div class="profil-ikona">&#128100;</div>
         <h2>REGISTRACIJA</h2>
         <form method="POST" action="/register">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="polje">
                 <label>Uporabniško ime</label>
                 <div class="input-wrap">

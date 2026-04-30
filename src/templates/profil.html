@@ -75,6 +75,7 @@
             <div class="prijava">
                 <h2>PRIJAVA</h2>
                 <form method="POST" action="/login" id="form-prijava">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="polje">
                         <div class="label">Uporabniško ime</div>
                         <div class="input-wrap">
@@ -98,6 +99,7 @@
             <div class="registracija">
                 <h2>REGISTRACIJA</h2>
                 <form method="POST" action="/register" id="form-registracija">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="polje">
                         <div class="label">Uporabniško ime</div>
                         <div class="input-wrap">

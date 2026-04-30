@@ -2,7 +2,7 @@ import sys
 import os
 import logging
 from flask import Flask, redirect, render_template
-from db import login_required, admin_required, frizer_required
+from db import login_required, admin_required, frizer_required, csrf_protect, generate_csrf_token
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
@@ -15,7 +15,6 @@ import controllers.storitve
 import controllers.ab_rezervacije
 import controllers.faq
 import controllers.saloni_controller
-#import controllers.primer_controller
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,6 +24,9 @@ logger = logging.getLogger(__name__)
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+
+# make csrf_token available in all templates
+f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 # ── ERROR HANDLERS ────────────────────────────────────────────────────────────
 @f_app.errorhandler(404)
@@ -62,10 +64,12 @@ def polni_db():
 
 # ─────────────────────────────────AUTH───────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
+@csrf_protect
 def register():
     return controllers.auth.register()
 
 @f_app.route("/login", methods=["GET", "POST"])
+@csrf_protect
 def login():
     return controllers.auth.login()
 
@@ -103,11 +107,13 @@ def saloni_view():
 # ─────────────────────────────────REZERVACIJE────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
 @login_required
+@csrf_protect
 def rezervacije():
     return controllers.rezervacije.nova_rezervacija()
 
 @f_app.route('/rezervacije/izbrisi/<int:id_rezervacije>', methods=['POST'])
 @login_required
+@csrf_protect
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
@@ -177,6 +183,7 @@ def termini():
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ─────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #@login_required
+#@csrf_protect  # dodaj ce ima POST metodo
 #def "tvoja_pot"():
 #    return controllers.ime_controllerja.funkcija()
 
