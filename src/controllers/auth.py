@@ -10,6 +10,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        vloga = request.form.get('vloga', 'stranka')  # default je stranka
 
         db_session = db.get_session()
         try:
@@ -21,7 +22,11 @@ def register():
                 return "Uporabnik že obstaja!"
 
             hashed_password = generate_password_hash(password)
-            db_session.add(Uporabnik(username=username, password=hashed_password))
+            db_session.add(Uporabnik(
+                username=username,
+                password=hashed_password,
+                vloga=vloga
+            ))
             db_session.commit()
         except:
             db_session.rollback()
@@ -50,7 +55,15 @@ def login():
         if user and check_password_hash(user.password, password):
             session["user_id"] = user.id
             session["username"] = user.username
-            return "Prijava uspešna!"
+            session["role"] = user.vloga  # shranjeno v Flask session
+
+            # redirect glede na vlogo
+            if user.vloga == 'admin':
+                return redirect('/admin')
+            elif user.vloga == 'frizer':
+                return redirect('/frizer')
+            else:
+                return redirect('/stranka')
 
         return "Napačni podatki!"
 
