@@ -1,12 +1,12 @@
 from flask import render_template
-from models import saloni_model
+from models import model_salon  # fixed: was 'saloni_model' which doesn't exist
 
 
 def saloni():
     saloni_list = []
 
     try:
-        saloni_list = saloni_model.get_saloni()
+        saloni_list = model_salon.get_vse('salon')
     except Exception:
         saloni_list = []
 
@@ -16,7 +16,7 @@ def saloni():
         salon_id = salon[0]
 
         try:
-            storitve = saloni_model.get_storitve_za_salon(salon_id)
+            storitve = model_salon.get_storitve_za_salon(salon_id)
         except Exception:
             storitve = []
 

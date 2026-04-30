@@ -11,11 +11,12 @@ import controllers.auth
 import controllers.rezervacije
 import controllers.storitve
 import controllers.ab_rezervacije
-import controllers.faq 
+import controllers.faq
 import controllers.saloni_controller
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
+f_app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
 # ───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────
 @f_app.get('/')
@@ -56,7 +57,7 @@ def saloni():
 
 @f_app.get('/seznam_salonov')
 def seznam_salonov_alias():
-    return controllers.sv_salon.saloni()
+    return controllers.sv_salon.saloni() if hasattr(controllers.sv_salon, 'saloni') else redirect('/saloni')
 
 @f_app.route('/salon/<int:salon_id>')
 def salon_detail(salon_id):
@@ -71,7 +72,7 @@ def saloni_view():
     return controllers.sv_salon.saloni_view()
 # ─────────────────────────────────SALONI─────────────────────────────────────
 
-# ─────────────────────────────────REZERVACIJE─────────────────────────────────
+# ─────────────────────────────────REZERVACIJE────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
 def rezervacije():
     return controllers.rezervacije.nova_rezervacija()
@@ -91,9 +92,9 @@ def vse_rezervacije():
 @f_app.route('/zgodovina')
 def zgodovina():
     return controllers.sv_salon.zgodovina()
-# ─────────────────────────────────REZERVACIJE─────────────────────────────────
+# ─────────────────────────────────REZERVACIJE────────────────────────────────
 
-# ─────────────────────────────────STORITVE────────────────────────────────────
+# ─────────────────────────────────STORITVE───────────────────────────────────
 @f_app.route('/cenik')
 def cenik():
     return controllers.storitve.pridobi_storitve()
@@ -105,9 +106,9 @@ def seznam_storitev():
 @f_app.get('/seznam_storitev')
 def seznam_storitev_alias():
     return controllers.storitve.pridobi_storitve()
-# ─────────────────────────────────STORITVE────────────────────────────────────
+# ─────────────────────────────────STORITVE───────────────────────────────────
 
-# ─────────────────────────────────OSTALO──────────────────────────────────────
+# ─────────────────────────────────OSTALO─────────────────────────────────────
 @f_app.route('/stranke')
 def stranke():
     return controllers.sv_salon.seznam_stranke()
@@ -120,27 +121,20 @@ def urnik():
 def faq():
     return controllers.faq.faq()
 
-@f_app.route("/register", methods=["POST"])
-def register_user():
-    return controllers.auth.register()
-
-@f_app.route("/login", methods=["POST"])
-def login_user():
-    return controllers.auth.login()
-
 @f_app.route("/admin")
 def admin():
     return controllers.sv_setup.admin()
 
 @f_app.route("/frizer")
 def frizer():
-    return controllers.sv_setup.frizer()
+    return controllers.sv_salon.frizer()
 
 @f_app.route("/stranka")
 def stranka():
     return controllers.storitve.stranka()
+# ─────────────────────────────────OSTALO─────────────────────────────────────
 
-# ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ──────────────────────────
+# ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ─────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #def "tvoja_pot"():
 #    return controllers.ime_controllerja.funkcija()

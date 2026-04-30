@@ -14,9 +14,10 @@ def setup_db():
     }
     return render_template("sv_setup.html", tables=tables)
 
+
 def polni_db():
     success = model_salon.polni_db()
-    tabless={
+    tables = {
         "salon": success,
         "frizer": success,
         "stranka": success,
@@ -24,14 +25,12 @@ def polni_db():
         "urnik": success,
         "rezervacija": success
     }
-    return render_template("sv_setup.html", tables=tabless)
-    
+    return render_template("sv_setup.html", tables=tables)
+
 
 def admin():
     if "user_id" not in session:
         return redirect("/login")
-
-    if session["role"] != "admin":
+    if session.get("role") != "admin":
         return "Nimaš dostopa"
-
     return "Admin panel"

@@ -12,13 +12,11 @@ def pridobi_storitve():
         "seznam_storitev.html",
         podatki=podatki
     )
-    
+
 
 def stranka():
     if "user_id" not in session:
         return redirect("/login")
-
-    if session["role"] != "stranka":
+    if session.get("role") != "stranka":
         return "Nimaš dostopa"
-
     return "Stranka panel"
