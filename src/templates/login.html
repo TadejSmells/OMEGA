@@ -35,12 +35,20 @@
         }
         .polje { margin-bottom: 16px; }
         .polje label { font-size: 11px; color: var(--dark); display: block; margin-bottom: 4px; letter-spacing: 0.02em; }
+        .input-wrap { position: relative; }
         .polje input {
             width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
-            background: transparent; padding: 6px 0; font-size: 13px;
+            background: transparent; padding: 6px 32px 6px 0; font-size: 13px;
             outline: none; font-family: var(--font-body); color: var(--dark); transition: border-color 0.2s;
         }
         .polje input:focus { border-bottom-color: var(--brown); }
+        .toggle-pw {
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer;
+            font-size: 16px; color: #aaa; padding: 0 2px;
+            line-height: 1;
+        }
+        .toggle-pw:hover { color: var(--brown); }
         .gumb {
             width: 100%; background: var(--brown); border: none; border-radius: 30px;
             padding: 12px; font-size: 14px; font-family: var(--font-body);
@@ -62,11 +70,16 @@
         <form method="POST" action="/login">
             <div class="polje">
                 <label>Uporabniško ime</label>
-                <input type="text" name="username" required autofocus>
+                <div class="input-wrap">
+                    <input type="text" name="username" required autofocus>
+                </div>
             </div>
             <div class="polje">
                 <label>Geslo</label>
-                <input type="password" name="password" required>
+                <div class="input-wrap">
+                    <input type="password" name="password" id="pw-login" required>
+                    <button type="button" class="toggle-pw" onclick="togglePw('pw-login', this)">👁</button>
+                </div>
             </div>
             <button type="submit" class="gumb">Prijava</button>
         </form>
@@ -75,5 +88,17 @@
         </div>
     </div>
 </div>
+<script>
+    function togglePw(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            btn.textContent = '👁';
+        }
+    }
+</script>
 </body>
 </html>

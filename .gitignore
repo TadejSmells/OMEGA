@@ -1,3 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
 
+# Virtual environments
+venv/
+env/
+.venv/
 
+# Environment variables — NEVER commit this
+.env
+
+# Docker
+gunicorn.ctl
 src/gunicorn.ctl
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# SQLite (if ever used locally)
+*.db
+*.sqlite3

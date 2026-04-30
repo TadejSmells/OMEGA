@@ -1,16 +1,22 @@
-#tuki notri je kako mora zgledat controller, da se lahko uporablja v app.py
+# ── PRIMER CONTROLLERJA ───────────────────────────────────────────────────────
+# Ta datoteka je VZOREC — pokaže kako mora izgledati controller.
+# Kopiraj ta vzorec ko delaš svojo controller datoteko.
+#
+# KORAKI za nov user story:
+# 1. Ustvari src/models/model_ime.py  (podatki iz baze)
+# 2. Ustvari src/controllers/ime.py   (logika, ta vzorec)
+# 3. Dodaj route v src/app.py
+# 4. Ustvari src/templates/ime.html
+
 from flask import render_template
-from models import model_primer_modela
-#v primeru poizvedbe da nekaj naredimo, npr. pridobimo podatke iz baze, jih obdelamo in jih posredujemo v template¸
+# from models import model_primer_modela  # ← zamenjaj z dejanskim modelom
 
 
 def funkcija():
+    # podatki = model_primer_modela.get_vse_podatke()
+    podatki = []  # začasno prazno dokler ni model narejen
 
     return render_template(
-        "primer_template.html",
-        podatki = model_primer_modela.get_vse_podatke()
+        "primer_template.html",  # ← zamenjaj z dejanskim templateom
+        podatki=podatki
     )
-
-#ta file dela, da lahko v app.py kličemo funkcijo funkcija() in nam vrne render_template, 
-# ki nam prikaže template in podatke iz baze, 
-# ki jih pridobimo z modelom model_primer_modela.get_vse_podatke()

@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, abort, session
 from models import model_salon
+from models import model_rezervacije
 
 
 def pregled():
@@ -25,19 +26,11 @@ def salon_detail(salon_id):
     except Exception:
         storitve = []
 
-    return render_template(
-        "salon.html",
-        salon=salon,
-        storitve=storitve,
-        ocene=[]
-    )
+    return render_template("salon.html", salon=salon, storitve=storitve, ocene=[])
 
 
 def saloni_view_info():
-    return render_template(
-        "saloni_view.html",
-        saloni=model_salon.get_salone()
-    )
+    return render_template("saloni_view.html", saloni=model_salon.get_salone())
 
 
 def saloni_view():
@@ -67,4 +60,8 @@ def frizer():
         return redirect("/login")
     if session.get("role") not in ("frizer", "admin"):
         return "Nimaš dostopa.", 403
-    return "Frizer panel"
+
+    # show all reservations for now
+    # in future: filter by this frizer's id
+    rezervacije = model_rezervacije.get_vse_rezervacije()
+    return render_template("frizer_panel.html", rezervacije=rezervacije)
