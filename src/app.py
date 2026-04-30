@@ -17,6 +17,8 @@ import controllers.saloni_controller
 
 f_app = Flask(__name__, template_folder='templates')
 
+f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
+
 # ───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────
 @f_app.get('/')
 def home():
