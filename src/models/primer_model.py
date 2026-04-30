@@ -1,23 +1,22 @@
-#tukaj notri je primer modela
+# PRIMER MODELA — kako mora izgledati model datoteka
+# Kopiraj ta vzorec ko delaš svojo model datoteko
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-#importamo db, da lahko delamo z bazo, 
-# v tem primeru bomo delali z modelom model_primer_modela, 
-# ki bo imel funkcijo get_vse_podatke(), 
-# ki bo vrnila vse podatke iz baze, 
-# ki jih bomo potem uporabili v controllerju
+# from models.models import TvojModel  ← importaj svojo tabelo iz models.py
+
 
 def get_vse_podatke():
-    conn = db.get_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM tabela")
-    rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return rows
-
-#ta funkcija get_vse_podatke() se poveže z bazo, izvede poizvedbo, da dobi vse podatke iz tabele,
-# zapre povezavo in vrne podatke, ki jih potem lahko uporabimo v controllerju, da jih posredujemo v template in jih prikažemo uporabniku
+    """
+    Primer funkcije ki dobi vse podatke iz tabele.
+    Zamenjaj 'TvojModel' z dejanskim imenom razreda iz models.py
+    """
+    session = db.get_session()
+    try:
+        # rows = session.query(TvojModel).all()
+        # return [(r.id, r.ime) for r in rows]
+        return []  # zamenjaj z zgornjo kodo
+    finally:
+        session.close()

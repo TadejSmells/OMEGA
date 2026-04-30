@@ -1,10 +1,11 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 from models.models import Faq
 
-def pridobi_faq ():
+
+def pridobi_faq():
     session = db.get_session()
     try:
         rows = (
@@ -20,4 +21,3 @@ def pridobi_faq ():
         return rows
     finally:
         session.close()
-

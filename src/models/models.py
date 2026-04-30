@@ -61,6 +61,7 @@ class Uporabnik(Base):
     id       = Column(Integer, primary_key=True)
     username = Column(String(100), unique=True, nullable=False)
     password = Column(String(200), nullable=False)
+    vloga    = Column(String(50), default='stranka')  # 'admin', 'frizer', 'stranka'
 
 class Faq(Base):
     __tablename__ = 'faq'
