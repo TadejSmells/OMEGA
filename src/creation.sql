@@ -14,8 +14,13 @@ CREATE TABLE IF NOT EXISTS public.rezervacija (
     id_frizerja integer,
     id_salona integer,
     id_storitve integer,
+    datum date,
+    ura time without time zone,
     CONSTRAINT rezervacija_pkey PRIMARY KEY (id_rezervacije)
 );
+
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS datum date;
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS ura time without time zone;
 
 CREATE TABLE IF NOT EXISTS public.salon (
     id serial NOT NULL,

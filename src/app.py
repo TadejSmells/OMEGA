@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 from flask import Flask, redirect, render_template
 from db import login_required, admin_required, frizer_required
 
@@ -16,8 +17,30 @@ import controllers.faq
 import controllers.saloni_controller
 #import controllers.primer_controller
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s: %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 f_app = Flask(__name__, template_folder='templates')
-f_app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
+f_app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+
+# ── ERROR HANDLERS ────────────────────────────────────────────────────────────
+@f_app.errorhandler(404)
+def not_found(e):
+    logger.warning(f"404: {e}")
+    return render_template('404.html'), 404
+
+@f_app.errorhandler(500)
+def server_error(e):
+    logger.error(f"500: {e}")
+    return render_template('500.html'), 500
+
+@f_app.errorhandler(403)
+def forbidden(e):
+    return render_template('403.html'), 403
+# ── ERROR HANDLERS ────────────────────────────────────────────────────────────
 
 # ───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────
 @f_app.get('/')
@@ -153,7 +176,7 @@ def termini():
 
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ─────────────────────────
 #@f_app.route('/"tvoja_pot"')
-#@login_required  # dodaj ce je stran zasčitena
+#@login_required
 #def "tvoja_pot"():
 #    return controllers.ime_controllerja.funkcija()
 

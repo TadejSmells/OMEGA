@@ -5,6 +5,7 @@ Base = declarative_base()
 
 # TA DATOTEKA DEFINIRA STRUKTURO BAZE PODATKOV (vse tabele)
 # Stolpci se ujemajo s creation.sql
+# NE SPREMINJAJ brez posvetovanja z vodjo SQLAlchemy dela.
 
 class Salon(Base):
     __tablename__ = 'salon'
@@ -55,6 +56,8 @@ class Rezervacija(Base):
     id_frizerja    = Column(Integer, ForeignKey('frizer.id_frizer'))
     id_salona      = Column(Integer, ForeignKey('salon.id'), nullable=True)
     id_storitve    = Column(Integer, ForeignKey('storitev.id_storitve'), nullable=True)
+    datum          = Column(Date, nullable=True)   # datum rezervacije
+    ura            = Column(Time, nullable=True)   # ura rezervacije
 
 class Uporabnik(Base):
     __tablename__ = 'users'

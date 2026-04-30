@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, session
+from flask import request, render_template, redirect, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -14,12 +14,13 @@ def register():
         password = request.form['password']
         vloga = request.form.get('vloga', 'stranka')
 
-        # password length validation
         if len(password) < MIN_PASSWORD_LENGTH:
-            return f"Geslo mora imeti vsaj {MIN_PASSWORD_LENGTH} znakov."
+            flash(f"Geslo mora imeti vsaj {MIN_PASSWORD_LENGTH} znakov.", "error")
+            return redirect('/register')
 
         if not username:
-            return "Uporabniško ime ne sme biti prazno."
+            flash("Uporabniško ime ne sme biti prazno.", "error")
+            return redirect('/register')
 
         db_session = db.get_session()
         try:
@@ -28,7 +29,8 @@ def register():
             ).first()
 
             if existing:
-                return "Uporabnik že obstaja!"
+                flash("Uporabnik s tem imenom že obstaja.", "error")
+                return redirect('/register')
 
             hashed_password = generate_password_hash(password)
             db_session.add(Uporabnik(
@@ -37,9 +39,11 @@ def register():
                 vloga=vloga
             ))
             db_session.commit()
+            flash("Registracija uspešna! Prijavi se.", "success")
         except:
             db_session.rollback()
-            raise
+            flash("Napaka pri registraciji. Poskusi znova.", "error")
+            return redirect('/register')
         finally:
             db_session.close()
 
@@ -65,21 +69,25 @@ def login():
             session["user_id"] = user.id
             session["username"] = user.username
             session["role"] = user.vloga
+            flash(f"Dobrodošel, {user.username}!", "success")
 
             if user.vloga == 'admin':
                 return redirect('/admin')
             elif user.vloga == 'frizer':
                 return redirect('/frizer')
             else:
-                return redirect('/stranka')
+                return redirect('/')
 
-        return "Napačni podatki!"
+        flash("Napačno uporabniško ime ali geslo.", "error")
+        return redirect('/login')
 
     return render_template("login.html")
 
 
 def logout():
+    username = session.get("username", "")
     session.clear()
+    flash(f"Uspešno si se odjavil.", "success")
     return redirect('/')
 
 

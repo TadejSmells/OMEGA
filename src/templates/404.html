@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Stran ni najdena{% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root { --beige: #D9B99F; --light: #F2E7DD; --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif; }
+    .err-page { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 32px; text-align: center; }
+    .err-code { font-family: var(--font-head); font-size: 6rem; color: var(--beige); font-weight: 700; line-height: 1; }
+    .err-title { font-family: var(--font-head); font-size: 1.4rem; color: var(--dark); margin: 16px 0 8px; }
+    .err-desc { font-size: 13px; color: #7A958F; max-width: 400px; line-height: 1.7; margin-bottom: 32px; }
+    .err-btn { background: var(--brown); color: white; border: none; border-radius: 30px; padding: 12px 32px; font-size: 13px; text-decoration: none; transition: background 0.2s; }
+    .err-btn:hover { background: var(--rose); color: white; }
+</style>
+<div class="err-page">
+    <div class="err-code">404</div>
+    <div class="err-title">Stran ni bila najdena</div>
+    <div class="err-desc">Stran, ki jo iščeš, ne obstaja ali je bila premaknjena.</div>
+    <a href="/" class="err-btn">← Nazaj na začetek</a>
+</div>
+{% endblock %}

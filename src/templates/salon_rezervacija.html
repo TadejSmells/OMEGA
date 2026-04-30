@@ -3,16 +3,13 @@
 
 {% block content %}
 <div class="container mt-4">
-
-  <!-- ── PAGE HEADER ───────────────────────────────────────────── -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">🗓️ Rezervacije</h2>
     <a href="/" class="btn btn-outline-secondary btn-sm">← Domov</a>
   </div>
 
   <div class="row g-4">
-
-    <!-- ── ADD FORM ─────────────────────────────────────────────── -->
+    <!-- ADD FORM -->
     <div class="col-lg-4">
       <div class="card shadow-sm h-100">
         <div class="card-header bg-primary text-white">
@@ -22,20 +19,18 @@
           <form method="POST" action="/rezervacije">
 
             <div class="mb-3">
-              <label for="stranka_id" class="form-label fw-semibold">Stranka</label>
-              <select class="form-select" id="stranka_id" name="stranka_id" required>
+              <label class="form-label fw-semibold">Stranka</label>
+              <select class="form-select" name="stranka_id" required>
                 <option value="" disabled selected>— izberi stranko —</option>
                 {% for stranka in stranke %}
-                <option value="{{ stranka[0] }}">
-                  {{ stranka[1] }} {{ stranka[2] }}
-                </option>
+                <option value="{{ stranka[0] }}">{{ stranka[1] }} {{ stranka[2] }}</option>
                 {% endfor %}
               </select>
             </div>
 
             <div class="mb-3">
-              <label for="frizer_id" class="form-label fw-semibold">Frizer</label>
-              <select class="form-select" id="frizer_id" name="frizer_id" required>
+              <label class="form-label fw-semibold">Frizer</label>
+              <select class="form-select" name="frizer_id" required>
                 <option value="" disabled selected>— izberi frizerja —</option>
                 {% for frizer in frizerji %}
                 <option value="{{ frizer[0] }}">{{ frizer[2] }}</option>
@@ -44,8 +39,8 @@
             </div>
 
             <div class="mb-3">
-              <label for="salon_id" class="form-label fw-semibold">Salon</label>
-              <select class="form-select" id="salon_id" name="salon_id">
+              <label class="form-label fw-semibold">Salon</label>
+              <select class="form-select" name="salon_id">
                 <option value="">— brez salona —</option>
                 {% for salon in saloni %}
                 <option value="{{ salon[0] }}">{{ salon[1] }}</option>
@@ -53,27 +48,33 @@
               </select>
             </div>
 
-            <div class="mb-4">
-              <label for="storitev_id" class="form-label fw-semibold">Storitev</label>
-              <select class="form-select" id="storitev_id" name="storitev_id">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Storitev</label>
+              <select class="form-select" name="storitev_id">
                 <option value="">— brez storitve —</option>
                 {% for storitev in storitve %}
-                <option value="{{ storitev[0] }}">
-                  {{ storitev[1] }} — {{ storitev[2] }} € ({{ storitev[3] }} min)
-                </option>
+                <option value="{{ storitev[0] }}">{{ storitev[1] }} — {{ storitev[2] }} €</option>
                 {% endfor %}
               </select>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">
-              ＋ Dodaj rezervacijo
-            </button>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Datum</label>
+              <input type="date" class="form-control" name="datum">
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Ura</label>
+              <input type="time" class="form-control" name="ura">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">＋ Dodaj rezervacijo</button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- ── RESERVATION LIST ─────────────────────────────────────── -->
+    <!-- RESERVATION LIST -->
     <div class="col-lg-8">
       <div class="card shadow-sm">
         <div class="card-header bg-light">
@@ -92,8 +93,8 @@
                   <th>Frizer</th>
                   <th>Salon</th>
                   <th>Storitev</th>
-                  <th>Cena</th>
-                  <th>Min</th>
+                  <th>Datum</th>
+                  <th>Ura</th>
                   <th></th>
                 </tr>
               </thead>
@@ -105,8 +106,8 @@
                   <td>{{ r[2] or '—' }}</td>
                   <td>{{ r[3] or '—' }}</td>
                   <td>{{ r[4] or '—' }}</td>
-                  <td>{% if r[5] %}{{ r[5] }} €{% else %}—{% endif %}</td>
-                  <td>{{ r[6] or '—' }}</td>
+                  <td>{{ r[7] or '—' }}</td>
+                  <td>{{ r[8] or '—' }}</td>
                   <td>
                     <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}"
                           onsubmit="return confirm('Izbriši rezervacijo #{{ r[0] }}?')">
@@ -126,7 +127,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 {% endblock %}
