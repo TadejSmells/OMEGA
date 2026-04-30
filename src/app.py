@@ -2,7 +2,7 @@ import sys
 import os
 import logging
 from flask import Flask, redirect, render_template
-from db import login_required, admin_required, frizer_required, csrf_protect, generate_csrf_token
+from db import login_required, admin_required, frizer_required, csrf_protect, generate_csrf_token, check_session_timeout
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
@@ -27,6 +27,14 @@ f_app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-produc
 
 # make csrf_token available in all templates
 f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
+
+# ── SESSION TIMEOUT ───────────────────────────────────────────────────────────
+@f_app.before_request
+def session_timeout():
+    result = check_session_timeout()
+    if result is not None:
+        return result
+# ── SESSION TIMEOUT ───────────────────────────────────────────────────────────
 
 # ── ERROR HANDLERS ────────────────────────────────────────────────────────────
 @f_app.errorhandler(404)
