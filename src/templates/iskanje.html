@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Iskanje — {{ query }}{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    .page-header {
+        background: var(--beige); padding: 14px 32px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-header-title {
+        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
+        letter-spacing: 0.06em; color: var(--dark);
+    }
+    .vsebina { padding: 24px 32px; max-width: 900px; margin: 0 auto; }
+    .query-label {
+        font-size: 13px; color: #7A958F; margin-bottom: 24px;
+    }
+    .query-label strong { color: var(--brown); }
+    .section-title {
+        font-family: var(--font-head); font-size: 1rem; color: var(--dark);
+        margin: 28px 0 12px; padding-bottom: 6px;
+        border-bottom: 1px solid var(--peach);
+        display: flex; align-items: center; gap: 10px;
+    }
+    .count { font-size: 11px; color: #aaa; font-family: var(--font-body); }
+    .result-card {
+        background: var(--white); border: 1px solid var(--peach);
+        border-radius: 12px; padding: 14px 18px; margin-bottom: 8px;
+        display: flex; justify-content: space-between; align-items: center;
+        transition: background 0.15s;
+    }
+    .result-card:hover { background: #fdf8f4; }
+    .result-name { font-size: 14px; color: var(--dark); font-weight: 500; }
+    .result-sub { font-size: 12px; color: #7A958F; margin-top: 2px; }
+    .result-link {
+        font-size: 12px; color: var(--brown); text-decoration: none;
+        font-style: italic;
+    }
+    .result-link:hover { text-decoration: underline; }
+    .result-price { font-size: 14px; color: var(--brown); font-weight: 600; }
+    .prazno { text-align: center; color: #aaa; padding: 60px 20px; font-style: italic; font-size: 14px; }
+    .no-results { text-align: center; padding: 60px 20px; }
+    .no-results .icon { font-size: 48px; margin-bottom: 16px; }
+    .no-results p { font-size: 14px; color: #7A958F; }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">ISKANJE</div>
+    <a href="/" style="color:var(--rose);font-size:13px;text-decoration:none;">← Domov</a>
+</div>
+
+<div class="vsebina">
+    <div class="query-label">Rezultati za: <strong>{{ query }}</strong></div>
+
+    {% set total = rezultati.saloni|length + rezultati.frizerji|length + rezultati.storitve|length %}
+
+    {% if total == 0 %}
+    <div class="no-results">
+        <div class="icon">🔍</div>
+        <p>Ni rezultatov za "<strong>{{ query }}</strong>".<br>Poskusi z drugim iskanjem.</p>
+    </div>
+    {% else %}
+
+        {% if rezultati.saloni %}
+        <div class="section-title">
+            💈 Saloni
+            <span class="count">{{ rezultati.saloni|length }} rezultat(ov)</span>
+        </div>
+        {% for s in rezultati.saloni %}
+        <div class="result-card">
+            <div>
+                <div class="result-name">{{ s[1] }}</div>
+                <div class="result-sub">{{ s[2] }}, {{ s[3] }}</div>
+            </div>
+            <a href="/salon/{{ s[0] }}" class="result-link">Poglej salon →</a>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if rezultati.frizerji %}
+        <div class="section-title">
+            ✂️ Frizerji
+            <span class="count">{{ rezultati.frizerji|length }} rezultat(ov)</span>
+        </div>
+        {% for f in rezultati.frizerji %}
+        <div class="result-card">
+            <div>
+                <div class="result-name">{{ f[1] }}</div>
+                <div class="result-sub">{{ f[2] or '—' }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if rezultati.storitve %}
+        <div class="section-title">
+            🛁 Storitve
+            <span class="count">{{ rezultati.storitve|length }} rezultat(ov)</span>
+        </div>
+        {% for st in rezultati.storitve %}
+        <div class="result-card">
+            <div>
+                <div class="result-name">{{ st[1] }}</div>
+            </div>
+            <div class="result-price">{{ st[2] }} €</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}

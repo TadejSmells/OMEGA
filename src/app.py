@@ -1,7 +1,7 @@
 import sys
 import os
 import logging
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 from db import login_required, admin_required, frizer_required, csrf_protect, generate_csrf_token, check_session_timeout
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
-# make csrf_token available in all templates
 f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 # ── SESSION TIMEOUT ───────────────────────────────────────────────────────────
@@ -34,7 +33,6 @@ def session_timeout():
     result = check_session_timeout()
     if result is not None:
         return result
-# ── SESSION TIMEOUT ───────────────────────────────────────────────────────────
 
 # ── ERROR HANDLERS ────────────────────────────────────────────────────────────
 @f_app.errorhandler(404)
@@ -50,7 +48,6 @@ def server_error(e):
 @f_app.errorhandler(403)
 def forbidden(e):
     return render_template('403.html'), 403
-# ── ERROR HANDLERS ────────────────────────────────────────────────────────────
 
 # ───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────
 @f_app.get('/')
@@ -68,7 +65,6 @@ def setup():
 @f_app.get('/polni_db')
 def polni_db():
     return controllers.sv_setup.polni_db()
-# ───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────
 
 # ─────────────────────────────────AUTH───────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
@@ -88,7 +84,14 @@ def logout():
 @f_app.get('/profil')
 def profil():
     return controllers.auth.profil()
-# ─────────────────────────────────AUTH───────────────────────────────────────
+
+# ─────────────────────────────────ISKANJE────────────────────────────────────
+@f_app.get('/iskanje')
+def iskanje():
+    from models import model_salon
+    query = request.args.get('q', '').strip()
+    rezultati = model_salon.iskanje(query)
+    return render_template('iskanje.html', query=query, rezultati=rezultati)
 
 # ─────────────────────────────────SALONI─────────────────────────────────────
 @f_app.route('/saloni', methods=['GET', 'POST'])
@@ -110,7 +113,6 @@ def salon_pregled():
 @f_app.route("/saloni_view")
 def saloni_view():
     return controllers.sv_salon.saloni_view()
-# ─────────────────────────────────SALONI─────────────────────────────────────
 
 # ─────────────────────────────────REZERVACIJE────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
@@ -138,7 +140,6 @@ def vse_rezervacije():
 @login_required
 def zgodovina():
     return controllers.sv_salon.zgodovina()
-# ─────────────────────────────────REZERVACIJE────────────────────────────────
 
 # ─────────────────────────────────STORITVE───────────────────────────────────
 @f_app.route('/cenik')
@@ -152,7 +153,6 @@ def seznam_storitev():
 @f_app.get('/seznam_storitev')
 def seznam_storitev_alias():
     return controllers.storitve.pridobi_storitve()
-# ─────────────────────────────────STORITVE───────────────────────────────────
 
 # ─────────────────────────────────OSTALO─────────────────────────────────────
 @f_app.route('/stranke')
@@ -186,15 +186,13 @@ def stranka():
 @f_app.get('/termini')
 def termini():
     return render_template('termini.html')
-# ─────────────────────────────────OSTALO─────────────────────────────────────
 
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ─────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #@login_required
-#@csrf_protect  # dodaj ce ima POST metodo
+#@csrf_protect
 #def "tvoja_pot"():
 #    return controllers.ime_controllerja.funkcija()
 
-# ─────────────────────────────────KAR JE SPODAJ PUSTI PRI MIRU───────────────
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)

@@ -45,9 +45,8 @@ def polni_db():
     conn.close()
     return True
 
-# ── INDIVIDUAL GETTERS (replaces get_vse) ─────────────────────────────────────
-# Separate functions are faster — SQLAlchemy can optimise each query individually
-# and you only load what you need instead of one giant function.
+
+# ── INDIVIDUAL GETTERS ────────────────────────────────────────────────────────
 
 def get_frizerje():
     db_session = db.get_session()
@@ -123,17 +122,10 @@ def get_rezervacije():
 
 
 def get_saloni_s_storitvami():
-    """
-    Optimised single query — fixes N+1 problem in saloni().
-    Previously: 1 query for salons + 1 query per salon for services = N+1 queries.
-    Now: 1 single JOIN query gets everything at once.
-    Returns list of dicts: [{'salon': (...), 'storitve': [...]}, ...]
-    """
+    """Single JOIN query — fixes N+1 problem."""
     db_session = db.get_session()
     try:
         saloni = db_session.query(Salon).order_by(Salon.id).all()
-
-        # get all salon-service links in one query
         storitve_rows = (
             db_session.query(
                 SaloniInStoritve.salon_id,
@@ -146,15 +138,12 @@ def get_saloni_s_storitvami():
             .order_by(SaloniInStoritve.salon_id, Storitev.ime_storitve)
             .all()
         )
-
-        # group services by salon_id in Python
         from collections import defaultdict
         storitve_map = defaultdict(list)
         for row in storitve_rows:
             storitve_map[row.salon_id].append(
                 (row.id_storitve, row.ime_storitve, row.cena, row.trajanje)
             )
-
         return [
             {
                 'salon': (s.id, s.ime, s.naslov, s.mesto, s.telefon),
@@ -181,16 +170,61 @@ def get_storitve_za_salon(salon_id):
         db_session.close()
 
 
+# ── GLOBAL SEARCH ─────────────────────────────────────────────────────────────
+
+def iskanje(query):
+    """
+    Searches salons, hairdressers and services for the query string.
+    Case-insensitive partial match. Returns dict with keys:
+    saloni, frizerji, storitve.
+    """
+    if not query or not query.strip():
+        return {'saloni': [], 'frizerji': [], 'storitve': []}
+
+    q = f"%{query.strip().lower()}%"
+    db_session = db.get_session()
+    try:
+        from sqlalchemy import func
+
+        saloni = (
+            db_session.query(Salon)
+            .filter(
+                func.lower(Salon.ime).like(q) |
+                func.lower(Salon.mesto).like(q) |
+                func.lower(Salon.naslov).like(q)
+            )
+            .order_by(Salon.ime).all()
+        )
+
+        frizerji = (
+            db_session.query(Frizer)
+            .filter(func.lower(Frizer.ime).like(q))
+            .order_by(Frizer.ime).all()
+        )
+
+        storitve = (
+            db_session.query(Storitev)
+            .filter(func.lower(Storitev.ime_storitve).like(q))
+            .order_by(Storitev.ime_storitve).all()
+        )
+
+        return {
+            'saloni':   [(s.id, s.ime, s.naslov, s.mesto) for s in saloni],
+            'frizerji': [(f.id_frizer, f.ime, f.kontakt) for f in frizerji],
+            'storitve': [(s.id_storitve, s.ime_storitve, s.cena) for s in storitve],
+        }
+    finally:
+        db_session.close()
+
+
 # ── BACKWARDS COMPATIBILITY ───────────────────────────────────────────────────
-# get_vse() still works so existing teammate code doesn't break.
-# But new code should use the specific functions above.
 
 def get_vse(tip):
-    if tip == 'frizer':     return get_frizerje()
-    if tip == 'stranka':    return get_stranke()
-    if tip == 'salon':      return get_salone()
-    if tip == 'storitev':   return get_storitve()
-    if tip == 'urnik':      return get_urnik()
+    if tip == 'frizer':      return get_frizerje()
+    if tip == 'stranka':     return get_stranke()
+    if tip == 'salon':       return get_salone()
+    if tip == 'storitev':    return get_storitve()
+    if tip == 'urnik':       return get_urnik()
     if tip == 'rezervacija': return get_rezervacije()
     return []
 
