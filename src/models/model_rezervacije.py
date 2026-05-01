@@ -34,7 +34,7 @@ def get_vse_rezervacije():
 
 
 def get_rezervacije_za_uporabnika(stranka_id):
-    """Rezervacije samo za določeno stranko — za prikaz prijavljenemu uporabniku."""
+    """Rezervacije samo za določeno stranko."""
     db_session = db.get_session()
     try:
         rows = (
@@ -62,8 +62,40 @@ def get_rezervacije_za_uporabnika(stranka_id):
         db_session.close()
 
 
+def preveri_konflikt(frizer_id, datum, ura):
+    """
+    Preveri ali ima frizer že rezervacijo ob istem datumu in uri.
+    Vrne True če pride do konflikta (termin je zaseden), False če je prosto.
+    Samo preverja — ne vstavi ničesar.
+    """
+    if not datum or not ura:
+        return False  # brez datuma/ure ni konflikta
+
+    db_session = db.get_session()
+    try:
+        obstoječa = (
+            db_session.query(Rezervacija)
+            .filter(
+                Rezervacija.id_frizerja == frizer_id,
+                Rezervacija.datum == datum,
+                Rezervacija.ura == ura
+            )
+            .first()
+        )
+        return obstoječa is not None
+    finally:
+        db_session.close()
+
+
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum=None, ura=None):
-    """Doda novo rezervacijo z opcijskim datumom in uro."""
+    """
+    Doda novo rezervacijo.
+    Pred vstavitvijo preveri konflikt — vrže ValueError če je termin zaseden.
+    """
+    if datum and ura:
+        if preveri_konflikt(frizer_id, datum, ura):
+            raise ValueError("Frizer ima ob tem terminu že rezervacijo.")
+
     db_session = db.get_session()
     try:
         db_session.add(Rezervacija(
@@ -75,6 +107,8 @@ def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum=None, 
             ura=ura or None
         ))
         db_session.commit()
+    except ValueError:
+        raise  # re-raise conflict error so controller can flash it
     except:
         db_session.rollback()
         raise

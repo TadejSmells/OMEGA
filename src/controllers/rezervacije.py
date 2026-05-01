@@ -12,9 +12,12 @@ def nova_rezervacija():
         datum       = request.form.get('datum') or None
         ura         = request.form.get('ura') or None
 
-        # basic validation
         if not stranka_id or not frizer_id:
             flash("Izberi stranko in frizerja.", "error")
+            return redirect('/rezervacije')
+
+        if not datum or not ura:
+            flash("Datum in ura sta obvezna.", "error")
             return redirect('/rezervacije')
 
         try:
@@ -23,7 +26,12 @@ def nova_rezervacija():
             )
             flash("Rezervacija je bila uspešno dodana!", "success")
             return redirect('/rezervacije')
-        except Exception as e:
+
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect('/rezervacije')
+
+        except Exception:
             flash("Napaka pri dodajanju rezervacije. Poskusi znova.", "error")
             return redirect('/rezervacije')
 
