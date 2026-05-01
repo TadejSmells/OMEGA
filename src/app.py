@@ -1,7 +1,9 @@
 import sys
 import os
+import csv
+import io
 import logging
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, Response
 from db import login_required, admin_required, frizer_required, csrf_protect, generate_csrf_token, check_session_timeout
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
@@ -135,6 +137,40 @@ def salon_rezerviraj_old():
 @login_required
 def vse_rezervacije():
     return controllers.ab_rezervacije.pregled_rezervacij()
+
+@f_app.get('/rezervacije/izvoz')
+@login_required
+def rezervacije_izvoz():
+    """Export all reservations as a CSV file download."""
+    from models import model_rezervacije
+
+    rows = model_rezervacije.get_vse_rezervacije()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # header row
+    writer.writerow(['ID', 'Stranka', 'Frizer', 'Salon', 'Storitev', 'Cena', 'Trajanje', 'Datum', 'Ura'])
+
+    for r in rows:
+        writer.writerow([
+            r[0],           # id
+            r[1] or '',     # stranka
+            r[2] or '',     # frizer
+            r[3] or '',     # salon
+            r[4] or '',     # storitev
+            r[5] or '',     # cena
+            r[6] or '',     # trajanje
+            r[7] or '',     # datum
+            r[8] or '',     # ura
+        ])
+
+    output.seek(0)
+    return Response(
+        output.getvalue(),
+        mimetype='text/csv',
+        headers={'Content-Disposition': 'attachment; filename=rezervacije.csv'}
+    )
 
 @f_app.route('/zgodovina')
 @login_required
