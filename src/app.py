@@ -13,6 +13,7 @@ import controllers.storitve
 import controllers.ab_rezervacije
 import controllers.faq 
 import controllers.saloni_controller
+import controllers.uredi_rezervacijo
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
@@ -94,6 +95,10 @@ def vse_rezervacije():
 def zgodovina():
     return controllers.sv_salon.zgodovina()
 # ─────────────────────────────────REZERVACIJE─────────────────────────────────
+
+@f_app.route('/rezervacije/uredi/<int:id_rezervacije>', methods=['GET', 'POST'])
+def uredi_rezervacijo(id_rezervacije):
+    return controllers.uredi_rezervacijo.uredi_rezervacijo(id_rezervacije)
 
 # ─────────────────────────────────STORITVE────────────────────────────────────
 @f_app.route('/cenik')
