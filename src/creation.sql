@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS public.stranka (
     CONSTRAINT stranka_pkey PRIMARY KEY (id_stranke)
 );
 
+ALTER TABLE public.stranka ADD COLUMN IF NOT EXISTS user_id integer UNIQUE;
+
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
@@ -117,6 +119,13 @@ DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'urnik_id_frizerja_fkey') THEN
         ALTER TABLE public.urnik ADD CONSTRAINT urnik_id_frizerja_fkey
             FOREIGN KEY (id_frizerja) REFERENCES public.frizer (id_frizer) ON UPDATE NO ACTION ON DELETE NO ACTION;
+    END IF;
+END $$;
+
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'stranka_user_id_fkey') THEN
+        ALTER TABLE public.stranka ADD CONSTRAINT stranka_user_id_fkey
+            FOREIGN KEY (user_id) REFERENCES public.users (id) ON UPDATE NO ACTION ON DELETE SET NULL;
     END IF;
 END $$;
 

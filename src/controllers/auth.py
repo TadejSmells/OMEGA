@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sys, os, time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-from models.models import Uporabnik
+from models.models import Uporabnik, Stranka
 
 MIN_PASSWORD_LENGTH = 6
 MAX_LOGIN_ATTEMPTS = 5
@@ -64,11 +64,21 @@ def register():
                 return render_template('register.html')
 
             hashed_password = generate_password_hash(password)
-            db_session.add(Uporabnik(
+            nov_uporabnik = Uporabnik(
                 username=username,
                 password=hashed_password,
                 vloga=vloga
-            ))
+            )
+            db_session.add(nov_uporabnik)
+            db_session.flush()  # get nov_uporabnik.id before commit
+
+            # auto-create stranka row for stranka accounts
+            if vloga == 'stranka':
+                db_session.add(Stranka(
+                    priimek=username,  # placeholder until profile is filled
+                    user_id=nov_uporabnik.id
+                ))
+
             db_session.commit()
             flash("Registracija uspešna! Prijavi se.", "success")
         except:
@@ -90,7 +100,7 @@ def login():
         locked, remaining = _check_rate_limit()
         if locked:
             flash(f"Preveč neuspešnih poskusov. Počakaj {remaining} sekund.", "error")
-            return render_template('login.html')  # render, don't redirect
+            return render_template('login.html')
 
         username = request.form["username"].strip()
         password = request.form["password"]
@@ -100,6 +110,15 @@ def login():
             user = db_session.query(Uporabnik).filter(
                 Uporabnik.username == username
             ).first()
+
+            # also fetch stranka_id at login time for stranka accounts
+            stranka_id = None
+            if user and user.vloga == 'stranka':
+                stranka = db_session.query(Stranka).filter(
+                    Stranka.user_id == user.id
+                ).first()
+                if stranka:
+                    stranka_id = stranka.id_stranke
         finally:
             db_session.close()
 
@@ -108,6 +127,8 @@ def login():
             session["user_id"] = user.id
             session["username"] = user.username
             session["role"] = user.vloga
+            if stranka_id is not None:
+                session["stranka_id"] = stranka_id
             flash(f"Dobrodošel, {user.username}!", "success")
 
             if user.vloga == 'admin':
@@ -127,7 +148,7 @@ def login():
         else:
             flash(f"Napačno geslo. Še {attempts_left} poskus(ov) pred zaklepom.", "error")
 
-        return render_template('login.html')  # render, don't redirect
+        return render_template('login.html')
 
     return render_template("login.html")
 

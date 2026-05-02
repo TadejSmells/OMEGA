@@ -21,11 +21,14 @@ def stranka():
     if session.get("role") not in ("stranka", "admin"):
         return "Nimaš dostopa.", 403
 
-    user_id = session.get("user_id")
+    stranka_id = session.get("stranka_id")
+    if not stranka_id:
+        return render_template("stranka_panel.html", rezervacije=[])
+
     try:
-        rezervacije = model_rezervacije.get_rezervacije_za_uporabnika(user_id)
+        rezervacije = model_rezervacije.get_rezervacije_za_uporabnika(stranka_id)
     except Exception:
-        logger.error(f"Napaka pri nalaganju rezervacij za uporabnika {user_id}.", exc_info=True)
+        logger.error(f"Napaka pri nalaganju rezervacij za stranko {stranka_id}.", exc_info=True)
         rezervacije = []
 
     return render_template("stranka_panel.html", rezervacije=rezervacije)
