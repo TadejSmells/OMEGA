@@ -29,12 +29,8 @@ def salon_detail(salon_id):
     return render_template("salon.html", salon=salon, storitve=storitve, ocene=[])
 
 
-def saloni_view_info():
-    return render_template("saloni_view.html", saloni=model_salon.get_salone())
-
-
 def saloni_view():
-    return saloni_view_info()
+    return render_template("saloni_view.html", saloni=model_salon.get_salone())
 
 
 def urnik():

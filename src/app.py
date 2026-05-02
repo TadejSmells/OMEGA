@@ -51,7 +51,7 @@ def server_error(e):
 def forbidden(e):
     return render_template('403.html'), 403
 
-# ───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────
+# ── INDEX ─────────────────────────────────────────────────────────────────────
 @f_app.get('/')
 def home():
     return controllers.index.home()
@@ -68,7 +68,7 @@ def setup():
 def polni_db():
     return controllers.sv_setup.polni_db()
 
-# ─────────────────────────────────AUTH───────────────────────────────────────
+# ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
 @csrf_protect
 def register():
@@ -87,7 +87,7 @@ def logout():
 def profil():
     return controllers.auth.profil()
 
-# ─────────────────────────────────ISKANJE────────────────────────────────────
+# ── ISKANJE ───────────────────────────────────────────────────────────────────
 @f_app.get('/iskanje')
 def iskanje():
     from models import model_salon
@@ -95,28 +95,20 @@ def iskanje():
     rezultati = model_salon.iskanje(query)
     return render_template('iskanje.html', query=query, rezultati=rezultati)
 
-# ─────────────────────────────────SALONI─────────────────────────────────────
+# ── SALONI ────────────────────────────────────────────────────────────────────
 @f_app.route('/saloni', methods=['GET', 'POST'])
 def saloni():
     return controllers.saloni_controller.saloni()
-
-@f_app.get('/seznam_salonov')
-def seznam_salonov_alias():
-    return redirect('/saloni')
 
 @f_app.route('/salon/<int:salon_id>')
 def salon_detail(salon_id):
     return controllers.sv_salon.salon_detail(salon_id)
 
-@f_app.route('/salon')
-def salon_pregled():
-    return controllers.sv_salon.pregled()
-
 @f_app.route("/saloni_view")
 def saloni_view():
     return controllers.sv_salon.saloni_view()
 
-# ─────────────────────────────────REZERVACIJE────────────────────────────────
+# ── REZERVACIJE ───────────────────────────────────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
 @login_required
 @csrf_protect
@@ -128,10 +120,6 @@ def rezervacije():
 @csrf_protect
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
-
-@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
-def salon_rezerviraj_old():
-    return redirect('/rezervacije')
 
 @f_app.get('/vse_rezervacije')
 @login_required
@@ -148,21 +136,12 @@ def rezervacije_izvoz():
 
     output = io.StringIO()
     writer = csv.writer(output)
-
-    # header row
     writer.writerow(['ID', 'Stranka', 'Frizer', 'Salon', 'Storitev', 'Cena', 'Trajanje', 'Datum', 'Ura'])
 
     for r in rows:
         writer.writerow([
-            r[0],           # id
-            r[1] or '',     # stranka
-            r[2] or '',     # frizer
-            r[3] or '',     # salon
-            r[4] or '',     # storitev
-            r[5] or '',     # cena
-            r[6] or '',     # trajanje
-            r[7] or '',     # datum
-            r[8] or '',     # ura
+            r[0], r[1] or '', r[2] or '', r[3] or '',
+            r[4] or '', r[5] or '', r[6] or '', r[7] or '', r[8] or '',
         ])
 
     output.seek(0)
@@ -177,20 +156,12 @@ def rezervacije_izvoz():
 def zgodovina():
     return controllers.sv_salon.zgodovina()
 
-# ─────────────────────────────────STORITVE───────────────────────────────────
-@f_app.route('/cenik')
-def cenik():
-    return controllers.storitve.pridobi_storitve()
-
+# ── STORITVE ──────────────────────────────────────────────────────────────────
 @f_app.route('/storitve')
 def seznam_storitev():
     return controllers.storitve.pridobi_storitve()
 
-@f_app.get('/seznam_storitev')
-def seznam_storitev_alias():
-    return controllers.storitve.pridobi_storitve()
-
-# ─────────────────────────────────OSTALO─────────────────────────────────────
+# ── OSTALO ────────────────────────────────────────────────────────────────────
 @f_app.route('/stranke')
 @login_required
 def stranke():
@@ -223,7 +194,7 @@ def stranka():
 def termini():
     return render_template('termini.html')
 
-# ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ─────────────────────────
+# ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #@login_required
 #@csrf_protect
