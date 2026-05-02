@@ -3,10 +3,6 @@ from models import model_salon
 from models import model_rezervacije
 
 
-def pregled():
-    return redirect('/saloni')
-
-
 def seznam_stranke():
     stranke = model_salon.get_stranke()
     return render_template("seznam_stranke.html", stranke=stranke)

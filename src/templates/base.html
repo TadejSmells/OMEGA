@@ -73,7 +73,6 @@
         <span class="sep">|</span>
         <a href="/saloni">💈 Saloni</a>
         <a href="/storitve">✂️ Storitve</a>
-        <a href="/cenik">💰 Cenik</a>
         <a href="/rezervacije">📅 Rezervacije</a>
         <a href="/vse_rezervacije">📋 Vse rezervacije</a>
         <a href="/faq">❓ FAQ</a>
@@ -90,7 +89,7 @@
                 <span style="color:rgba(255,255,255,0.7);font-size:12px;">👤 {{ session.get('username', '') }}</span>
                 <a href="/logout" class="logout-btn">Odjava</a>
             {% else %}
-                <a href="/profil" class="login-btn">Prijava</a>
+                <a href="/login" class="login-btn">Prijava</a>
                 <a href="/register">Registracija</a>
             {% endif %}
         </div>
