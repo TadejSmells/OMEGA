@@ -3,6 +3,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 from models.models import Salon, Frizer, Stranka, Storitev, Urnik, Rezervacija, SaloniInStoritve
+from sqlalchemy.exc import IntegrityError
 
 # ── DB SETUP ──────────────────────────────────────────────────────────────────
 
@@ -71,6 +72,17 @@ def get_salone():
     try:
         rows = db_session.query(Salon).order_by(Salon.id).all()
         return [(r.id, r.ime, r.naslov, r.mesto, r.telefon) for r in rows]
+    finally:
+        db_session.close()
+
+
+def get_salon_by_id(salon_id):
+    db_session = db.get_session()
+    try:
+        r = db_session.query(Salon).filter(Salon.id == salon_id).first()
+        if r is None:
+            return None
+        return (r.id, r.ime, r.naslov, r.mesto, r.telefon)
     finally:
         db_session.close()
 
@@ -231,16 +243,22 @@ def get_vse(tip):
 
 # ── INSERTS ───────────────────────────────────────────────────────────────────
 
-def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):
+def dodaj_urnik(frizer_id, dan, ura):
+    """
+    Doda nov urnik za frizerja.
+    Vrže ValueError če frizer ta dan že ima vpisan urnik (composite PK conflict).
+    """
     db_session = db.get_session()
     try:
-        db_session.add(Rezervacija(
-            id_stranke=stranka_id,
+        db_session.add(Urnik(
             id_frizerja=frizer_id,
-            id_salona=salon_id or None,
-            id_storitve=storitev_id or None
+            dan=dan,
+            ura=ura
         ))
         db_session.commit()
+    except IntegrityError:
+        db_session.rollback()
+        raise ValueError("Frizer ima ta dan že vpisan urnik.")
     except:
         db_session.rollback()
         raise

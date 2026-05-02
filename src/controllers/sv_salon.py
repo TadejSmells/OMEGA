@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, abort, session
+from flask import render_template, request, redirect, abort, session, flash
 from models import model_salon
 from models import model_rezervacije
 
@@ -14,7 +14,7 @@ def seznam_stranke():
 
 def salon_detail(salon_id):
     try:
-        salon = next((s for s in model_salon.get_salone() if s[0] == salon_id), None)
+        salon = model_salon.get_salon_by_id(salon_id)
     except Exception:
         salon = None
 
@@ -39,12 +39,19 @@ def saloni_view():
 
 def urnik():
     if request.method == 'POST':
-        model_salon.dodaj_urnik(
-            request.form.get('frizer_id'),
-            request.form.get('dan'),
-            request.form.get('ura')
-        )
+        try:
+            model_salon.dodaj_urnik(
+                request.form.get('frizer_id'),
+                request.form.get('dan'),
+                request.form.get('ura')
+            )
+            flash("Urnik je bil uspešno dodan.", "success")
+        except ValueError as e:
+            flash(str(e), "error")
+        except Exception:
+            flash("Napaka pri dodajanju urnika. Poskusi znova.", "error")
         return redirect('/urnik')
+
     return render_template("urnik.html",
                            urnik=model_salon.get_urnik(),
                            frizerji=model_salon.get_frizerje())

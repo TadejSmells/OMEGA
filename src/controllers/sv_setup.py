@@ -29,13 +29,13 @@ def admin():
     if session.get("role") != "admin":
         return "Nimaš dostopa.", 403
 
-    # stats for dashboard
-    stats = {
-        'saloni':     len(model_salon.get_salone()),
-        'frizerji':   len(model_salon.get_frizerje()),
-        'stranke':    len(model_salon.get_stranke()),
-        'rezervacije': len(model_rezervacije.get_vse_rezervacije()),
-    }
     rezervacije = model_rezervacije.get_vse_rezervacije()
+
+    stats = {
+        'saloni':      len(model_salon.get_salone()),
+        'frizerji':    len(model_salon.get_frizerje()),
+        'stranke':     len(model_salon.get_stranke()),
+        'rezervacije': len(rezervacije),
+    }
 
     return render_template("admin.html", stats=stats, rezervacije=rezervacije)
