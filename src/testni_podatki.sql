@@ -93,3 +93,42 @@ VALUES (1, 1),
     (3, 1),
     (3, 2)
 ON CONFLICT DO NOTHING;
+
+INSERT INTO
+    faq (
+        vprasanje,
+        odgovor,
+        vrstni_red,
+        aktiven
+    )
+VALUES (
+        'Kako rezerviram termin?',
+        'Termin rezerviraš prek naše spletne strani v razdelku Rezervacije. Izberi frizerjа, datum in uro.',
+        1,
+        TRUE
+    ),
+    (
+        'Ali lahko odpovem rezervacijo?',
+        'Da, rezervacijo lahko odpoveš najkasneje 24 ur pred terminom.',
+        2,
+        TRUE
+    ),
+    (
+        'Kakšne so možnosti plačila?',
+        'Sprejemamo gotovino in kartično plačilo na mestu.',
+        3,
+        TRUE
+    ),
+    (
+        'Kako dolgo traja barvanje las?',
+        'Barvanje las traja približno 1,5 ure, odvisno od dolžine in tehnike.',
+        4,
+        TRUE
+    ),
+    (
+        'Ali potrebujem predhodni termin?',
+        'Priporočamo predhodno rezervacijo, a sprejemamo tudi stranke brez termina, če je prosto mesto.',
+        5,
+        TRUE
+    )
+ON CONFLICT DO NOTHING;

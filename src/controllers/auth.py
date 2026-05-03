@@ -1,52 +1,64 @@
-from flask import request, render_template, redirect
+from flask import request, render_template, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from db import get_connection
+
+import db
+from models.models import Uporabnik
+
 
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        conn = get_connection()
-        cursor = conn.cursor()
+        db_session = db.get_session()
+        try:
+            existing = db_session.query(Uporabnik).filter(
+                Uporabnik.username == username
+            ).first()
 
-        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
-        existing_user = cursor.fetchone()
+            if existing:
+                return "Uporabnik že obstaja!"
 
-        if existing_user:
-            conn.close()
-            return "Uporabnik že obstaja!"
+            hashed_password = generate_password_hash(password)
+            db_session.add(Uporabnik(username=username, password=hashed_password))
+            db_session.commit()
+        except Exception:
+            db_session.rollback()
+            raise
+        finally:
+            db_session.close()
 
-        hashed_password = generate_password_hash(password)
-        cursor.execute(
-            "INSERT INTO users (username, password) VALUES (%s, %s)",
-            (username, hashed_password)
-        )
-        conn.commit()
-        conn.close()
         return redirect('/login')
 
     return render_template('register.html')
+
 
 def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
-        user = cursor.fetchone()
-        conn.close()
+        db_session = db.get_session()
+        try:
+            user = db_session.query(Uporabnik).filter(
+                Uporabnik.username == username
+            ).first()
+        finally:
+            db_session.close()
 
-        # user tuple: (id, username, password)
-        if user and check_password_hash(user[2], password):
-            return "Prijava uspešna!"
+        if user and check_password_hash(user.password, password):
+            session["user_id"] = user.id
+            session["username"] = user.username
+            return redirect('/profil')
 
         return "Napačni podatki!"
 
     return render_template("login.html")
+
+
 def profil():
+    if "user_id" not in session:
+        return redirect('/login')
     return render_template("profil.html")

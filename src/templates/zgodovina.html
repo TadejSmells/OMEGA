@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Zgodovina rezervacij{% endblock %}
+
+{% block content %}
+<h1>Zgodovina rezervacij</h1>
+
+<table border="1" style="width:100%">
+<tr>
+    <th>ID</th>
+    <th>Stranka</th>
+    <th>Frizer</th>
+    <th>Salon</th>
+    <th>Storitev</th>
+</tr>
+
+{% for r in rezervacije %}
+<tr>
+    <td>{{ r[0] }}</td>
+    <td>{{ r[1] }}</td>
+    <td>{{ r[2] }}</td>
+    <td>{{ r[3] }}</td>
+    <td>{{ r[4] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+{% endblock %}
