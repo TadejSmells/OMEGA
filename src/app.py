@@ -112,6 +112,10 @@ def seznam_storitev():
 @f_app.get('/seznam_storitev')
 def seznam_storitev_alias():
     return controllers.storitve.pridobi_storitve()
+
+@f_app.route('/storitve/dodaj', methods=['GET', 'POST'])
+def dodaj_storitev():
+    return controllers.storitve.dodaj_storitev()
 # ─────────────────────────────────STORITVE────────────────────────────────────
 
 # ─────────────────────────────────OSTALO──────────────────────────────────────

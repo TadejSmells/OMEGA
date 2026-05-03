@@ -62,6 +62,13 @@
         font-size: 13px; width: 100%;
         font-family: var(--font-body);
     }
+    .dodaj-btn {
+        background: var(--brown); color: white; border: none;
+        border-radius: 30px; padding: 8px 18px; font-size: 12px;
+        font-family: var(--font-body); text-decoration: none;
+        transition: background 0.2s;
+    }
+    .dodaj-btn:hover { background: var(--rose); color: white; }
     .back-btn {
         margin-left: auto;
         background: none; border: none; cursor: pointer;
@@ -152,6 +159,7 @@
         <span>&#128269;</span>
         <input type="text" placeholder="Išči storitev..." id="searchInput" oninput="filterCards()">
     </div>
+    <a href="/storitve/dodaj" class="dodaj-btn">＋ Dodaj storitev</a>
     <a href="/" class="back-btn">&#8617;</a>
 </div>
 

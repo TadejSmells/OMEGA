@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect
+from flask import render_template, session, redirect, request, flash
 from models import model_cenikstoritev
 
 
@@ -12,7 +12,42 @@ def pridobi_storitve():
         "seznam_storitev.html",
         podatki=podatki
     )
-    
+
+
+def dodaj_storitev():
+    if "user_id" not in session:
+        return redirect("/login")
+    if session.get("role") != "admin":
+        return "Nimaš dostopa.", 403
+
+    if request.method == "POST":
+        ime_storitve = request.form.get("ime_storitve", "").strip()
+        cena         = request.form.get("cena", "").strip()
+        trajanje     = request.form.get("trajanje", "").strip()
+
+        if not ime_storitve or not cena or not trajanje:
+            flash("Vsa polja so obvezna.", "error")
+            return redirect("/storitve/dodaj")
+
+        try:
+            cena = float(cena)
+        except ValueError:
+            flash("Cena mora biti število.", "error")
+            return redirect("/storitve/dodaj")
+
+        try:
+            model_cenikstoritev.dodaj_storitev(ime_storitve, cena, trajanje)
+            flash(f"Storitev '{ime_storitve}' je bila uspešno dodana.", "success")
+            return redirect("/storitve")
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect("/storitve/dodaj")
+        except Exception:
+            flash("Napaka pri dodajanju storitve. Poskusi znova.", "error")
+            return redirect("/storitve/dodaj")
+
+    return render_template("dodaj_storitev.html")
+
 
 def stranka():
     if "user_id" not in session:
