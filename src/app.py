@@ -14,6 +14,8 @@ import controllers.ab_rezervacije
 import controllers.faq 
 import controllers.saloni_controller
 import controllers.uredi_rezervacijo
+import controllers.kontakt_stranka_controller
+import controllers.rezervacije_stranke_controller
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
@@ -150,6 +152,15 @@ def frizer():
 @f_app.route("/stranka")
 def stranka():
     return controllers.storitve.stranka()
+
+@f_app.route('/kontakti_strank')
+def kontakti_strank():
+    return controllers.kontakt_stranka_controller.seznam_kontaktov()
+
+
+@f_app.route('/rezervacije_stranke')
+def rezervacije_stranke():
+    return controllers.rezervacije_stranke_controller.rezervacije_stranke()
 
 # ──────────────ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ──────────────────────────
 #@f_app.route('/"tvoja_pot"')
