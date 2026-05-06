@@ -20,7 +20,9 @@ CREATE TABLE IF NOT EXISTS public.rezervacija (
 );
 
 ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS datum date;
-ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS ura time without time zone;
+
+ALTER TABLE public.rezervacija
+ADD COLUMN IF NOT EXISTS ura time without time zone;
 
 CREATE TABLE IF NOT EXISTS public.salon (
     id serial NOT NULL,
@@ -62,7 +64,8 @@ CREATE TABLE IF NOT EXISTS users (
     vloga VARCHAR(50) DEFAULT 'stranka'
 );
 
-ALTER TABLE users ADD COLUMN IF NOT EXISTS vloga VARCHAR(50) DEFAULT 'stranka';
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS vloga VARCHAR(50) DEFAULT 'stranka';
 
 CREATE TABLE IF NOT EXISTS public.urnik (
     id_frizerja integer,
@@ -76,6 +79,23 @@ CREATE TABLE IF NOT EXISTS faq (
     odgovor TEXT NOT NULL,
     vrstni_red INT DEFAULT 0,
     aktiven BOOLEAN DEFAULT TRUE
+);
+
+-- ── US64: status rezervacije (active / cancelled) ────────────
+ALTER TABLE public.rezervacija
+ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active' CHECK (
+    status IN ('active', 'cancelled')
+);
+
+-- ── US35 + US69: blokiranje terminov za frizerje ─────────────
+CREATE TABLE IF NOT EXISTS public.blokiran_termin (
+    id SERIAL PRIMARY KEY,
+    id_frizerja INTEGER NOT NULL REFERENCES public.frizer (id_frizer) ON DELETE CASCADE,
+    datum DATE NOT NULL,
+    ura_od TIME NOT NULL,
+    ura_do TIME NOT NULL,
+    razlog VARCHAR(200),
+    CONSTRAINT blokiran_termin_cas_check CHECK (ura_do > ura_od)
 );
 
 DO $$ BEGIN
