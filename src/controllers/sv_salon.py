@@ -9,13 +9,7 @@ from models import model_salon
  
 def pregled():
     return redirect('/saloni')
- 
-#naredi novo datoteko pirkaz_stranke.py in controllers, kjer se definira funkcija prikaz_stranke, ki bo prikazala seznam strank
-def seznam_stranke():
-    stranke = model_salon.get_vse('stranka')
-    return render_template("seznam_stranke.html", stranke=stranke)
- 
- 
+
 def salon_detail(salon_id):
     try:
         salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)

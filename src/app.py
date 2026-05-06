@@ -16,6 +16,7 @@ import controllers.saloni_controller
 import controllers.uredi_rezervacijo
 import controllers.kontakt_stranka_controller
 import controllers.rezervacije_stranke_controller
+import controllers.pirkaz_stranke
 #import controllers.primer_controller
 
 f_app = Flask(__name__, template_folder='templates')
@@ -121,9 +122,13 @@ def dodaj_storitev():
 # ─────────────────────────────────STORITVE────────────────────────────────────
 
 # ─────────────────────────────────OSTALO──────────────────────────────────────
-@f_app.route('/stranke')
+@f_app.route('/stranke_uredi', methods=['GET', 'POST'])
 def stranke():
-    return controllers.sv_salon.seznam_stranke()
+    return controllers.pirkaz_stranke.seznam_stranke()
+
+@f_app.route('/stranke_uredi/shrani', methods=['POST'])
+def stranke_shrani():
+    return controllers.pirkaz_stranke.shrani_stranko()
 
 @f_app.route('/urnik', methods=['GET', 'POST'])
 def urnik():
