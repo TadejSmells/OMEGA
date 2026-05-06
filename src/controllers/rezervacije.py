@@ -24,5 +24,12 @@ def nova_rezervacija():
 
 
 def izbrisi_rezervacijo(id_rezervacije):
+    path = request.args.get('path', '/rezervacije')
     model_rezervacije.izbrisi_rezervacijo(id_rezervacije)
-    return redirect('/rezervacije')
+    return redirect(path)
+
+def admin():
+    return render_template(
+        "rezervacije_admin.html",
+        rezervacije=model_rezervacije.get_vse_rezervacije()
+    )

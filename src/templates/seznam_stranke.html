@@ -1,26 +1,63 @@
 {% extends "base.html" %}
 
+{% block head %}
+<!-- Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+
 {% block content %}
-<h1>Dropdown tabela strank</h1>
+<h1>Urejanje stranke</h1>
 
 <form method="POST">
-
     <label>Stranka:</label><br><br>
 
-    <select name="stranka_id" required>
+    <select name="stranka_id" id="stranka_select" style="width: 300px;" required>
         <option value="" disabled selected>-- izberi stranko --</option>
-
         {% for s in stranke %}
-            <option value="{{ s[0] }}">
-                {{ s[1] }} {{ s[2] }}
+            <option value="{{ s.id_stranke }}" {% if izbrana and s.id_stranke == izbrana.id_stranke %}selected{% endif %}>
+                {{ s.ime }} {{ s.priimek }}
             </option>
         {% endfor %}
     </select>
 
     <br><br>
-
     <button type="submit">Potrdi</button>
-
 </form>
+
+{% if izbrana %}
+<hr>
+<h2>Uredi podatke</h2>
+<form method="POST" action="/stranke_uredi/shrani">
+    <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
+
+    <label>Ime:</label><br>
+    <input type="text" name="ime" value="{{ izbrana.ime }}" required><br><br>
+
+    <label>Priimek:</label><br>
+    <input type="text" name="priimek" value="{{ izbrana.priimek }}" required><br><br>
+
+    <label>Mail:</label><br>
+    <input type="email" name="mail" value="{{ izbrana.mail or '' }}"><br><br>
+
+    <label>Telefon:</label><br>
+    <input type="text" name="telefon" value="{{ izbrana.telefon or '' }}"><br><br>
+
+    <label>ID najljubšega frizija:</label><br>
+    <input type="text" name="id_naj_frizer" value="{{ izbrana.id_naj_frizer or '' }}"><br><br>
+
+    <button type="submit">Shrani</button>
+</form>
+{% endif %}
+
+<script>
+    $(document).ready(function() {
+        $('#stranka_select').select2({
+            placeholder: '-- izberi stranko --',
+            allowClear: true
+        });
+    });
+</script>
 
 {% endblock %}
