@@ -96,6 +96,11 @@ def vse_rezervacije():
 @f_app.route('/zgodovina')
 def zgodovina():
     return controllers.sv_salon.zgodovina()
+
+@f_app.route('/rezervacije/admin')
+def rezervacije_admin():
+    return controllers.rezervacije.admin()
+
 # ─────────────────────────────────REZERVACIJE─────────────────────────────────
 
 @f_app.route('/rezervacije/uredi/<int:id_rezervacije>', methods=['GET', 'POST'])
