@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Frizer Panel{% endblock %}
+
+{% block content %}
+<h2>✂️ Frizer Panel</h2>
+<p>Dobrodošel, <strong>{{ session.get('username') }}</strong>.</p>
+
+<h3>Moje orodja</h3>
+<ul>
+    <li><a href="/urnik">Moj urnik</a></li>
+    <li><a href="/vse_rezervacije">Rezervacije</a></li>
+    <li><a href="/cenik">Cenik / Storitve</a></li>
+</ul>
+{% endblock %}

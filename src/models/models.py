@@ -3,9 +3,6 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-# TA DATOTEKA DEFINIRA STRUKTURO BAZE PODATKOV (vse tabele)
-# Stolpci se ujemajo s creation.sql
-
 class Salon(Base):
     __tablename__ = 'salon'
     id      = Column(Integer, primary_key=True)
@@ -20,6 +17,7 @@ class Frizer(Base):
     salon_id  = Column(Integer, ForeignKey('salon.id'), nullable=True)
     ime       = Column(String(100))
     kontakt   = Column(String(100))
+    user_id   = Column(Integer, ForeignKey('users.id'), nullable=True)  # linked account
 
 class Stranka(Base):
     __tablename__ = 'stranka'
@@ -29,6 +27,7 @@ class Stranka(Base):
     mail          = Column(String(100))
     telefon       = Column(String(100))
     id_naj_frizer = Column(Integer, ForeignKey('frizer.id_frizer'), nullable=True)
+    user_id       = Column(Integer, ForeignKey('users.id'), nullable=True)  # linked account
 
 class Storitev(Base):
     __tablename__ = 'storitev'
@@ -55,12 +54,16 @@ class Rezervacija(Base):
     id_frizerja    = Column(Integer, ForeignKey('frizer.id_frizer'))
     id_salona      = Column(Integer, ForeignKey('salon.id'), nullable=True)
     id_storitve    = Column(Integer, ForeignKey('storitev.id_storitve'), nullable=True)
+    datum          = Column(Date)
+    ura            = Column(Time)
+    status         = Column(String(20), default='active', nullable=False)
 
 class Uporabnik(Base):
     __tablename__ = 'users'
     id       = Column(Integer, primary_key=True)
     username = Column(String(100), unique=True, nullable=False)
     password = Column(String(200), nullable=False)
+    vloga    = Column(String(50), default='stranka')
 
 class Faq(Base):
     __tablename__ = 'faq'

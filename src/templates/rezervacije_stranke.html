@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Rezervacije stranke</h2>
+
+<form method="GET" action="/rezervacije_stranke">
+    <label for="stranka_id">Izberi stranko:</label>
+    <select name="stranka_id" id="stranka_id" onchange="this.form.submit()">
+        <option value="">— izberi stranko —</option>
+        {% for s in stranke %}
+        <option value="{{ s[0] }}" {% if izbrana_id == s[0] %}selected{% endif %}>
+            {{ s[1] }} {{ s[2] }}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if rezervacije is not none %}
+<br>
+{% if rezervacije %}
+<table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Frizer</th>
+            <th>Salon</th>
+            <th>Storitev</th>
+            <th>Cena (€)</th>
+            <th>Trajanje</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in rezervacije %}
+        <tr>
+            <td>{{ r.id_rezervacije }}</td>
+            <td>{{ r.frizer or '-' }}</td>
+            <td>{{ r.salon or '-' }}</td>
+            <td>{{ r.storitev or '-' }}</td>
+            <td>{{ r.cena or '-' }}</td>
+            <td>{{ r.trajanje or '-' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Ta stranka nima rezervacij.</p>
+{% endif %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Seznam strank{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    .page-header { background: var(--beige); padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .page-header-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.06em; }
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .header-username { font-size: 11px; background: var(--white); border-radius: 30px; padding: 6px 28px; font-family: var(--font-head); font-weight: 600; }
+    .user-avatar { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--beige); text-decoration: none; }
+    .navbar { background: var(--brown); display: flex; }
+    .navbar a { font-size: 13px; color: var(--dark); font-weight: 700; font-style: italic; text-decoration: none; padding: 11px 28px; display: block; }
+    .navbar a.active { background: rgba(0,0,0,0.15); }
+    .navbar a:hover { background: rgba(0,0,0,0.12); }
+    .main-wrap { min-height: calc(100vh - 116px); display: flex; justify-content: center; background: linear-gradient(90deg, var(--white) 0 30%, var(--light) 30% 70%, var(--white) 70%); }
+    .panel { width: 460px; padding: 54px 48px; position: relative; }
+    .back-btn { position: absolute; top: 28px; right: 24px; font-size: 30px; color: var(--beige); text-decoration: none; }
+    h1 { font-family: var(--font-body); font-size: 1.35rem; text-align: center; margin-bottom: 12px; font-weight: 800; }
+    .line { height: 2px; background: var(--brown); margin: 0 auto 28px; width: 310px; }
+    .form-row { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 18px; margin-bottom: 18px; }
+    .form-row label { font-size: 15px; font-weight: 800; }
+    select { width: 100%; height: 25px; border: none; border-radius: 20px; background: var(--white); padding: 0 12px; font-family: var(--font-body); font-size: 11px; color: var(--dark); outline: none; text-align: center; }
+    .check-row { margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--rose); }
+    .check-row input { width: 24px; height: 24px; accent-color: var(--brown); }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">Seznam strank</div>
+    <div class="header-right"><span class="header-username">Ime priimek</span><a href="/profil" class="user-avatar">&#128100;</a></div>
+</div>
+<nav class="navbar">
+    <a href="/">Domov</a><a href="/saloni">Saloni</a><a href="/storitve">Storitve</a><a href="/termini">Termini</a><a href="/qanda">O &amp; A</a>
+</nav>
+
+<div class="main-wrap">
+    <div class="panel">
+        <a href="/" class="back-btn">&#8617;</a>
+        <h1>STRANKE</h1>
+        <div class="line"></div>
+        <form method="POST" action="/stranke">
+            <div class="form-row">
+                <label>Stranka</label>
+                <select name="stranka_id" required>
+                    <option value="" disabled selected>-izberi stranko-</option>
+                    {% for s in stranke %}
+                        <option value="{{ s[0] }}">{{ s[1] }} {{ s[2] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="line"></div>
+            <label class="check-row"><input type="checkbox" required> Potrdi</label>
+        </form>
+    </div>
+</div>
+{% endblock %}

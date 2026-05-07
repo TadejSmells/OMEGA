@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<h2>⚙️ Admin Panel</h2>
+<p>Dobrodošel, <strong>{{ session.get('username') }}</strong>. Imaš popoln dostop.</p>
+
+<h3>Upravljanje</h3>
+<ul>
+    <li><a href="/stranke">Seznam strank</a></li>
+    <li><a href="/kontakti_strank">Kontakti strank</a></li>
+    <li><a href="/vse_rezervacije">Vse rezervacije</a></li>
+    <li><a href="/rezervacije_stranke">Rezervacije strank</a></li>
+    <li><a href="/urnik">Urnik</a></li>
+    <li><a href="/cenik">Cenik / Storitve</a></li>
+    <li><a href="/faq">FAQ</a></li>
+</ul>
+
+<h3>Baza podatkov</h3>
+<ul>
+    <li><a href="/setup">Nastavi / Osveži tabele</a></li>
+    <li><a href="/polni_db">Naloži testne podatke</a></li>
+</ul>
+{% endblock %}
