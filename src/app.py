@@ -17,6 +17,7 @@ import controllers.saloni_controller
 import controllers.uredi_rezervacijo
 import controllers.kontakt_stranka_controller
 import controllers.rezervacije_stranke_controller
+import controllers.frizer_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -164,6 +165,15 @@ def kontakti_strank():
 @login_required
 def rezervacije_stranke():
     return controllers.rezervacije_stranke_controller.rezervacije_stranke()
+
+@f_app.route('/frizerji')
+def seznam_frizerjev():
+    return controllers.frizer_controller.seznam_frizerjev()
+ 
+@f_app.route('/frizer/<int:frizer_id>')
+def frizer_profil(frizer_id):
+    return controllers.frizer_controller.frizer_profil(frizer_id)
+
 
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
