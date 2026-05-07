@@ -5,7 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 import traceback
 from models.models import Uporabnik, Stranka, Frizer
-import controllers.stranka_opomnik_controller as opomnik_controller
+#import controllers.stranka_opomnik_controller as opomnik_controller
+import controllers.frizer_opomnik_controller as frizer_opomnik_controller
 
 MIN_PASSWORD_LENGTH = 6
 MAX_LOGIN_ATTEMPTS = 5
@@ -158,6 +159,18 @@ def login():
             if user.vloga == 'admin':
                 return redirect('/admin')
             elif user.vloga == 'frizer':
+                rezervacije = frizer_opomnik_controller.get_danasnje_rezervacije(user.id)
+                if rezervacije:
+                    session['opomnik_rezervacije'] = [
+                        {
+                            'ura': str(r.ura)[:5] if r.ura else '—',
+                            'storitev': r.storitev or 'Ni določena',
+                            'stranka': r.stranka or '—',
+                            'salon': r.salon or '—',
+                        }
+                        for r in rezervacije
+                    ]
+                    session['opomnik_tip'] = 'frizer'
                 return redirect('/frizer')
             else:
                 # Shrani opomnik v session za prikaz na domači strani
@@ -172,6 +185,7 @@ def login():
                         }
                         for r in rezervacije
                     ]
+                    session['opomnik_tip'] = 'stranka'
                 return redirect('/')
 
         just_locked   = _record_failed_attempt()
