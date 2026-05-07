@@ -3,7 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sys, os, time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
+import traceback
 from models.models import Uporabnik, Stranka, Frizer
+import controllers.stranka_opomnik_controller as opomnik_controller
 
 MIN_PASSWORD_LENGTH = 6
 MAX_LOGIN_ATTEMPTS = 5
@@ -105,9 +107,11 @@ def register():
             db_session.commit()
             flash("Registracija uspešna! Prijavi se.", "success")
 
-        except Exception:
+        except Exception as e:
             db_session.rollback()
-            flash("Napaka pri registraciji. Poskusi znova.", "error")
+            import traceback as _tb
+            print(f"[REGISTER ERROR] {_tb.format_exc()}", flush=True)
+            flash(f"Napaka pri registraciji: {e}", "error")
             return render_template('register.html')
         finally:
             db_session.close()
@@ -156,6 +160,18 @@ def login():
             elif user.vloga == 'frizer':
                 return redirect('/frizer')
             else:
+                # Shrani opomnik v session za prikaz na domači strani
+                rezervacije = opomnik_controller.get_danasnje_rezervacije(user.id)
+                if rezervacije:
+                    session['opomnik_rezervacije'] = [
+                        {
+                            'ura': str(r.ura)[:5] if r.ura else '—',
+                            'storitev': r.storitev or 'Ni določena',
+                            'frizer': r.frizer or '—',
+                            'salon': r.salon or '—',
+                        }
+                        for r in rezervacije
+                    ]
                 return redirect('/')
 
         just_locked   = _record_failed_attempt()
