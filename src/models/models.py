@@ -52,6 +52,9 @@ class Rezervacija(Base):
     id_frizerja    = Column(Integer, ForeignKey('frizer.id_frizer'))
     id_salona      = Column(Integer, ForeignKey('salon.id'), nullable=True)
     id_storitve    = Column(Integer, ForeignKey('storitev.id_storitve'), nullable=True)
+    datum          = Column(Date)
+    ura            = Column(Time)
+    status         = Column(String(20), default='active', nullable=False)
 
 class Uporabnik(Base):
     __tablename__ = 'users'
