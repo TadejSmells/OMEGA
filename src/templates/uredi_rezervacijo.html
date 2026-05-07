@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Uredi rezervacijo{% endblock %}
+
+{% block content %}
+<h2>Uredi rezervacijo #{{ rezervacija[0] }}</h2>
+
+<form method="POST">
+
+  <label for="stranka_id">Stranka</label><br>
+  <select name="stranka_id" id="stranka_id" required>
+    <option value="">— izberi stranko —</option>
+    {% for s in stranke %}
+      <option value="{{ s[0] }}" {% if s[0] == rezervacija[1] %}selected{% endif %}>
+        {{ s[1] }} {{ s[2] }}
+      </option>
+    {% endfor %}
+  </select><br><br>
+
+  <label for="frizer_id">Frizer</label><br>
+  <select name="frizer_id" id="frizer_id" required>
+    <option value="">— izberi frizerja —</option>
+    {% for f in frizerji %}
+      <option value="{{ f[0] }}" {% if f[0] == rezervacija[2] %}selected{% endif %}>
+        {{ f[2] }}
+      </option>
+    {% endfor %}
+  </select><br><br>
+
+  <label for="salon_id">Salon</label><br>
+  <select name="salon_id" id="salon_id">
+    <option value="">— brez salona —</option>
+    {% for s in saloni %}
+      <option value="{{ s[0] }}" {% if s[0] == rezervacija[3] %}selected{% endif %}>
+        {{ s[1] }}
+      </option>
+    {% endfor %}
+  </select><br><br>
+
+  <label for="storitev_id">Storitev</label><br>
+  <select name="storitev_id" id="storitev_id">
+    <option value="">— brez storitve —</option>
+    {% for st in storitve %}
+      <option value="{{ st[0] }}" {% if st[0] == rezervacija[4] %}selected{% endif %}>
+        {{ st[1] }} ({{ st[2] }} €)
+      </option>
+    {% endfor %}
+  </select><br><br>
+
+  <button type="submit">Shrani</button>
+  <a href="/rezervacije">Prekliči</a>
+
+</form>
+{% endblock %}

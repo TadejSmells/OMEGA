@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, abort
+from flask import render_template, request, redirect, abort, session
 from models import model_salon
  
  
@@ -9,35 +9,7 @@ from models import model_salon
  
 def pregled():
     return redirect('/saloni')
- 
-#naredi novo datoteko pirkaz_stranke.py in controllers, kjer se definira funkcija prikaz_stranke, ki bo prikazala seznam strank
-def seznam_stranke():
-    stranke = model_salon.get_vse('stranka')
-    return render_template("seznam_stranke.html", stranke=stranke)
- 
-def saloni():
-    try:
-        saloni_list = model_salon.get_vse('salon')
-    except Exception:
-        saloni_list = []
-    saloni_with_storitve = []
-    
-    for salon in saloni_list:
-        salon_id = salon[0]
-        try:
-            storitve = model_salon.get_storitve_za_salon(salon_id)
-        except Exception:
-            storitve = []
-        saloni_with_storitve.append({
-            'salon': salon,
-            'storitve': storitve
-        })
-    
-    return render_template(
-        "seznam_salonov.html",
-        saloni=saloni_with_storitve
-    )
- 
+
 def salon_detail(salon_id):
     try:
         salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)
@@ -95,3 +67,13 @@ def urnik():
 def zgodovina():
     rezervacije = model_salon.get_vse('rezervacija')
     return render_template("zgodovina.html", rezervacije=rezervacije)
+
+
+def frizer():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session["role"] != "frizer":
+        return "Nimaš dostopa"
+
+    return "Frizer panel"

@@ -108,10 +108,14 @@
                   <td>{% if r[5] %}{{ r[5] }} €{% else %}—{% endif %}</td>
                   <td>{{ r[6] or '—' }}</td>
                   <td>
-                    <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}"
-                          onsubmit="return confirm('Izbriši rezervacijo #{{ r[0] }}?')">
-                      <button type="submit" class="btn btn-outline-danger btn-sm">🗑</button>
-                    </form>
+                    <div class="d-flex gap-1">
+                      <a href="/rezervacije/uredi/{{ r[0] }}"
+                         class="btn btn-outline-warning btn-sm">✏️</a>
+                      <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}"
+                            onsubmit="return confirm('Izbriši rezervacijo #{{ r[0] }}?')">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">🗑</button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
                 {% endfor %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Kontakti strank</h2>
+
+<form method="GET" action="/kontakti_strank">
+    <label for="stranka_id">Izberi stranko:</label>
+    <select name="stranka_id" id="stranka_id" onchange="this.form.submit()">
+        <option value="">— izberi stranko —</option>
+        {% for k in kontakti %}
+        <option value="{{ k[0] }}" {% if izbrana_id == k[0] %}selected{% endif %}>
+            {{ k[1] }} {{ k[2] }}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if stranka %}
+<br>
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Ime</th>
+        <td>{{ stranka[1] }}</td>
+    </tr>
+    <tr>
+        <th>Priimek</th>
+        <td>{{ stranka[2] }}</td>
+    </tr>
+    <tr>
+        <th>E-mail</th>
+        <td>{{ stranka[3] or '-' }}</td>
+    </tr>
+    <tr>
+        <th>Telefon</th>
+        <td>{{ stranka[4] or '-' }}</td>
+    </tr>
+</table>
+{% endif %}
+
+{% endblock %}

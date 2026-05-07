@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Dodaj storitev{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    .page-header {
+        background: var(--brown); padding: 14px 32px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-header-title {
+        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
+        letter-spacing: 0.06em; color: white;
+    }
+    .vsebina { padding: 40px 32px; max-width: 480px; margin: 0 auto; }
+    .form-panel {
+        background: var(--white); border: 1px solid var(--peach);
+        border-radius: 14px; overflow: hidden;
+    }
+    .form-panel-header {
+        background: var(--beige); padding: 14px 20px;
+        font-family: var(--font-head); font-size: 0.9rem;
+        color: var(--dark); letter-spacing: 0.04em;
+    }
+    .form-panel-body { padding: 24px; }
+    .polje { margin-bottom: 20px; }
+    .polje label {
+        font-size: 11px; color: var(--dark); display: block;
+        margin-bottom: 4px; letter-spacing: 0.02em; font-weight: 600;
+        text-transform: uppercase;
+    }
+    .polje input {
+        width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
+        background: transparent; padding: 6px 0; font-size: 13px;
+        outline: none; font-family: var(--font-body); color: var(--dark);
+        transition: border-color 0.2s;
+    }
+    .polje input:focus { border-bottom-color: var(--brown); }
+    .hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+    .form-actions { display: flex; gap: 10px; margin-top: 8px; }
+    .submit-btn {
+        flex: 1; background: var(--brown); border: none; border-radius: 30px;
+        padding: 12px; font-size: 13px; font-family: var(--font-body);
+        color: white; cursor: pointer; transition: background 0.2s;
+    }
+    .submit-btn:hover { background: var(--rose); }
+    .cancel-btn {
+        flex: 1; background: var(--light); border: 1px solid var(--peach);
+        border-radius: 30px; padding: 12px; font-size: 13px;
+        font-family: var(--font-body); color: var(--dark);
+        text-decoration: none; text-align: center; transition: background 0.2s;
+    }
+    .cancel-btn:hover { background: var(--peach); color: var(--dark); }
+
+    /* flash messages */
+    .flash { padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-bottom: 16px; }
+    .flash-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">DODAJ STORITEV</div>
+    <a href="/storitve" style="color:rgba(255,255,255,0.8);font-size:13px;text-decoration:none;">← Nazaj</a>
+</div>
+
+<div class="vsebina">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="form-panel">
+        <div class="form-panel-header">Nova storitev</div>
+        <div class="form-panel-body">
+            <form method="POST" action="/storitve/dodaj">
+                <div class="polje">
+                    <label>Ime storitve</label>
+                    <input type="text" name="ime_storitve" required autofocus placeholder="npr. Striženje las">
+                </div>
+                <div class="polje">
+                    <label>Cena (€)</label>
+                    <input type="number" name="cena" required min="0" step="0.01" placeholder="npr. 25.00">
+                </div>
+                <div class="polje">
+                    <label>Trajanje</label>
+                    <input type="time" name="trajanje" required>
+                    <div class="hint">Format HH:MM — npr. 00:30 za 30 minut</div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">＋ Dodaj storitev</button>
+                    <a href="/storitve" class="cancel-btn">Prekliči</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
