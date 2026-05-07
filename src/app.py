@@ -48,8 +48,8 @@ def salon_rezerviraj():
     return controllers.sv_salon.nova_rezervacija()
 
 
-@f_app.route('/saloni', methods=['GET', 'POST'])
-def saloni():
+@f_app.route('/vsi_saloni', methods=['GET', 'POST'])
+def vsi_saloni():
     return controllers.sv_salon.saloni()
 
 
@@ -130,7 +130,7 @@ def stranke():
 def cenik():
     return controllers.storitve.pridobi_storitve()
 
-@f_app.route('/storitve')
+@f_app.route('/vse_storitve')
 def seznam_storitev():
     return controllers.storitve.pridobi_storitve()
 
