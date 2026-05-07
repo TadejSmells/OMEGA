@@ -132,3 +132,50 @@ VALUES (
         TRUE
     )
 ON CONFLICT DO NOTHING;
+
+INSERT INTO
+    rezervacija (
+        id_stranke,
+        id_frizerja,
+        id_salona,
+        id_storitve,
+        datum,
+        ura,
+        status
+    )
+VALUES (
+        1,
+        1,
+        1,
+        1,
+        '2024-07-01',
+        '10:00:00',
+        'active'
+    ),
+    (
+        2,
+        2,
+        2,
+        2,
+        '2024-07-02',
+        '11:30:00',
+        'active'
+    ),
+    (
+        3,
+        3,
+        3,
+        1,
+        '2024-07-03',
+        '14:00:00',
+        'cancelled'
+    ),
+    (
+        4,
+        1,
+        1,
+        2,
+        '2024-07-04',
+        '09:30:00',
+        'cancelled'
+    )
