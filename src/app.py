@@ -39,6 +39,36 @@ def setup():
 @f_app.get('/polni_db')
 def polni_db():
     return controllers.sv_setup.polni_db()
+#───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────────
+
+
+# ─────────────────────────────────AUTH───────────────────────────────────────
+@f_app.route('/salon/dodaj', methods=['GET', 'POST'])
+def salon_dodaj():
+    return controllers.sv_salon.dodaj_osebe()
+
+
+@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
+def salon_rezerviraj():
+    return controllers.sv_salon.nova_rezervacija()
+
+
+@f_app.route('/vsi_saloni', methods=['GET', 'POST'])
+def vsi_saloni():
+    return controllers.sv_salon.saloni()
+
+
+@f_app.route('/storitve', methods=['GET', 'POST'])
+def storitve():
+    return controllers.sv_salon.storitve()
+
+@f_app.route('/zgodovina')
+def zgodovina():
+    return controllers.sv_salon.zgodovina()
+
+@f_app.route('/urnik', methods=['GET', 'POST'])
+def urnik():
+    return controllers.sv_salon.urnik()
 
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
@@ -113,7 +143,7 @@ def uredi_rezervacijo(id_rezervacije):
 def cenik():
     return controllers.storitve.pridobi_storitve()
 
-@f_app.route('/storitve')
+@f_app.route('/vse_storitve')
 def seznam_storitev():
     return controllers.storitve.pridobi_storitve()
 

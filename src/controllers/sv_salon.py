@@ -40,6 +40,8 @@ def storitve():
         )
         return redirect('/storitve')
     return render_template("storitve.html", storitve=model_salon.get_vse('storitev'))
+
+
  
  
 #premakne v datoteko salon_info.py
