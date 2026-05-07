@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sys, os, time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-from models.models import Uporabnik
+from models.models import Uporabnik, Stranka, Frizer
 
 MIN_PASSWORD_LENGTH = 6
 MAX_LOGIN_ATTEMPTS = 5
@@ -42,8 +42,13 @@ def register():
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password']
-        vloga = request.form.get('vloga', 'stranka')
+        vloga    = request.form.get('vloga', 'stranka')
+        ime      = request.form.get('ime', '').strip()
+        priimek  = request.form.get('priimek', '').strip()
+        mail     = request.form.get('mail', '').strip()
+        telefon  = request.form.get('telefon', '').strip()
 
+        # ── Validation ────────────────────────────────────────────────────────
         if not username:
             flash("Uporabniško ime ne sme biti prazno.", "error")
             return render_template('register.html')
@@ -52,8 +57,17 @@ def register():
             flash(f"Geslo mora imeti vsaj {MIN_PASSWORD_LENGTH} znakov.", "error")
             return render_template('register.html')
 
+        if vloga == 'stranka' and not priimek:
+            flash("Priimek je obvezen za stranke.", "error")
+            return render_template('register.html')
+
+        if vloga not in ('stranka', 'frizer'):
+            flash("Neveljavna vloga.", "error")
+            return render_template('register.html')
+
         db_session = db.get_session()
         try:
+            # Check username is unique
             existing = db_session.query(Uporabnik).filter(
                 Uporabnik.username == username
             ).first()
@@ -62,14 +76,36 @@ def register():
                 flash("Uporabnik s tem imenom že obstaja.", "error")
                 return render_template('register.html')
 
-            db_session.add(Uporabnik(
+            # Create the user account
+            novi_user = Uporabnik(
                 username=username,
                 password=generate_password_hash(password),
                 vloga=vloga
-            ))
+            )
+            db_session.add(novi_user)
+            db_session.flush()  # populates novi_user.id before commit
+
+            # Create linked stranka or frizer row
+            if vloga == 'stranka':
+                db_session.add(Stranka(
+                    ime=ime or None,
+                    priimek=priimek,
+                    mail=mail or None,
+                    telefon=telefon or None,
+                    user_id=novi_user.id
+                ))
+            elif vloga == 'frizer':
+                full_name = f"{ime} {priimek}".strip() or username
+                db_session.add(Frizer(
+                    ime=full_name,
+                    kontakt=mail or telefon or None,
+                    user_id=novi_user.id
+                ))
+
             db_session.commit()
             flash("Registracija uspešna! Prijavi se.", "success")
-        except:
+
+        except Exception:
             db_session.rollback()
             flash("Napaka pri registraciji. Poskusi znova.", "error")
             return render_template('register.html')
@@ -91,6 +127,15 @@ def login():
         username = request.form["username"].strip()
         password = request.form["password"]
 
+        # Admin shortcut — hardcoded credentials, no DB needed
+        if username == 'admin123' and password == 'admin123':
+            _clear_rate_limit()
+            session["user_id"]  = 0          # sentinel for hardcoded admin
+            session["username"] = 'admin123'
+            session["role"]     = 'admin'
+            flash("Dobrodošel, admin!", "success")
+            return redirect('/admin')
+
         db_session = db.get_session()
         try:
             user = db_session.query(Uporabnik).filter(
@@ -101,9 +146,9 @@ def login():
 
         if user and check_password_hash(user.password, password):
             _clear_rate_limit()
-            session["user_id"] = user.id
+            session["user_id"]  = user.id
             session["username"] = user.username
-            session["role"] = user.vloga
+            session["role"]     = user.vloga
             flash(f"Dobrodošel, {user.username}!", "success")
 
             if user.vloga == 'admin':
@@ -113,12 +158,12 @@ def login():
             else:
                 return redirect('/')
 
-        just_locked = _record_failed_attempt()
+        just_locked   = _record_failed_attempt()
         attempts_left = MAX_LOGIN_ATTEMPTS - session.get('login_attempts', 0)
         if just_locked:
             flash(f"Preveč neuspešnih poskusov. Počakaj {LOCKOUT_SECONDS} sekund.", "error")
         else:
-            flash(f"Napačno geslo. Še {attempts_left} poskus(ov) pred zaklepom.", "error")
+            flash(f"Napačno geslo ali uporabniško ime. Še {attempts_left} poskus(ov) pred zaklepom.", "error")
 
         return render_template('login.html')
 

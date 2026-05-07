@@ -1,29 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Registracija</title>
-</head>
-<body>
-    <h2>Registracija</h2>
+{% extends "base.html" %}
+{% block title %}Registracija{% endblock %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-        <p style="color: {% if category == 'error' %}red{% else %}green{% endif %};">{{ message }}</p>
-        {% endfor %}
-    {% endwith %}
+{% block content %}
+<h2>Registracija</h2>
 
-    <form method="POST" action="/register">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="text" name="username" placeholder="Uporabniško ime" required><br><br>
-        <input type="password" name="password" placeholder="Geslo (min. 6 znakov)" required><br><br>
-        <select name="vloga">
-            <option value="stranka">Stranka</option>
-            <option value="frizer">Frizer</option>
-            <option value="admin">Admin</option>
-        </select><br><br>
-        <button type="submit">Registriraj se</button>
-    </form>
+<form method="POST" action="/register">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    <a href="/login">Že imaš račun? Prijava</a>
-</body>
-</html>
+    <table>
+        <tr>
+            <td><label for="username">Uporabniško ime *</label></td>
+            <td><input type="text" id="username" name="username" required autofocus></td>
+        </tr>
+        <tr>
+            <td><label for="password">Geslo * <small>(vsaj 6 znakov)</small></label></td>
+            <td><input type="password" id="password" name="password" required minlength="6"></td>
+        </tr>
+        <tr>
+            <td><label for="ime">Ime</label></td>
+            <td><input type="text" id="ime" name="ime"></td>
+        </tr>
+        <tr>
+            <td><label for="priimek">Priimek <span id="priimek_required_label"></span></label></td>
+            <td><input type="text" id="priimek" name="priimek"></td>
+        </tr>
+        <tr>
+            <td><label for="mail">E-mail</label></td>
+            <td><input type="email" id="mail" name="mail"></td>
+        </tr>
+        <tr>
+            <td><label for="telefon">Telefon</label></td>
+            <td><input type="tel" id="telefon" name="telefon"></td>
+        </tr>
+        <tr>
+            <td><label for="vloga">Vrsta računa *</label></td>
+            <td>
+                <select id="vloga" name="vloga" onchange="onVlogaChange(this.value)">
+                    <option value="stranka">Stranka</option>
+                    <option value="frizer">Frizer</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button type="submit">Registriraj se</button></td>
+        </tr>
+    </table>
+</form>
+
+<p>Že imaš račun? <a href="/login">Prijavi se</a></p>
+
+<script>
+    function onVlogaChange(vloga) {
+        const label = document.getElementById('priimek_required_label');
+        const priimekInput = document.getElementById('priimek');
+        if (vloga === 'stranka') {
+            label.textContent = '*';
+            priimekInput.required = true;
+        } else {
+            label.textContent = '';
+            priimekInput.required = false;
+        }
+    }
+    // Set initial state
+    onVlogaChange(document.getElementById('vloga').value);
+</script>
+{% endblock %}

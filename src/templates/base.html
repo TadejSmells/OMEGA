@@ -13,24 +13,54 @@
         <p>
             <strong>Navigacija:</strong>
             <a href="/">Domov</a> |
-            <a href="/salon/rezerviraj">Nova rezervacija</a>
-            <a href="/vse_rezervacije">Vse rezervacije</a>
-            <a href="/kontakti_strank">Kontakti strank</a>
-            <a href="/rezervacije_stranke">Rezervacije strank</a>
-            <a href="/login">Prijava</a>
-            <a href="/register">Registracija</a>
-            <a href="/stranke_uredi">Seznam strank</a>
-            <a href="/cenik">Cenik</a>
-            <a href="/faq">Faq</a>
-            <a href="/setup">Nastavi/Osveži tabele baze</a>
-            <a href="/polni_db">Naloži testne podatke</a>
-            <a href="/rezervacije/admin">Admin rezervacije</a>
+            <a href="/cenik">Cenik</a> |
+            <a href="/faq">FAQ</a>
+
+            {% if session.get('role') == 'admin' %}
+                | <a href="/admin">⚙️ Admin panel</a>
+                | <a href="/stranke">Seznam strank</a>
+                | <a href="/vse_rezervacije">Vse rezervacije</a>
+                | <a href="/kontakti_strank">Kontakti strank</a>
+                | <a href="/setup">Nastavi DB</a>
+                | <a href="/polni_db">Testni podatki</a>
+            {% endif %}
+
+            {% if session.get('role') in ('frizer', 'admin') %}
+                | <a href="/frizer">Frizer panel</a>
+                | <a href="/urnik">Urnik</a>
+            {% endif %}
+
+            {% if session.get('user_id') %}
+                | <a href="/rezervacije">Nova rezervacija</a>
+                | <a href="/rezervacije_stranke">Moje rezervacije</a>
+                | <a href="/profil">👤 {{ session.get('username') }}</a>
+                | <a href="/logout">Odjava</a>
+            {% else %}
+                | <a href="/login">Prijava</a>
+                | <a href="/register">Registracija</a>
+            {% endif %}
         </p>
     </nav>
+
     <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div style="padding: 0.5em 1em;">
+            {% for category, message in messages %}
+                <p style="
+                    color: {{ 'green' if category == 'success' else 'red' }};
+                    margin: 0.3em 0;
+                ">{{ message }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <main>
         {% block content %}{% endblock %}
     </main>
+
     <hr>
     <footer>
         <p>&copy; 2024 Upravljanje Salona | [<a href="/">nazaj na začetek</a>]</p>

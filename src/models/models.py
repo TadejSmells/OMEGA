@@ -17,6 +17,7 @@ class Frizer(Base):
     salon_id  = Column(Integer, ForeignKey('salon.id'), nullable=True)
     ime       = Column(String(100))
     kontakt   = Column(String(100))
+    user_id   = Column(Integer, ForeignKey('users.id'), nullable=True)  # linked account
 
 class Stranka(Base):
     __tablename__ = 'stranka'
@@ -26,6 +27,7 @@ class Stranka(Base):
     mail          = Column(String(100))
     telefon       = Column(String(100))
     id_naj_frizer = Column(Integer, ForeignKey('frizer.id_frizer'), nullable=True)
+    user_id       = Column(Integer, ForeignKey('users.id'), nullable=True)  # linked account
 
 class Storitev(Base):
     __tablename__ = 'storitev'

@@ -295,3 +295,42 @@
     }
 </script>
 {% endblock %}
+
+{% extends "base.html" %}
+{% block title %}Moj profil{% endblock %}
+
+{% block content %}
+<h2>Moj profil</h2>
+
+<table>
+    <tr>
+        <td><strong>Uporabniško ime:</strong></td>
+        <td>{{ session.get('username') }}</td>
+    </tr>
+    <tr>
+        <td><strong>Vloga:</strong></td>
+        <td>
+            {% if session.get('role') == 'admin' %}
+                ⚙️ Administrator
+            {% elif session.get('role') == 'frizer' %}
+                ✂️ Frizer
+            {% else %}
+                👤 Stranka
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+<br>
+
+{% if session.get('role') == 'admin' %}
+    <p><a href="/admin">Pojdi na admin panel</a></p>
+{% elif session.get('role') == 'frizer' %}
+    <p><a href="/frizer">Pojdi na frizer panel</a></p>
+{% else %}
+    <p><a href="/rezervacije_stranke">Moje rezervacije</a></p>
+    <p><a href="/rezervacije">Nova rezervacija</a></p>
+{% endif %}
+
+<p><a href="/logout">Odjava</a></p>
+{% endblock %}
