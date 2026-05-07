@@ -16,6 +16,9 @@ CREATE TABLE IF NOT EXISTS public.rezervacija (
     id_storitve integer,
     datum date,
     ura time without time zone,
+    status VARCHAR(20) DEFAULT 'active' CHECK (
+        status IN ('active', 'cancelled')
+    ),
     CONSTRAINT rezervacija_pkey PRIMARY KEY (id_rezervacije)
 );
 
