@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Seznam frizerjev{% endblock %}
+
+{% block content %}
+<h1>Seznam frizerjev</h1>
+
+{% for f in frizerji %}
+<div>
+    <h3>{{ f['ime'] }}</h3>
+    <p>Salon: {{ f['salon'] if f['salon'] else '—' }}</p>
+    <p>Kontakt: {{ f['kontakt'] if f['kontakt'] else '—' }}</p>
+    <a href="/frizer/{{ f['id'] }}">Poglej profil</a>
+</div>
+<hr>
+{% else %}
+<p>Ni vpisanih frizerjev.</p>
+{% endfor %}
+
+{% endblock %}

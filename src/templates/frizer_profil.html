@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ frizer['ime'] }}{% endblock %}
+
+{% block content %}
+<h1>{{ frizer['ime'] }}</h1>
+
+<h3>Podatki o frizerju</h3>
+<p>Ime: {{ frizer['ime'] }}</p>
+<p>Kontakt: {{ frizer['kontakt'] if frizer['kontakt'] else '—' }}</p>
+
+{% if salon %}
+<h3>Salon</h3>
+<p>Ime: <a href="/salon/{{ salon['id'] }}">{{ salon['ime'] }}</a></p>
+<p>Naslov: {{ salon['naslov'] }}, {{ salon['mesto'] }}</p>
+<p>Telefon: {{ salon['telefon'] if salon['telefon'] else '—' }}</p>
+{% else %}
+<p>Frizer ni dodeljen salonu.</p>
+{% endif %}
+
+<h3>Storitve</h3>
+{% if storitve %}
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Storitev</th>
+            <th>Trajanje</th>
+            <th>Cena</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for st in storitve %}
+        <tr>
+            <td>{{ st['ime'] }}</td>
+            <td>{{ st['trajanje'] if st['trajanje'] else '—' }}</td>
+            <td>{{ st['cena'] }} €</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Ni vpisanih storitev.</p>
+{% endif %}
+
+<br>
+<a href="/frizerji">← Nazaj na seznam frizerjev</a>
+<a href="/rezervacije">Naroči se</a>
+
+{% endblock %}

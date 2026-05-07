@@ -62,13 +62,6 @@ def vsi_saloni():
 def storitve():
     return controllers.sv_salon.storitve()
 
-@f_app.route('/zgodovina')
-def zgodovina():
-    return controllers.sv_salon.zgodovina()
-
-@f_app.route('/urnik', methods=['GET', 'POST'])
-def urnik():
-    return controllers.sv_salon.urnik()
 
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
@@ -119,9 +112,7 @@ def rezervacije():
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
-@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
-def salon_rezerviraj_old():
-    return redirect('/rezervacije')
+
 
 @f_app.get('/vse_rezervacije')
 @login_required
