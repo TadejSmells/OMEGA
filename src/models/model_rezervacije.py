@@ -2,7 +2,9 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import db
+from datetime import date
 from models.models import Rezervacija, Stranka, Frizer, Salon, Storitev
+
 
 def get_vse_rezervacije():
     session = db.get_session()
@@ -14,14 +16,16 @@ def get_vse_rezervacije():
                 Frizer.ime.label('frizer'),
                 Salon.ime.label('salon'),
                 Storitev.ime_storitve.label('storitev'),
+                Rezervacija.datum,
+                Rezervacija.ura,
                 Storitev.cena.label('cena'),
-                Storitev.trajanje.label('trajanje')
+                Rezervacija.status,
             )
             .outerjoin(Stranka, Rezervacija.id_stranke == Stranka.id_stranke)
             .outerjoin(Frizer, Rezervacija.id_frizerja == Frizer.id_frizer)
             .outerjoin(Salon, Rezervacija.id_salona == Salon.id)
             .outerjoin(Storitev, Rezervacija.id_storitve == Storitev.id_storitve)
-            .order_by(Rezervacija.id_rezervacije.desc())
+            .order_by(Rezervacija.datum.desc(), Rezervacija.ura.desc())
             .all()
         )
         return rows
@@ -54,6 +58,22 @@ def izbrisi_rezervacijo(id_rezervacije):
         ).first()
         if r:
             session.delete(r)
+            session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+def preklic_rezervacije(id_rezervacije):
+    session = db.get_session()
+    try:
+        r = session.query(Rezervacija).filter(
+            Rezervacija.id_rezervacije == id_rezervacije
+        ).first()
+        if r:
+            r.status = 'cancelled'
             session.commit()
     except:
         session.rollback()

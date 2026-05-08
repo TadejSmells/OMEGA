@@ -17,6 +17,7 @@ import controllers.saloni_controller
 import controllers.uredi_rezervacijo
 import controllers.kontakt_stranka_controller
 import controllers.rezervacije_stranke_controller
+import controllers.frizer_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -38,6 +39,29 @@ def setup():
 @f_app.get('/polni_db')
 def polni_db():
     return controllers.sv_setup.polni_db()
+#───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────────
+
+
+# ─────────────────────────────────AUTH───────────────────────────────────────
+@f_app.route('/salon/dodaj', methods=['GET', 'POST'])
+def salon_dodaj():
+    return controllers.sv_salon.dodaj_osebe()
+
+
+@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
+def salon_rezerviraj():
+    return controllers.sv_salon.nova_rezervacija()
+
+
+@f_app.route('/vsi_saloni', methods=['GET', 'POST'])
+def vsi_saloni():
+    return controllers.sv_salon.saloni()
+
+
+@f_app.route('/storitve', methods=['GET', 'POST'])
+def storitve():
+    return controllers.sv_salon.storitve()
+
 
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
@@ -88,9 +112,7 @@ def rezervacije():
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
-@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
-def salon_rezerviraj_old():
-    return redirect('/rezervacije')
+
 
 @f_app.get('/vse_rezervacije')
 @login_required
@@ -112,7 +134,7 @@ def uredi_rezervacijo(id_rezervacije):
 def cenik():
     return controllers.storitve.pridobi_storitve()
 
-@f_app.route('/storitve')
+@f_app.route('/vse_storitve')
 def seznam_storitev():
     return controllers.storitve.pridobi_storitve()
 
@@ -164,6 +186,15 @@ def kontakti_strank():
 @login_required
 def rezervacije_stranke():
     return controllers.rezervacije_stranke_controller.rezervacije_stranke()
+
+@f_app.route('/frizerji')
+def seznam_frizerjev():
+    return controllers.frizer_controller.seznam_frizerjev()
+ 
+@f_app.route('/frizer/<int:frizer_id>')
+def frizer_profil(frizer_id):
+    return controllers.frizer_controller.frizer_profil(frizer_id)
+
 
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
