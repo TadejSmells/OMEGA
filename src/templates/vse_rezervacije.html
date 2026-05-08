@@ -2,59 +2,398 @@
 {% block title %}Vse rezervacije{% endblock %}
 
 {% block content %}
-<h1>Vse rezervacije</h1>
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-<p>Skupaj: {{ skupaj }} | Aktivnih: {{ aktivnih }} | Preklicanih: {{ preklicanih }}</p>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
 
-<h2>Seznam rezervacij</h2>
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
 
-{% if rezervacije %}
-<table border="1" cellpadding="6" cellspacing="0">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Stranka</th>
-            <th>Frizer</th>
-            <th>Salon</th>
-            <th>Storitev</th>
-            <th>Datum</th>
-            <th>Ura</th>
-            <th>Cena</th>
-            <th>Status</th>
-            <th>Možnosti</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in rezervacije %}
-        <tr>
-            <td>{{ r[0] }}</td>
-            <td>{{ r[1] or '—' }}</td>
-            <td>{{ r[2] or '—' }}</td>
-            <td>{{ r[3] or '—' }}</td>
-            <td>{{ r[4] or '—' }}</td>
-            <td>{% if r[5] %}{{ r[5].strftime('%d. %m. %Y') }}{% else %}—{% endif %}</td>
-            <td>{% if r[6] %}{{ r[6] | string | truncate(5, false, '') }}{% else %}—{% endif %}</td>
-            <td>{% if r[7] %}{{ "%.2f" | format(r[7] | float) }} €{% else %}—{% endif %}</td>
-            <td>{{ r[8] or '—' }}</td>
-            <td>
-                <a href="/rezervacije/uredi/{{ r[0] }}">Uredi</a>
-                {% if r[8] != 'cancelled' %}
-                <form method="POST" action="/rezervacije/preklic/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" onclick="return confirm('Preklic?')">Prekliči</button>
-                </form>
-                {% endif %}
-                <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" onclick="return confirm('Izbris?')">Izbriši</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>Ni še nobene rezervacije.</p>
-{% endif %}
+    .page-header {
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
+    .page-header-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
+        letter-spacing: 0.02em;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-username {
+        font-size: 13px;
+        color: #292421;
+        background: rgba(255,255,255,0.7);
+        padding: 7px 18px;
+        border-radius: 20px;
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    .rezervacije-page {
+        flex: 1;
+        min-height: calc(100vh - 310px);
+        background: #F2E7DD;
+        padding: 24px 32px 30px;
+        position: relative;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 28px;
+        text-decoration: none;
+    }
+
+    .summary-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 22px;
+        padding-right: 48px;
+    }
+
+    .summary-card {
+        background: #FFFFFF;
+        border: 1px solid #F2D6CE;
+        border-radius: 14px;
+        padding: 18px 22px;
+        min-width: 170px;
+    }
+
+    .summary-card .label {
+        color: #CA8E82;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 6px;
+    }
+
+    .summary-card .value {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.7rem;
+        color: #292421;
+        font-weight: 700;
+    }
+
+    .table-box {
+        background: #FFFFFF;
+        border: 1px solid #F2D6CE;
+        border-radius: 14px;
+        padding: 28px 34px;
+        overflow: hidden;
+    }
+
+    .table-box h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.55rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 20px;
+    }
+
+    .line {
+        height: 1px;
+        background: #F2D6CE;
+        margin-bottom: 14px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    th {
+        text-align: left;
+        color: #CA8E82;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        padding: 12px 10px;
+        border-bottom: 1px solid #F2D6CE;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 13px 10px;
+        border-bottom: 1px solid #F2D6CE;
+        color: #292421;
+        vertical-align: middle;
+    }
+
+    .muted {
+        color: #7A958F;
+    }
+
+    .status {
+        display: inline-block;
+        border-radius: 18px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        background: #F2D6CE;
+        color: #A75F37;
+    }
+
+    .status.cancelled {
+        background: #F2D6CE;
+        color: #CA8E82;
+    }
+
+    .status.active {
+        background: #D9B99F;
+        color: #292421;
+    }
+
+    .btn-link,
+    .btn-action {
+        display: inline-block;
+        border: none;
+        background: #D9B99F;
+        color: #292421;
+        text-decoration: none;
+        border-radius: 18px;
+        padding: 6px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        margin: 2px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .btn-action.delete {
+        background: #F2D6CE;
+        color: #A75F37;
+    }
+
+    .btn-link:hover,
+    .btn-action:hover {
+        background: #CA8E82;
+        color: #FFFFFF;
+    }
+
+    .empty {
+        padding: 28px;
+        text-align: center;
+        color: #7A958F;
+        font-size: 15px;
+    }
+
+    .nav-footer {
+        background: #D9B99F;
+        padding: 7px 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-footer a {
+        font-size: 13px;
+        color: #292421;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .nav-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+        .page-header {
+            padding: 12px 18px;
+        }
+
+        .page-header-title {
+            font-size: 1.4rem;
+        }
+
+        .navbar a {
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .rezervacije-page {
+            padding: 22px 18px;
+        }
+
+        .summary-row {
+            flex-direction: column;
+            padding-right: 0;
+        }
+
+        .table-box {
+            padding: 22px 18px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">VSE REZERVACIJE</div>
+
+    <div class="header-right">
+        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
+        <a href="/profil" class="user-avatar">&#128100;</a>
+    </div>
+</div>
+
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni">Saloni</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/rezervacije" class="active">Termini</a>
+    <a href="/faq">O &amp; A</a>
+</nav>
+
+<div class="rezervacije-page">
+    <a href="/rezervacije" class="back-btn">&#8617;</a>
+
+    <div class="summary-row">
+        <div class="summary-card">
+            <div class="label">Skupaj</div>
+            <div class="value">{{ skupaj if skupaj is defined else rezervacije|length }}</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="label">Aktivnih</div>
+            <div class="value">{{ aktivnih if aktivnih is defined else '—' }}</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="label">Preklicanih</div>
+            <div class="value">{{ preklicanih if preklicanih is defined else '—' }}</div>
+        </div>
+    </div>
+
+    <div class="table-box">
+        <h2>Seznam rezervacij</h2>
+        <div class="line"></div>
+
+        {% if rezervacije %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Stranka</th>
+                            <th>Frizer</th>
+                            <th>Salon</th>
+                            <th>Storitev</th>
+                            <th>Cena</th>
+                            <th>Trajanje</th>
+                            <th>Status</th>
+                            <th>Možnosti</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for r in rezervacije %}
+                            <tr>
+                                <td class="muted">{{ r[0] }}</td>
+                                <td>{{ r[1] or '—' }}</td>
+                                <td>{{ r[2] or '—' }}</td>
+                                <td>{{ r[3] or '—' }}</td>
+                                <td>{{ r[4] or '—' }}</td>
+                                <td>{% if r[5] %}{{ "%.2f"|format(r[5]|float) }} €{% else %}—{% endif %}</td>
+                                <td>{{ r[6] or '—' }}</td>
+                                <td>
+                                    {% if r[7] == 'cancelled' %}
+                                        <span class="status cancelled">Preklicana</span>
+                                    {% elif r[7] == 'active' %}
+                                        <span class="status active">Aktivna</span>
+                                    {% else %}
+                                        <span class="status">{{ r[7] or '—' }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/rezervacije/uredi/{{ r[0] }}" class="btn-link">Uredi</a>
+
+                                    {% if r[7] != 'cancelled' %}
+                                        <form method="POST" action="/rezervacije/preklic/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn-action" onclick="return confirm('Preklic?')">Prekliči</button>
+                                        </form>
+                                    {% endif %}
+
+                                    <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn-action delete" onclick="return confirm('Izbris?')">Izbriši</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty">Ni še nobene rezervacije.</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="nav-footer">
+    <a href="/faq">Novice</a>
+    <a href="/rezervacije">Vaši termini</a>
+    <a href="/saloni">Informacije</a>
+</div>
 {% endblock %}
