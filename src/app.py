@@ -19,6 +19,7 @@ import controllers.kontakt_stranka_controller
 import controllers.rezervacije_stranke_controller
 import controllers.frizer_controller
 import controllers.blokade_controller
+import controllers.moje_rezervacije_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -134,6 +135,21 @@ def uredi_rezervacijo(id_rezervacije):
 @frizer_required
 def blokade():
     return controllers.blokade_controller.blokade()
+
+@f_app.route('/moje')
+@login_required
+def moje():
+    return controllers.moje_rezervacije_controller.moje()
+
+@f_app.route('/moje/uredi/<int:id_rezervacije>', methods=['GET', 'POST'])
+@login_required
+def uredi_mojo(id_rezervacije):
+    return controllers.moje_rezervacije_controller.uredi_mojo_rezervacijo(id_rezervacije)
+
+@f_app.route('/moje/preklic/<int:id_rezervacije>', methods=['POST'])
+@login_required
+def preklic_moje(id_rezervacije):
+    return controllers.moje_rezervacije_controller.preklic_moje_rezervacije(id_rezervacije)
 
 # ── STORITVE ──────────────────────────────────────────────────────────────────
 @f_app.route('/cenik')
