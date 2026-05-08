@@ -2,47 +2,391 @@
 {% block title %}{{ frizer['ime'] }}{% endblock %}
 
 {% block content %}
-<h1>{{ frizer['ime'] }}</h1>
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<h3>Podatki o frizerju</h3>
-<p>Ime: {{ frizer['ime'] }}</p>
-<p>Kontakt: {{ frizer['kontakt'] if frizer['kontakt'] else '—' }}</p>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
 
-{% if salon %}
-<h3>Salon</h3>
-<p>Ime: <a href="/salon/{{ salon['id'] }}">{{ salon['ime'] }}</a></p>
-<p>Naslov: {{ salon['naslov'] }}, {{ salon['mesto'] }}</p>
-<p>Telefon: {{ salon['telefon'] if salon['telefon'] else '—' }}</p>
-{% else %}
-<p>Frizer ni dodeljen salonu.</p>
-{% endif %}
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
 
-<h3>Storitve</h3>
-{% if storitve %}
-<table border="1" cellpadding="5">
-    <thead>
-        <tr>
-            <th>Storitev</th>
-            <th>Trajanje</th>
-            <th>Cena</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for st in storitve %}
-        <tr>
-            <td>{{ st['ime'] }}</td>
-            <td>{{ st['trajanje'] if st['trajanje'] else '—' }}</td>
-            <td>{{ st['cena'] }} €</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>Ni vpisanih storitev.</p>
-{% endif %}
+    .page-header {
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-<br>
-<a href="/frizerji">← Nazaj na seznam frizerjev</a>
-<a href="/rezervacije">Naroči se</a>
+    .page-header-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
+    }
 
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-username {
+        font-size: 13px;
+        color: #292421;
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    .frizer-page {
+        flex: 1;
+        min-height: calc(100vh - 310px);
+        background: #F2E7DD;
+        position: relative;
+        padding: 32px 32px 30px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 28px;
+        text-decoration: none;
+    }
+
+    .frizer-layout {
+        display: flex;
+        gap: 48px;
+        align-items: flex-start;
+    }
+
+    .frizer-left {
+        width: 260px;
+        text-align: center;
+        flex-shrink: 0;
+        padding-top: 10px;
+    }
+
+    .frizer-icon {
+        width: 210px;
+        height: 210px;
+        border-radius: 50%;
+        background: #D9B99F;
+        margin: 0 auto 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        font-size: 86px;
+        font-weight: bold;
+    }
+
+    .frizer-left h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.8rem;
+        font-weight: 400;
+        margin-bottom: 26px;
+    }
+
+    .kontakt {
+        color: #CA8E82;
+        font-size: 16px;
+        margin-bottom: 28px;
+    }
+
+    .gumb {
+        display: inline-block;
+        background: #A75F37;
+        color: #FFFFFF;
+        text-decoration: none;
+        border-radius: 28px;
+        padding: 14px 54px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .gumb:hover {
+        background: #CA8E82;
+    }
+
+    .frizer-main {
+        flex: 1;
+    }
+
+    .box {
+        background: #FFFFFF;
+        border: 1px solid #F2D6CE;
+        border-radius: 14px;
+        padding: 34px 38px;
+        margin-bottom: 28px;
+    }
+
+    .box h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.55rem;
+        letter-spacing: 0.04em;
+        margin-bottom: 26px;
+        text-transform: uppercase;
+    }
+
+    .line {
+        height: 1px;
+        background: #F2D6CE;
+        margin-bottom: 22px;
+    }
+
+    .info-row {
+        display: flex;
+        margin-bottom: 14px;
+        font-size: 16px;
+    }
+
+    .info-label {
+        width: 140px;
+        color: #CA8E82;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 0.06em;
+    }
+
+    .info-value a {
+        color: #A75F37;
+        text-decoration: none;
+    }
+
+    .info-value a:hover {
+        text-decoration: underline;
+    }
+
+    .storitve-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+    }
+
+    .storitve-table th {
+        text-align: left;
+        color: #CA8E82;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        padding: 0 0 12px;
+        border-bottom: 1px solid #F2D6CE;
+    }
+
+    .storitve-table td {
+        padding: 12px 0;
+        border-bottom: 1px solid #F2D6CE;
+    }
+
+    .cena {
+        display: inline-block;
+        background: #F2D6CE;
+        color: #A75F37;
+        border-radius: 18px;
+        padding: 5px 16px;
+        font-weight: 700;
+    }
+
+    .nav-footer {
+        background: #D9B99F;
+        padding: 7px 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-footer a {
+        font-size: 13px;
+        color: #292421;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .nav-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+        .page-header {
+            padding: 12px 18px;
+        }
+
+        .page-header-title {
+            font-size: 1.4rem;
+        }
+
+        .navbar a {
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .frizer-layout {
+            flex-direction: column;
+        }
+
+        .frizer-left {
+            width: 100%;
+        }
+
+        .info-row {
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-label {
+            width: auto;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">FRIZER</div>
+
+    <div class="header-right">
+        <span class="header-username">Ime priimek</span>
+        <a href="/profil" class="user-avatar">&#128100;</a>
+    </div>
+</div>
+
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni" class="active">Saloni</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/rezervacije">Termini</a>
+    <a href="/faq">O &amp; A</a>
+</nav>
+
+<div class="frizer-page">
+    <a href="/frizerji" class="back-btn">&#8617;</a>
+
+    <div class="frizer-layout">
+        <div class="frizer-left">
+            <div class="frizer-icon">✂</div>
+
+            <h2>{{ frizer['ime'] }}</h2>
+
+            <div class="kontakt">☎ {{ frizer['kontakt'] if frizer['kontakt'] else '—' }}</div>
+
+            <a href="/rezervacije" class="gumb">Naroči se</a>
+        </div>
+
+        <div class="frizer-main">
+            <div class="box">
+                <h3>Podatki o frizerju</h3>
+                <div class="line"></div>
+
+                <div class="info-row">
+                    <div class="info-label">Ime</div>
+                    <div class="info-value">{{ frizer['ime'] }}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">Kontakt</div>
+                    <div class="info-value">{{ frizer['kontakt'] if frizer['kontakt'] else '—' }}</div>
+                </div>
+
+                {% if salon %}
+                    <div class="info-row">
+                        <div class="info-label">Salon</div>
+                        <div class="info-value">
+                            <a href="/salon/{{ salon['id'] }}">{{ salon['ime'] }}</a>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Lokacija</div>
+                        <div class="info-value">{{ salon['naslov'] }}, {{ salon['mesto'] }}</div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-label">Tel. salona</div>
+                        <div class="info-value">{{ salon['telefon'] if salon['telefon'] else '—' }}</div>
+                    </div>
+                {% else %}
+                    <div class="info-row">
+                        <div class="info-label">Salon</div>
+                        <div class="info-value">Frizer ni dodeljen salonu.</div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="box">
+                <h3>Storitve</h3>
+                <div class="line"></div>
+
+                {% if storitve %}
+                    <table class="storitve-table">
+                        <thead>
+                            <tr>
+                                <th>Storitev</th>
+                                <th>Trajanje</th>
+                                <th>Cena</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for st in storitve %}
+                                <tr>
+                                    <td>{{ st['ime'] }}</td>
+                                    <td>{{ st['trajanje'] if st['trajanje'] else '—' }}</td>
+                                    <td><span class="cena">{{ st['cena'] }} €</span></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>Ni vpisanih storitev.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="nav-footer">
+    <a href="/faq">Novice</a>
+    <a href="/rezervacije">Vaši termini</a>
+    <a href="/saloni">Informacije</a>
+</div>
 {% endblock %}
