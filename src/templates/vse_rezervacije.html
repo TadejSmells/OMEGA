@@ -340,7 +340,8 @@
                             <th>Salon</th>
                             <th>Storitev</th>
                             <th>Cena</th>
-                            <th>Trajanje</th>
+                            <th>Datum</th>
+                            <th>Ura</th>
                             <th>Status</th>
                             <th>Možnosti</th>
                         </tr>
@@ -354,21 +355,22 @@
                                 <td>{{ r[2] or '—' }}</td>
                                 <td>{{ r[3] or '—' }}</td>
                                 <td>{{ r[4] or '—' }}</td>
-                                <td>{% if r[5] %}{{ "%.2f"|format(r[5]|float) }} €{% else %}—{% endif %}</td>
+                                <td>{% if r[7] %}{{ "%.2f"|format(r[7]|float) }} €{% else %}—{% endif %}</td>
+                                <td>{{ r[5] or '—' }}</td>
                                 <td>{{ r[6] or '—' }}</td>
                                 <td>
-                                    {% if r[7] == 'cancelled' %}
+                                    {% if r[8] == 'cancelled' %}
                                         <span class="status cancelled">Preklicana</span>
-                                    {% elif r[7] == 'active' %}
+                                    {% elif r[8] == 'active' %}
                                         <span class="status active">Aktivna</span>
                                     {% else %}
-                                        <span class="status">{{ r[7] or '—' }}</span>
+                                        <span class="status">{{ r[8] or '—' }}</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     <a href="/rezervacije/uredi/{{ r[0] }}" class="btn-link">Uredi</a>
 
-                                    {% if r[7] != 'cancelled' %}
+                                    {% if r[8] != 'cancelled' %}
                                         <form method="POST" action="/rezervacije/preklic/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn-action" onclick="return confirm('Preklic?')">Prekliči</button>

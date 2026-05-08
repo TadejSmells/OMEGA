@@ -114,6 +114,11 @@ def rezervacije():
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
+@f_app.route('/rezervacije/preklic/<int:id_rezervacije>', methods=['POST'])
+@login_required
+def rezervacije_preklic(id_rezervacije):
+    return controllers.rezervacije.preklici_rezervacijo(id_rezervacije)
+
 
 
 @f_app.get('/vse_rezervacije')
