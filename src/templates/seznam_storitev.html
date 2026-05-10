@@ -288,7 +288,9 @@
             <input type="text" placeholder="Išči storitev..." id="searchInput" oninput="filterCards()">
         </div>
 
+        {% if session.get("role") == "admin" %}
         <a href="/storitve/dodaj" class="dodaj-btn">＋ Dodaj storitev</a>
+        {% endif %}
         <a href="/" class="back-btn">&#8617;</a>
     </div>
 
