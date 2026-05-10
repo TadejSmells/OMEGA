@@ -269,18 +269,8 @@
 </nav>
 
 <div class="stranke-page">
-    <a href="/" class="back-btn">&#8617;</a>
+    <a href="/admin" class="back-btn">&#8617;</a>
 
-    <div class="stranke-filter">
-        <h3>Seznam strank</h3>
-        <ul>
-            {% for s in stranke %}
-                <li>{{ s.ime }} {{ s.priimek }}</li>
-            {% else %}
-                <li>Ni vpisanih strank.</li>
-            {% endfor %}
-        </ul>
-    </div>
 
     <div class="stranke-box">
         <h2>Stranke</h2>
@@ -307,45 +297,55 @@
             </div>
         </form>
 
-        {% if izbrana %}
-            <div class="uredi-box">
-                <h3>Uredi podatke</h3>
+       {% if izbrana %}
+    <div class="uredi-box">
+        <h3>Uredi podatke</h3>
 
-                <form method="POST" action="/stranke_uredi/shrani">
-                    <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
+        <form method="POST" action="/stranke_uredi/shrani">
+            <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
 
-                    <div class="vrstica">
-                        <label>Ime</label>
-                        <input type="text" name="ime" value="{{ izbrana.ime }}" required>
-                    </div>
-
-                    <div class="vrstica">
-                        <label>Priimek</label>
-                        <input type="text" name="priimek" value="{{ izbrana.priimek }}" required>
-                    </div>
-
-                    <div class="vrstica">
-                        <label>Mail</label>
-                        <input type="email" name="mail" value="{{ izbrana.mail or '' }}">
-                    </div>
-
-                    <div class="vrstica">
-                        <label>Telefon</label>
-                        <input type="text" name="telefon" value="{{ izbrana.telefon or '' }}">
-                    </div>
-
-                    <div class="vrstica">
-                        <label>ID frizerja</label>
-                        <input type="text" name="id_naj_frizer" value="{{ izbrana.id_naj_frizer or '' }}">
-                    </div>
-
-                    <div class="gumb-vrstica">
-                        <span class="check"></span>
-                        <button type="submit" class="gumb">Shrani</button>
-                    </div>
-                </form>
+            <div class="vrstica">
+                <label>Ime</label>
+                <input type="text" name="ime" value="{{ izbrana.ime }}" required>
             </div>
-        {% endif %}
+
+            <div class="vrstica">
+                <label>Priimek</label>
+                <input type="text" name="priimek" value="{{ izbrana.priimek }}" required>
+            </div>
+
+            <div class="vrstica">
+                <label>Mail</label>
+                <input type="email" name="mail" value="{{ izbrana.mail or '' }}">
+            </div>
+
+            <div class="vrstica">
+                <label>Telefon</label>
+                <input type="text" name="telefon" value="{{ izbrana.telefon or '' }}">
+            </div>
+
+            <div class="vrstica">
+                <label>ID naj frizerja</label>
+                <input type="text" name="id_naj_frizer" value="{{ izbrana.id_naj_frizer or '' }}">
+            </div>
+
+            <div class="gumb-vrstica">
+                <span class="check"></span>
+                <button type="submit" class="gumb">Shrani</button>
+            </div>
+        </form>
+
+        <!-- DELETE BUTTON -->
+<form method="POST" action="/stranke_uredi/izbrisi"
+      onsubmit="return confirm('Res želiš izbrisati stranko {{ izbrana.ime }} {{ izbrana.priimek }}?')">
+    <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
+    <div class="gumb-vrstica" style="margin-top: 10px; border-top: none;">
+        <span class="check"></span>
+        <button type="submit" class="gumb" style="color: #a75f37;">🗑️ Izbriši stranko</button>
+    </div>
+</form>
+    </div>
+{% endif %}
     </div>
 </div>
 

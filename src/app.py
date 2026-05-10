@@ -20,6 +20,7 @@ import controllers.rezervacije_stranke_controller
 import controllers.frizer_controller
 import controllers.blokade_controller
 import controllers.moje_rezervacije_controller
+import controllers.pirkaz_stranke
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -175,10 +176,20 @@ def dodaj_storitev():
     return controllers.storitve.dodaj_storitev()
 
 # ── OSTALO ────────────────────────────────────────────────────────────────────
-@f_app.route('/stranke')
+@f_app.route('/stranke_uredi', methods=['GET', 'POST'])
 @login_required
 def stranke():
-    return controllers.sv_salon.seznam_stranke()
+    return controllers.pirkaz_stranke.seznam_stranke()
+
+@f_app.route('/stranke_uredi/shrani', methods=['POST'])
+@login_required
+def stranke_shrani():
+    return controllers.pirkaz_stranke.shrani_stranko()
+
+@f_app.route('/stranke_uredi/izbrisi', methods=['POST'])
+@login_required
+def izbrisi_stranko():
+    return controllers.pirkaz_stranke.izbrisi_stranko()
 
 @f_app.route('/urnik', methods=['GET', 'POST'])
 @login_required
