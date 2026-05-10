@@ -10,5 +10,64 @@
     <li><a href="/urnik">Moj urnik</a></li>
     <li><a href="/vse_rezervacije">Rezervacije</a></li>
     <li><a href="/cenik">Cenik / Storitve</a></li>
+    <li><a href="/blokade">Blokirani termini</a></li>
 </ul>
+
+<hr>
+
+<h3>📋 Moje rezervacije</h3>
+
+{% if rezervacije %}
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr style="background: #f0f0f0;">
+            <th>#</th>
+            <th>Stranka</th>
+            <th>Storitev</th>
+            <th>Salon</th>
+            <th>Datum</th>
+            <th>Ura</th>
+            <th>Status</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in rezervacije %}
+        <tr>
+            <td>{{ r.id_rezervacije }}</td>
+            <td>{{ r.stranka or '—' }}</td>
+            <td>{{ r.storitev or '—' }}</td>
+            <td>{{ r.salon or '—' }}</td>
+            <td>{{ r.datum or '—' }}</td>
+            <td>{{ r.ura | string | truncate(5, True, '') if r.ura else '—' }}</td>
+            <td>
+                {% if r.status == 'cancelled' %}
+                    <span style="color: red;">Preklicana</span>
+                {% else %}
+                    <span style="color: green;">Aktivna</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if r.status != 'cancelled' %}
+                <form method="POST" action="/frizer/preklic/{{ r.id_rezervacije }}"
+                      onsubmit="return confirm('Ali res želite preklicati to rezervacijo?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit"
+                            style="background: #c0392b; color: white; border: none;
+                                   padding: 4px 10px; cursor: pointer; border-radius: 4px;">
+                        Prekliči
+                    </button>
+                </form>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>Ni rezervacij.</p>
+{% endif %}
+
 {% endblock %}

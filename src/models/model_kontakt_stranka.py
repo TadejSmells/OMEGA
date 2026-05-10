@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import db
-from models.models import Stranka
+from models.models import Stranka, Rezervacija, Frizer
 
 
 def get_vse_kontakti():
@@ -32,3 +32,28 @@ def get_stranka(id_stranke):
         )
     finally:
         session.close()
+
+
+def get_stranke_frizerja(user_id):
+
+    session_db = db.get_session()
+
+    try:
+        return (
+            session_db.query(
+                Stranka.ime,
+                Stranka.priimek,
+                Stranka.mail,
+                Stranka.telefon,
+            )
+            .join(Rezervacija,
+                  Rezervacija.id_stranke == Stranka.id_stranke)
+            .join(Frizer,
+                  Rezervacija.id_frizerja == Frizer.id_frizer)
+            .filter(Frizer.user_id == user_id)
+            .distinct()
+            .all()
+        )
+
+    finally:
+        session_db.close()

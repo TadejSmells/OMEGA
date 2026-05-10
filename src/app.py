@@ -17,6 +17,10 @@ import controllers.saloni_controller
 import controllers.uredi_rezervacijo
 import controllers.kontakt_stranka_controller
 import controllers.rezervacije_stranke_controller
+import controllers.frizer_controller
+import controllers.blokade_controller
+import controllers.moje_rezervacije_controller
+import controllers.preklic_rezervacije_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -38,6 +42,29 @@ def setup():
 @f_app.get('/polni_db')
 def polni_db():
     return controllers.sv_setup.polni_db()
+#───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────────
+
+
+# ─────────────────────────────────AUTH───────────────────────────────────────
+@f_app.route('/salon/dodaj', methods=['GET', 'POST'])
+def salon_dodaj():
+    return controllers.sv_salon.dodaj_osebe()
+
+
+@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
+def salon_rezerviraj():
+    return controllers.sv_salon.nova_rezervacija()
+
+
+@f_app.route('/vsi_saloni', methods=['GET', 'POST'])
+def vsi_saloni():
+    return controllers.sv_salon.saloni()
+
+
+@f_app.route('/storitve', methods=['GET', 'POST'])
+def storitve():
+    return controllers.sv_salon.storitve()
+
 
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 @f_app.route("/register", methods=["GET", "POST"])
@@ -88,9 +115,12 @@ def rezervacije():
 def rezervacije_izbrisi(id_rezervacije):
     return controllers.rezervacije.izbrisi_rezervacijo(id_rezervacije)
 
-@f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
-def salon_rezerviraj_old():
-    return redirect('/rezervacije')
+@f_app.route('/rezervacije/preklic/<int:id_rezervacije>', methods=['POST'])
+@login_required
+def rezervacije_preklic(id_rezervacije):
+    return controllers.rezervacije.preklici_rezervacijo(id_rezervacije)
+
+
 
 @f_app.get('/vse_rezervacije')
 @login_required
@@ -107,12 +137,32 @@ def zgodovina():
 def uredi_rezervacijo(id_rezervacije):
     return controllers.uredi_rezervacijo.uredi_rezervacijo(id_rezervacije)
 
+@f_app.route('/blokade', methods=['GET', 'POST'])
+@frizer_required
+def blokade():
+    return controllers.blokade_controller.blokade()
+
+@f_app.route('/moje')
+@login_required
+def moje():
+    return controllers.moje_rezervacije_controller.moje()
+
+@f_app.route('/moje/uredi/<int:id_rezervacije>', methods=['GET', 'POST'])
+@login_required
+def uredi_mojo(id_rezervacije):
+    return controllers.moje_rezervacije_controller.uredi_mojo_rezervacijo(id_rezervacije)
+
+@f_app.route('/moje/preklic/<int:id_rezervacije>', methods=['POST'])
+@login_required
+def preklic_moje(id_rezervacije):
+    return controllers.moje_rezervacije_controller.preklic_moje_rezervacije(id_rezervacije)
+
 # ── STORITVE ──────────────────────────────────────────────────────────────────
 @f_app.route('/cenik')
 def cenik():
     return controllers.storitve.pridobi_storitve()
 
-@f_app.route('/storitve')
+@f_app.route('/vse_storitve')
 def seznam_storitev():
     return controllers.storitve.pridobi_storitve()
 
@@ -121,7 +171,7 @@ def seznam_storitev_alias():
     return controllers.storitve.pridobi_storitve()
 
 @f_app.route('/storitve/dodaj', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def dodaj_storitev():
     return controllers.storitve.dodaj_storitev()
 
@@ -148,8 +198,12 @@ def admin():
 @f_app.route("/frizer")
 @frizer_required
 def frizer():
-    return controllers.sv_setup.frizer()
+    return controllers.preklic_rezervacije_controller.frizer_panel()
 
+@f_app.route("/frizer/preklic/<int:id_rezervacije>", methods=["POST"])
+@frizer_required
+def frizer_preklic_rezervacije(id_rezervacije):
+    return controllers.preklic_rezervacije_controller.preklic_rezervacije(id_rezervacije)
 @f_app.route("/stranka")
 @login_required
 def stranka():
@@ -158,12 +212,20 @@ def stranka():
 @f_app.route('/kontakti_strank')
 @login_required
 def kontakti_strank():
-    return controllers.kontakt_stranka_controller.seznam_kontaktov()
-
+   return controllers.kontakt_stranka_controller.kontakti_mojih_strank()
 @f_app.route('/rezervacije_stranke')
 @login_required
 def rezervacije_stranke():
-    return controllers.rezervacije_stranke_controller.rezervacije_stranke()
+    return controllers.rezervacije_stranke_controller.moje_rezervacije()
+
+@f_app.route('/frizerji')
+def seznam_frizerjev():
+    return controllers.frizer_controller.seznam_frizerjev()
+ 
+@f_app.route('/frizer/<int:frizer_id>')
+def frizer_profil(frizer_id):
+    return controllers.frizer_controller.frizer_profil(frizer_id)
+
 
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
