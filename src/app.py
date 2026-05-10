@@ -207,12 +207,11 @@ def stranka():
 @f_app.route('/kontakti_strank')
 @login_required
 def kontakti_strank():
-    return controllers.kontakt_stranka_controller.seznam_kontaktov()
-
+   return controllers.kontakt_stranka_controller.kontakti_mojih_strank()
 @f_app.route('/rezervacije_stranke')
 @login_required
 def rezervacije_stranke():
-    return controllers.rezervacije_stranke_controller.rezervacije_stranke()
+    return controllers.rezervacije_stranke_controller.moje_rezervacije()
 
 @f_app.route('/frizerji')
 def seznam_frizerjev():
