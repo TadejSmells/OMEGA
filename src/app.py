@@ -21,6 +21,8 @@ import controllers.frizer_controller
 import controllers.blokade_controller
 import controllers.moje_rezervacije_controller
 import controllers.pirkaz_stranke
+import controllers.preklic_rezervacije_controller
+
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -208,8 +210,12 @@ def admin():
 @f_app.route("/frizer")
 @frizer_required
 def frizer():
-    return controllers.sv_setup.frizer()
+    return controllers.preklic_rezervacije_controller.frizer_panel()
 
+@f_app.route("/frizer/preklic/<int:id_rezervacije>", methods=["POST"])
+@frizer_required
+def frizer_preklic_rezervacije(id_rezervacije):
+    return controllers.preklic_rezervacije_controller.preklic_rezervacije(id_rezervacije)
 @f_app.route("/stranka")
 @login_required
 def stranka():
