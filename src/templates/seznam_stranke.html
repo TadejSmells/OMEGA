@@ -1,63 +1,357 @@
 {% extends "base.html" %}
-
-{% block head %}
-<!-- Select2 -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-{% endblock %}
+{% block title %}Seznam strank{% endblock %}
 
 {% block content %}
-<h1>Urejanje stranke</h1>
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<form method="POST">
-    <label>Stranka:</label><br><br>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
 
-    <select name="stranka_id" id="stranka_select" style="width: 300px;" required>
-        <option value="" disabled selected>-- izberi stranko --</option>
-        {% for s in stranke %}
-            <option value="{{ s.id_stranke }}" {% if izbrana and s.id_stranke == izbrana.id_stranke %}selected{% endif %}>
-                {{ s.ime }} {{ s.priimek }}
-            </option>
-        {% endfor %}
-    </select>
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
 
-    <br><br>
-    <button type="submit">Potrdi</button>
-</form>
+    .page-header {
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-{% if izbrana %}
-<hr>
-<h2>Uredi podatke</h2>
-<form method="POST" action="/stranke_uredi/shrani">
+    .page-header-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-username {
+        font-size: 13px;
+        color: #292421;
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    .stranke-page {
+        flex: 1;
+        min-height: calc(100vh - 310px);
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        padding: 24px 32px 30px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 28px;
+        text-decoration: none;
+    }
+
+    .stranke-box {
+        width: 430px;
+        min-height: 430px;
+        background: rgba(255,255,255,0.18);
+        padding: 34px 42px;
+    }
+
+    .stranke-box h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.6rem;
+        text-align: center;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+    }
+
+    .crta {
+        height: 2px;
+        background: #A75F37;
+        margin-bottom: 28px;
+    }
+
+    .vrstica {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 22px;
+    }
+
+    .vrstica label {
+        width: 90px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111111;
+    }
+
+    select, input {
+        border: none;
+        background: #FFFFFF;
+        border-radius: 20px;
+        padding: 7px 12px;
+        font-size: 12px;
+        outline: none;
+        width: 210px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .gumb-vrstica {
+        border-top: 2px solid #A75F37;
+        padding-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #CA8E82;
+        font-size: 12px;
+    }
+
+    .check {
+        width: 18px;
+        height: 18px;
+        border: 1px solid #D9B99F;
+        border-radius: 4px;
+        background: #F2E7DD;
+        display: inline-block;
+    }
+
+    .gumb {
+        border: none;
+        background: transparent;
+        color: #CA8E82;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .uredi-box {
+        margin-top: 26px;
+        border-top: 2px solid #A75F37;
+        padding-top: 18px;
+    }
+
+    .uredi-box h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+        color: #292421;
+    }
+
+    .uredi-box .vrstica {
+        gap: 14px;
+        margin-bottom: 12px;
+    }
+
+    .uredi-box label {
+        font-size: 13px;
+        width: 100px;
+    }
+
+    .stranke-filter {
+        position: absolute;
+        top: 42px;
+        right: 110px;
+        width: 280px;
+        background: #FFFFFF;
+        border-radius: 28px;
+        padding: 22px 26px;
+        border: 1px solid #D9B99F;
+    }
+
+    .stranke-filter h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .stranke-filter ul {
+        list-style: circle;
+        padding-left: 18px;
+        max-height: 90px;
+        overflow: auto;
+    }
+
+    .stranke-filter li {
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+
+    .nav-footer {
+        background: #D9B99F;
+        padding: 7px 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-footer a {
+        font-size: 13px;
+        color: #292421;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .nav-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1000px) {
+        .stranke-filter { display: none; }
+    }
+
+    @media (max-width: 700px) {
+        .page-header { padding: 12px 18px; }
+        .page-header-title { font-size: 1.4rem; }
+        .navbar a { padding: 10px 14px; font-size: 12px; }
+        .stranke-box { width: 100%; padding: 28px 22px; }
+        .vrstica { flex-direction: column; align-items: flex-start; gap: 8px; }
+        select, input { width: 100%; }
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">Seznam strank</div>
+
+    <div class="header-right">
+        <span class="header-username">Ime priimek</span>
+        <a href="/profil" class="user-avatar">&#128100;</a>
+    </div>
+</div>
+
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni">Saloni</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/rezervacije">Termini</a>
+    <a href="/faq">O &amp; A</a>
+</nav>
+
+<div class="stranke-page">
+    <a href="/admin" class="back-btn">&#8617;</a>
+
+
+    <div class="stranke-box">
+        <h2>Stranke</h2>
+        <div class="crta"></div>
+
+        <form method="POST">
+            <div class="vrstica">
+                <label for="stranka_select">Stranka</label>
+
+                <select name="stranka_id" id="stranka_select" required>
+                    <option value="" disabled selected>-izberi stranko-</option>
+
+                    {% for s in stranke %}
+                        <option value="{{ s.id_stranke }}" {% if izbrana and s.id_stranke == izbrana.id_stranke %}selected{% endif %}>
+                            {{ s.ime }} {{ s.priimek }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="gumb-vrstica">
+                <span class="check"></span>
+                <button type="submit" class="gumb">Potrdi</button>
+            </div>
+        </form>
+
+       {% if izbrana %}
+    <div class="uredi-box">
+        <h3>Uredi podatke</h3>
+
+        <form method="POST" action="/stranke_uredi/shrani">
+            <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
+
+            <div class="vrstica">
+                <label>Ime</label>
+                <input type="text" name="ime" value="{{ izbrana.ime }}" required>
+            </div>
+
+            <div class="vrstica">
+                <label>Priimek</label>
+                <input type="text" name="priimek" value="{{ izbrana.priimek }}" required>
+            </div>
+
+            <div class="vrstica">
+                <label>Mail</label>
+                <input type="email" name="mail" value="{{ izbrana.mail or '' }}">
+            </div>
+
+            <div class="vrstica">
+                <label>Telefon</label>
+                <input type="text" name="telefon" value="{{ izbrana.telefon or '' }}">
+            </div>
+
+            <div class="vrstica">
+                <label>ID naj frizerja</label>
+                <input type="text" name="id_naj_frizer" value="{{ izbrana.id_naj_frizer or '' }}">
+            </div>
+
+            <div class="gumb-vrstica">
+                <span class="check"></span>
+                <button type="submit" class="gumb">Shrani</button>
+            </div>
+        </form>
+
+        <!-- DELETE BUTTON -->
+<form method="POST" action="/stranke_uredi/izbrisi"
+      onsubmit="return confirm('Res želiš izbrisati stranko {{ izbrana.ime }} {{ izbrana.priimek }}?')">
     <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
-
-    <label>Ime:</label><br>
-    <input type="text" name="ime" value="{{ izbrana.ime }}" required><br><br>
-
-    <label>Priimek:</label><br>
-    <input type="text" name="priimek" value="{{ izbrana.priimek }}" required><br><br>
-
-    <label>Mail:</label><br>
-    <input type="email" name="mail" value="{{ izbrana.mail or '' }}"><br><br>
-
-    <label>Telefon:</label><br>
-    <input type="text" name="telefon" value="{{ izbrana.telefon or '' }}"><br><br>
-
-    <label>ID najljubšega frizija:</label><br>
-    <input type="text" name="id_naj_frizer" value="{{ izbrana.id_naj_frizer or '' }}"><br><br>
-
-    <button type="submit">Shrani</button>
+    <div class="gumb-vrstica" style="margin-top: 10px; border-top: none;">
+        <span class="check"></span>
+        <button type="submit" class="gumb" style="color: #a75f37;">🗑️ Izbriši stranko</button>
+    </div>
 </form>
+    </div>
 {% endif %}
+    </div>
+</div>
 
-<script>
-    $(document).ready(function() {
-        $('#stranka_select').select2({
-            placeholder: '-- izberi stranko --',
-            allowClear: true
-        });
-    });
-</script>
-
+<div class="nav-footer">
+    <a href="/faq">News</a>
+    <a href="/rezervacije">Vaši termini</a>
+    <a href="/saloni">Informacije</a>
+</div>
 {% endblock %}

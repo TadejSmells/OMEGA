@@ -2,65 +2,308 @@
 {% block title %}Rezervacije{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
+
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
     .page-header {
-        background: var(--beige); padding: 14px 32px;
-        display: flex; align-items: center; justify-content: space-between;
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
-    .page-header-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.06em; }
-    .header-right { display: flex; align-items: center; gap: 14px; }
-    .header-username { font-size: 11px; background: var(--white); border-radius: 30px; padding: 6px 28px; font-family: var(--font-head); font-weight: 600; }
-    .user-avatar { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--beige); text-decoration: none; }
-    .navbar { background: var(--brown); display: flex; }
-    .navbar a { font-size: 13px; color: var(--dark); font-weight: 700; font-style: italic; text-decoration: none; padding: 11px 28px; display: block; }
-    .navbar a.active { background: rgba(0,0,0,0.15); }
-    .navbar a:hover { background: rgba(0,0,0,0.12); }
-    .main-wrap { min-height: calc(100vh - 116px); display: flex; justify-content: center; background: linear-gradient(90deg, var(--white) 0 30%, var(--light) 30% 70%, var(--white) 70%); }
-    .panel { width: 460px; padding: 42px 48px; position: relative; }
-    .back-btn { position: absolute; top: 18px; right: 24px; font-size: 30px; color: var(--beige); text-decoration: none; }
-    h1 { font-family: var(--font-body); font-size: 1.45rem; text-align: center; margin-bottom: 8px; font-weight: 800; }
-    .line { height: 2px; background: var(--brown); margin: 0 auto 26px; width: 310px; }
-    .form-row { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 18px; margin-bottom: 16px; }
-    .form-row label { font-size: 15px; font-weight: 800; }
-    select { width: 100%; height: 25px; border: none; border-radius: 20px; background: var(--white); padding: 0 12px; font-family: var(--font-body); font-size: 11px; color: var(--dark); outline: none; text-align: center; }
-    .check-row { margin-top: 12px; display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--rose); }
-    .check-row input { width: 24px; height: 24px; accent-color: var(--brown); }
-    .spodaj { margin-top: 32px; font-size: 12px; line-height: 1.7; }
+
+    .page-header-title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
+        letter-spacing: 0.02em;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-username {
+        font-size: 13px;
+        color: #292421;
+        background: rgba(255,255,255,0.7);
+        padding: 7px 18px;
+        border-radius: 20px;
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    .rezervacije-page {
+        flex: 1;
+        min-height: calc(100vh - 265px);
+        background: linear-gradient(90deg, #FFFFFF 0 30%, #F2E7DD 30% 70%, #FFFFFF 70%);
+        display: flex;
+        justify-content: center;
+        position: relative;
+        padding: 22px 32px 26px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 28px;
+        text-decoration: none;
+    }
+
+    .panel {
+        width: 430px;
+        min-height: 390px;
+        padding: 26px 42px 22px;
+        background: #F2E7DD;
+    }
+
+    h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.55rem;
+        text-align: center;
+        margin-bottom: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .line {
+        height: 2px;
+        background: #A75F37;
+        margin: 0 auto 22px;
+        width: 100%;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 105px 1fr;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 13px;
+    }
+
+    .form-row label {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111111;
+    }
+
+    select {
+        width: 100%;
+        height: 24px;
+        border: none;
+        border-radius: 20px;
+        background: #FFFFFF;
+        padding: 0 12px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        color: #292421;
+        outline: none;
+        text-align: center;
+    }
+
+    .check-row {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        color: #CA8E82;
+    }
+
+    .check-box {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #D9B99F;
+        border-radius: 4px;
+        background: #F2E7DD;
+        display: inline-block;
+    }
+
+    .submit-btn {
+        border: none;
+        background: transparent;
+        color: #CA8E82;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .spodaj {
+        margin-top: 22px;
+        font-size: 12px;
+        line-height: 1.6;
+        max-height: 86px;
+        overflow: auto;
+    }
+
+    @media (max-width: 800px) {
+        .page-header {
+            padding: 12px 18px;
+        }
+
+        .page-header-title {
+            font-size: 1.4rem;
+        }
+
+        .navbar a {
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .rezervacije-page {
+            background: #F2E7DD;
+            padding: 20px 18px;
+        }
+
+        .panel {
+            width: 100%;
+            padding: 24px 20px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+    }
 </style>
 
 <div class="page-header">
     <div class="page-header-title">REZERVACIJE</div>
-    <div class="header-right"><span class="header-username">Ime priimek</span><a href="/profil" class="user-avatar">&#128100;</a></div>
+
+    <div class="header-right">
+        <span class="header-username">Ime priimek</span>
+        <a href="/profil" class="user-avatar">&#128100;</a>
+    </div>
 </div>
+
 <nav class="navbar">
-    <a href="/">Domov</a><a href="/saloni">Saloni</a><a href="/storitve">Storitve</a><a href="/termini" class="active">Termini</a><a href="/qanda">O &amp; A</a>
+    <a href="/">Domov</a>
+    <a href="/saloni">Saloni</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/rezervacije" class="active">Termini</a>
+    <a href="/faq">O &amp; A</a>
 </nav>
 
-<div class="main-wrap">
+<div class="rezervacije-page">
+    <a href="/" class="back-btn">&#8617;</a>
+
     <div class="panel">
-        <a href="/" class="back-btn">&#8617;</a>
-        <h1>VAŠE REZERVACIJE</h1>
+        <h1>Vaše rezervacije</h1>
         <div class="line"></div>
-        <form method="POST" action="/termini">
-            <div class="form-row"><label>Stranka</label><select name="stranka_id" required><option value="" disabled selected>-izberi stranko-</option>{% for s in stranke %}<option value="{{ s[0] }}">{{ s[1] }} {{ s[2] }}</option>{% endfor %}</select></div>
-            <div class="form-row"><label>Frizer</label><select name="frizer_id" required><option value="" disabled selected>-izberi frizerja-</option>{% for f in frizerji %}<option value="{{ f[0] }}">{{ f[1] }} {{ f[2] }}</option>{% endfor %}</select></div>
-            <div class="form-row"><label>Salon</label><select name="salon_id" required><option value="" disabled selected>-izberi salon-</option>{% for s in saloni %}<option value="{{ s[0] }}">{{ s[1] }}</option>{% endfor %}</select></div>
-            <div class="form-row"><label>Storitev</label><select name="storitev_id" required><option value="" disabled selected>-izberi storitev-</option>{% for st in storitve %}<option value="{{ st[0] }}">{{ st[1] }}</option>{% endfor %}</select></div>
+
+        <form method="POST" action="/rezervacije">
+            <div class="form-row">
+                <label for="stranka_id">Stranka</label>
+                <select name="stranka_id" id="stranka_id" required>
+                    <option value="" disabled selected>-izberi stranko-</option>
+                    {% for s in stranke %}
+                        <option value="{{ s[0] }}">{{ s[1] }} {{ s[2] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="frizer_id">Frizer</label>
+                <select name="frizer_id" id="frizer_id" required>
+                    <option value="" disabled selected>-izberi frizerja-</option>
+                    {% for f in frizerji %}
+                        <option value="{{ f[0] }}">{{ f[2] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="salon_id">Salon</label>
+                <select name="salon_id" id="salon_id" required>
+                    <option value="" disabled selected>-izberi salon-</option>
+                    {% for s in saloni %}
+                        <option value="{{ s[0] }}">{{ s[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="storitev_id">Storitev</label>
+                <select name="storitev_id" id="storitev_id" required>
+                    <option value="" disabled selected>-izberi storitev-</option>
+                    {% for st in storitve %}
+                        <option value="{{ st[0] }}">{{ st[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
             <div class="line"></div>
-            <label class="check-row"><input type="checkbox" name="dodaj" required> Dodaj rezervacijo</label>
+
+            <div class="check-row">
+                <span class="check-box"></span>
+                <button type="submit" class="submit-btn">Dodaj rezervacijo</button>
+            </div>
         </form>
+
         <div class="spodaj">
             Vse rezervacije: {{ rezervacije|length if rezervacije is defined else 0 }}<br>
+
             {% if rezervacije is defined and rezervacije %}
-                {% for r in rezervacije %}Rezervacija #{{ loop.index }}<br>{% endfor %}
+                {% for r in rezervacije %}
+                    Rezervacija #{{ r[0] }}:
+                    {{ r[1] or '—' }},
+                    {{ r[2] or '—' }},
+                    {{ r[4] or '—' }}<br>
+                {% endfor %}
             {% else %}
                 Ni še nobene rezervacije.
             {% endif %}

@@ -37,3 +37,29 @@ def get_rezervacije_stranke(id_stranke):
         )
     finally:
         session.close()
+
+
+def get_rezervacije_uporabnika(user_id):
+
+    session_db = db.get_session()
+
+    try:
+        return (
+            session_db.query(
+                Rezervacija.id_rezervacije,
+                Frizer.ime.label('frizer'),
+                Salon.ime.label('salon'),
+                Storitev.ime_storitve.label('storitev'),
+                Storitev.cena.label('cena'),
+                Storitev.trajanje.label('trajanje'),
+            )
+            .join(Stranka, Rezervacija.id_stranke == Stranka.id_stranke)
+            .filter(Stranka.user_id == user_id)
+            .outerjoin(Frizer, Rezervacija.id_frizerja == Frizer.id_frizer)
+            .outerjoin(Salon, Rezervacija.id_salona == Salon.id)
+            .outerjoin(Storitev, Rezervacija.id_storitve == Storitev.id_storitve)
+            .all()
+        )
+
+    finally:
+        session_db.close()

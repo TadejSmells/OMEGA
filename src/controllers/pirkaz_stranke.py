@@ -25,3 +25,8 @@ def shrani_stranko():
     model_stranke.uredi_stranko(id_stranke, ime, priimek, mail, telefon, id_naj_frizer)
 
     return redirect(url_for('stranke'))
+
+def izbrisi_stranko():
+    id_stranke = int(request.form.get('id_stranke'))
+    model_stranke.izbrisi_stranko(id_stranke)
+    return redirect(url_for('stranke'))

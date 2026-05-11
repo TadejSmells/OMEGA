@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Blokirani termini{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <h2 class="mb-4">Blokirani termini</h2>
+
+  <div class="row">
+
+    <!-- DODAJ BLOKADO -->
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm">
+        <h5>Nova blokada</h5>
+
+        <form method="POST">
+
+          <div class="mb-2">
+            <label>Frizer</label>
+
+            <select name="frizer_id" class="form-control" required>
+              <option value="">-- izberi frizerja --</option>
+
+              {% for f in frizerji %}
+                <option value="{{ f[0] }}">
+                  {{ f[2] }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label>Datum</label>
+            <input type="date" name="datum" class="form-control" required>
+          </div>
+
+          <div class="mb-2">
+            <label>Od</label>
+            <input type="time" name="ura_od" class="form-control" required>
+          </div>
+
+          <div class="mb-2">
+            <label>Do</label>
+            <input type="time" name="ura_do" class="form-control" required>
+          </div>
+
+          <div class="mb-2">
+            <label>Razlog</label>
+            <input type="text" name="razlog" class="form-control">
+          </div>
+
+          <button class="btn btn-danger w-100 mt-2">
+            Blokiraj
+          </button>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- SEZNAM BLOKAD -->
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+
+        <div class="card-body">
+
+          <h5>Seznam blokad</h5>
+
+          {% if blokade %}
+
+          <table class="table table-striped mt-3">
+
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Frizer</th>
+                <th>Datum</th>
+                <th>Od</th>
+                <th>Do</th>
+                <th>Razlog</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {% for b, f in blokade %}
+              <tr>
+
+                <td>{{ b.id }}</td>
+
+                <td>{{ f.ime }}</td>
+
+                <td>{{ b.datum }}</td>
+
+                <td>{{ b.ura_od }}</td>
+
+                <td>{{ b.ura_do }}</td>
+
+                <td>
+                  {{ b.razlog or '—' }}
+                </td>
+
+              </tr>
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+          {% else %}
+
+            <p class="text-muted">
+              Ni blokiranih terminov.
+            </p>
+
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

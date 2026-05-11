@@ -5,8 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
 import traceback
 from models.models import Uporabnik, Stranka, Frizer
-#import controllers.stranka_opomnik_controller as opomnik_controller
-#import controllers.frizer_opomnik_controller as frizer_opomnik_controller
+import controllers.stranka_opomnik as opomnik_controller
+import controllers.opomnik_rezervacij_controller as frizer_opomnik_controller
 
 MIN_PASSWORD_LENGTH = 6
 MAX_LOGIN_ATTEMPTS = 5

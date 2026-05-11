@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS public.users (
     vloga    character varying(50) DEFAULT 'stranka'
 );
 
+ALTER TABLE public.users ADD COLUMN IF NOT EXISTS vloga character varying(50) DEFAULT 'stranka';
+
 -- frizer
 CREATE TABLE IF NOT EXISTS public.frizer (
     id_frizer serial PRIMARY KEY,
@@ -25,6 +27,8 @@ CREATE TABLE IF NOT EXISTS public.frizer (
     kontakt   character varying(100),
     user_id   integer REFERENCES public.users (id) ON DELETE SET NULL
 );
+
+ALTER TABLE public.frizer ADD COLUMN IF NOT EXISTS user_id integer REFERENCES public.users (id) ON DELETE SET NULL;
 
 -- storitev
 CREATE TABLE IF NOT EXISTS public.storitev (
@@ -52,6 +56,8 @@ CREATE TABLE IF NOT EXISTS public.stranka (
     user_id       integer REFERENCES public.users (id) ON DELETE SET NULL
 );
 
+ALTER TABLE public.stranka ADD COLUMN IF NOT EXISTS user_id integer REFERENCES public.users (id) ON DELETE SET NULL;
+
 -- rezervacija
 CREATE TABLE IF NOT EXISTS public.rezervacija (
     id_rezervacije serial PRIMARY KEY,
@@ -64,6 +70,10 @@ CREATE TABLE IF NOT EXISTS public.rezervacija (
     status         character varying(20) DEFAULT 'active'
         CHECK (status IN ('active', 'cancelled'))
 );
+
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS datum date;
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS ura time without time zone;
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS status character varying(20) DEFAULT 'active';
 
 -- urnik
 CREATE TABLE IF NOT EXISTS public.urnik (

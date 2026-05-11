@@ -1,4 +1,4 @@
-from flask import render_template, abort
+from flask import render_template, abort, request, redirect, flash, session
 from models import model_frizer
 
 
@@ -28,3 +28,32 @@ def seznam_frizerjev():
         "seznam_frizerjev.html",
         frizerji=frizerji
     )
+
+
+def dodaj_frizer():
+    """Admin only — doda novega frizerja."""
+    if session.get("role") != "admin":
+        return "Nimaš dostopa.", 403
+
+    if request.method == "POST":
+        ime     = request.form.get("ime", "").strip()
+        kontakt = request.form.get("kontakt", "").strip()
+        salon_id = request.form.get("salon_id") or None
+
+        if not ime:
+            flash("Ime frizerja je obvezno.", "error")
+            return redirect("/frizerji/dodaj")
+
+        try:
+            model_frizer.dodaj_frizer(ime, kontakt, salon_id)
+            flash(f"Frizer '{ime}' je bil uspešno dodan.", "success")
+            return redirect("/frizerji")
+        except ValueError as e:
+            flash(str(e), "error")
+            return redirect("/frizerji/dodaj")
+        except Exception:
+            flash("Napaka pri dodajanju frizerja. Poskusi znova.", "error")
+            return redirect("/frizerji/dodaj")
+
+    saloni = model_frizer.get_vsi_saloni()
+    return render_template("dodaj_frizer.html", saloni=saloni)

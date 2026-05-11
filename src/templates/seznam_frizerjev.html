@@ -1,9 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Seznam storitev{% endblock %}
+{% block title %}Seznam frizerjev{% endblock %}
 
 {% block content %}
 <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
     body {
         font-family: Arial, Helvetica, sans-serif;
@@ -30,7 +34,6 @@
         font-size: 2rem;
         font-weight: 700;
         color: #292421;
-        letter-spacing: 0.02em;
     }
 
     .header-right {
@@ -42,6 +45,9 @@
     .header-username {
         font-size: 13px;
         color: #292421;
+        background: rgba(255,255,255,0.7);
+        padding: 7px 18px;
+        border-radius: 20px;
     }
 
     .user-avatar {
@@ -79,24 +85,23 @@
         background: rgba(0,0,0,0.15);
     }
 
-    .storitve-page {
+    .frizerji-page {
         flex: 1;
         min-height: calc(100vh - 310px);
         background: #F2E7DD;
         display: flex;
         flex-direction: column;
+        position: relative;
     }
 
-    .iskanjebox {
-        background: #F2E7DD;
+    .top-row {
         padding: 16px 32px 0;
         display: flex;
         align-items: center;
         gap: 12px;
-        position: relative;
     }
 
-    .iskanjabar {
+    .search-box {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -107,7 +112,7 @@
         border: 1px solid #D9B99F;
     }
 
-    .iskanjabar input {
+    .search-box input {
         border: none;
         background: transparent;
         outline: none;
@@ -126,90 +131,92 @@
         font-weight: 600;
         text-decoration: none;
     }
-
-    .dodaj-btn:hover {
-        background: #CA8E82;
-    }
-
+    .dodaj-btn:hover { background: #CA8E82; }
     .back-btn {
         margin-left: auto;
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 26px;
         color: #CA8E82;
+        font-size: 28px;
         text-decoration: none;
     }
 
-    .carousel-wrapper {
+    .cards-wrapper {
         flex: 1;
-        padding: 12px 32px 26px;
+        padding: 18px 32px 26px;
         display: flex;
         align-items: center;
         gap: 12px;
     }
 
-    .carousel {
-        display: flex;
-        gap: 14px;
-        flex: 1;
-        overflow: hidden;
-        align-items: stretch;
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        width: 100%;
     }
 
-    .card {
-        flex: 0 0 calc(25% - 11px);
-        min-height: 430px;
+    .frizer-card {
+        min-height: 420px;
         background: #FFFFFF;
-        border-radius: 14px;
-        overflow: hidden;
         border: 1px solid #F2D6CE;
+        border-radius: 14px;
+        padding: 36px 22px 28px;
+        text-align: center;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
     }
 
-    .card-img {
-        width: 100%;
-        height: 190px;
-        background: #F2D6CE;
+    .frizer-icon {
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        background: #D9B99F;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 52px;
+        margin: 0 auto 24px;
     }
 
-    .card-body {
-        padding: 18px 18px 20px;
-        flex: 1;
-    }
-
-    .card-body h2 {
+    .frizer-card h3 {
         font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.2rem;
+        font-size: 1.35rem;
         color: #292421;
-        margin-bottom: 14px;
+        margin-bottom: 18px;
     }
 
-    .card-body .oznaka {
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.06em;
+    .salon-ime {
         color: #CA8E82;
-        text-transform: uppercase;
-        margin-top: 10px;
-    }
-
-    .card-body .opis {
         font-size: 14px;
-        color: #7A958F;
-        line-height: 1.5;
-        margin-top: 3px;
+        margin-bottom: 10px;
     }
 
-    .arrow-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 26px;
-        color: #CA8E82;
-        flex-shrink: 0;
-        align-self: center;
+    .kontakt {
+        color: #7A958F;
+        font-size: 13px;
+    }
+
+    .profil-btn {
+        display: inline-block;
+        margin-top: 28px;
+        background: #D9B99F;
+        color: #292421;
+        text-decoration: none;
+        border-radius: 30px;
+        padding: 11px 36px;
+        font-size: 14px;
+    }
+
+    .profil-btn:hover {
+        background: #CA8E82;
+        color: #FFFFFF;
+    }
+
+    .empty {
+        font-size: 14px;
+        color: #292421;
+        padding: 20px 0;
     }
 
     .nav-footer {
@@ -230,7 +237,13 @@
         text-decoration: underline;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
+        .cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 700px) {
         .page-header {
             padding: 12px 18px;
         }
@@ -244,31 +257,29 @@
             font-size: 12px;
         }
 
-        .carousel-wrapper {
-            padding: 12px 18px 24px;
+        .top-row {
+            padding: 14px 18px 0;
         }
 
-        .carousel {
-            flex-direction: column;
-            overflow: visible;
+        .cards-wrapper {
+            padding: 18px;
         }
 
-        .card {
-            flex: 1 1 auto;
-            width: 100%;
-            min-height: 360px;
+        .cards {
+            grid-template-columns: 1fr;
         }
 
-        .arrow-btn {
-            display: none;
+        .frizer-card {
+            min-height: 340px;
         }
     }
 </style>
 
 <div class="page-header">
-    <div class="page-header-title">SEZNAM STORITEV</div>
+    <div class="page-header-title">FRIZERJI</div>
+
     <div class="header-right">
-        <span class="header-username">Ime priimek</span>
+        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
         <a href="/profil" class="user-avatar">&#128100;</a>
     </div>
 </div>
@@ -276,60 +287,52 @@
 <nav class="navbar">
     <a href="/">Domov</a>
     <a href="/saloni">Saloni</a>
-    <a href="/storitve" class="active">Storitve</a>
+    <a href="/storitve">Storitve</a>
     <a href="/rezervacije">Termini</a>
     <a href="/faq">O &amp; A</a>
 </nav>
 
-<div class="storitve-page">
-    <div class="iskanjebox">
-        <div class="iskanjabar">
+<div class="frizerji-page">
+    <div class="top-row">
+        <div class="search-box">
             <span>&#128269;</span>
-            <input type="text" placeholder="Išči storitev..." id="searchInput" oninput="filterCards()">
+            <input type="text" placeholder="Išči frizerja..." id="searchInput" oninput="filterCards()">
         </div>
 
-        {% if session.get("role") == "admin" %}
-        <a href="/storitve/dodaj" class="dodaj-btn">＋ Dodaj storitev</a>
-        {% endif %}
         <a href="/" class="back-btn">&#8617;</a>
     </div>
 
-    <div class="carousel-wrapper">
-        <button class="arrow-btn" onclick="prevPage()">&#8592;</button>
+    <div class="cards-wrapper">
+        <div class="cards" id="cardsContainer">
+            {% for f in frizerji %}
+                <div class="frizer-card" data-name="{{ f['ime']|lower }}">
+                    <div>
+                        <div class="frizer-icon">✂</div>
 
-        <div class="carousel" id="carouselContainer">
-            {% for st in podatki %}
-                <div class="card" data-name="{{ st[1]|lower }}">
-                    <div class="card-img"></div>
+                        <h3>{{ f['ime'] }}</h3>
 
-                    <div class="card-body">
-                        <h2>{{ st[1] | upper }}</h2>
+                        <div class="salon-ime">
+                            {{ f['salon'] if f['salon'] else '—' }}
+                        </div>
 
-                        <div class="oznaka">Okvirna cena storitve:</div>
-                        <div class="opis">{{ st[2] }}€</div>
+                        <div class="kontakt">
+                            {{ f['kontakt'] if f['kontakt'] else '—' }}
+                        </div>
+                    </div>
 
-                        <div class="oznaka">Okviren čas trajanja storitve:</div>
-                        <div class="opis">{{ st[3] }}</div>
-
-                        <div class="oznaka">Opis storitve:</div>
-                        <div class="opis">—</div>
+                    <div>
+                        <a href="/frizer/{{ f['id'] }}" class="profil-btn">Poglej profil &rarr;</a>
                     </div>
                 </div>
             {% else %}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="opis">Ni vpisanih storitev.</div>
-                    </div>
-                </div>
+                <div class="empty">Ni vpisanih frizerjev.</div>
             {% endfor %}
         </div>
-
-        <button class="arrow-btn" onclick="nextPage()">&#8594;</button>
     </div>
 </div>
 
 <div class="nav-footer">
-    <a href="/faq">News</a>
+    <a href="/faq">Novice</a>
     <a href="/rezervacije">Vaši termini</a>
     <a href="/saloni">Informacije</a>
 </div>
@@ -337,36 +340,9 @@
 <script>
     function filterCards() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('.card[data-name]').forEach(c => {
+        document.querySelectorAll('.frizer-card[data-name]').forEach(c => {
             c.style.display = c.dataset.name.includes(q) ? '' : 'none';
         });
     }
-
-    let page = 0;
-    const perPage = 4;
-
-    function updateVisible() {
-        const cards = [...document.querySelectorAll('.card[data-name]')];
-        cards.forEach((c, i) => {
-            c.style.display = (i >= page * perPage && i < (page + 1) * perPage) ? '' : 'none';
-        });
-    }
-
-    function nextPage() {
-        const total = document.querySelectorAll('.card[data-name]').length;
-        if ((page + 1) * perPage < total) {
-            page++;
-            updateVisible();
-        }
-    }
-
-    function prevPage() {
-        if (page > 0) {
-            page--;
-            updateVisible();
-        }
-    }
-
-    updateVisible();
 </script>
 {% endblock %}
