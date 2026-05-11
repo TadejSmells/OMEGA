@@ -238,6 +238,11 @@ def seznam_frizerjev():
 def frizer_profil(frizer_id):
     return controllers.frizer_controller.frizer_profil(frizer_id)
 
+@f_app.route('/frizerji/dodaj', methods=['GET', 'POST'])
+@admin_required
+def dodaj_frizer():
+    return controllers.frizer_controller.dodaj_frizer()
+
 
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
@@ -246,4 +251,3 @@ def frizer_profil(frizer_id):
 
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)
-    #agdgjkacdjkgadjjkgacjk
