@@ -34,11 +34,11 @@ def uredi_mojo_rezervacijo(id_rezervacije):
     rezervacija = model_moje_rezervacije.get_mojo_rezervacijo(id_rezervacije, id_stranke)
     if rezervacija is None:
         flash("Rezervacija ne obstaja ali nimate dostopa.", "error")
-        return redirect('/moje_rezervacije')
+        return redirect('/moje')
 
     if rezervacija[7] == 'cancelled':
         flash("Preklicane rezervacije ni mogoče urejati.", "error")
-        return redirect('/moje_rezervacije')
+        return redirect('/moje')
 
     if request.method == 'POST':
         frizer_id   = request.form.get('frizer_id')   or None
@@ -55,7 +55,7 @@ def uredi_mojo_rezervacijo(id_rezervacije):
             flash("Rezervacija uspešno posodobljena.", "success")
         else:
             flash("Urejanje ni uspelo (rezervacija je morda že preklicana).", "error")
-        return redirect('/moje_rezervacije')
+        return redirect('/moje')
 
     return render_template(
         "moje_rezervacije_uredi.html",
@@ -78,4 +78,4 @@ def preklic_moje_rezervacije(id_rezervacije):
         flash("Rezervacija je bila preklicana.", "success")
     else:
         flash("Preklic ni uspel (rezervacija ni vaša ali je že preklicana).", "error")
-    return redirect('/moje_rezervacije')
+    return redirect('/moje')
