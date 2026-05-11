@@ -138,6 +138,9 @@ def zgodovina():
 def uredi_rezervacijo(id_rezervacije):
     return controllers.uredi_rezervacijo.uredi_rezervacijo(id_rezervacije)
 
+@f_app.route('/prosti_termini')
+def prosti_termini():
+    return controllers.sv_salon.prosti_termini()
 # ── STORITVE ──────────────────────────────────────────────────────────────────
 @f_app.route('/cenik')
 def cenik():
