@@ -44,6 +44,25 @@
 
     <hr>
 
+    {% if session.get("user_id") %}
+    <div style="padding: 4px 10px 4px 10px;">
+        <p style="color: green; margin: 0 0 2px 0; font-size: 13px;">
+            Dobrodošel, {{ session.get("username") }}!
+        </p>
+        {% if session.get("opomnik_rezervacije") %}
+            {% for rez in session.get("opomnik_rezervacije") %}
+            <p style="color: green; margin: 0 0 1px 0; font-size: 13px;">
+                {% if session.get("opomnik_tip") == "frizer" %}
+                    Danes ob {{ rez.ura }} — storitev: {{ rez.storitev }}, stranka: {{ rez.stranka }}, salon: {{ rez.salon }}
+                {% else %}
+                    Danes ob {{ rez.ura }} — storitev: {{ rez.storitev }}, frizer: {{ rez.frizer }}, salon: {{ rez.salon }}
+                {% endif %}
+            </p>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div style="padding: 0.5em 1em;">
