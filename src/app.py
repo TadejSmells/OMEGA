@@ -147,7 +147,7 @@ def blokade():
 @f_app.route('/moje')
 @login_required
 def moje():
-    return controllers.moje_rezervacije_controller.moje()
+    return controllers.moje_rezervacije_controller.moje_rezervacije()
 
 @f_app.route('/moje/uredi/<int:id_rezervacije>', methods=['GET', 'POST'])
 @login_required
