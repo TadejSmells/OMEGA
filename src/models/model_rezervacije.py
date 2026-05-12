@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import db
-from datetime import date
 from models.models import Rezervacija, Stranka, Frizer, Salon, Storitev
 
 
@@ -21,9 +20,9 @@ def get_vse_rezervacije():
                 Storitev.cena.label('cena'),
                 Rezervacija.status,
             )
-            .outerjoin(Stranka, Rezervacija.id_stranke == Stranka.id_stranke)
-            .outerjoin(Frizer, Rezervacija.id_frizerja == Frizer.id_frizer)
-            .outerjoin(Salon, Rezervacija.id_salona == Salon.id)
+            .outerjoin(Stranka,  Rezervacija.id_stranke  == Stranka.id_stranke)
+            .outerjoin(Frizer,   Rezervacija.id_frizerja == Frizer.id_frizer)
+            .outerjoin(Salon,    Rezervacija.id_salona   == Salon.id)
             .outerjoin(Storitev, Rezervacija.id_storitve == Storitev.id_storitve)
             .order_by(Rezervacija.datum.desc(), Rezervacija.ura.desc())
             .all()
@@ -33,17 +32,22 @@ def get_vse_rezervacije():
         session.close()
 
 
-def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):
+def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum, ura):
+    """
+    Doda novo rezervacijo. datum in ura sta obvezna.
+    """
     session = db.get_session()
     try:
         session.add(Rezervacija(
             id_stranke=stranka_id,
             id_frizerja=frizer_id,
             id_salona=salon_id or None,
-            id_storitve=storitev_id or None
+            id_storitve=storitev_id or None,
+            datum=datum,
+            ura=ura,
         ))
         session.commit()
-    except:
+    except Exception:
         session.rollback()
         raise
     finally:
@@ -59,7 +63,7 @@ def izbrisi_rezervacijo(id_rezervacije):
         if r:
             session.delete(r)
             session.commit()
-    except:
+    except Exception:
         session.rollback()
         raise
     finally:
@@ -75,7 +79,7 @@ def preklic_rezervacije(id_rezervacije):
         if r:
             r.status = 'cancelled'
             session.commit()
-    except:
+    except Exception:
         session.rollback()
         raise
     finally:

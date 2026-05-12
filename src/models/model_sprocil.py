@@ -1,18 +1,67 @@
-from db import db
-from datetime import datetime
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import db
+from models.models import KontaktSporocilo
 
 
-class Sporocilo(db.Model):
-    __tablename__ = "sporocila"
+def get_vsa_sporocila():
+    """Vrne vsa kontaktna sporočila, najnovejša najprej."""
+    session = db.get_session()
+    try:
+        return (
+            session.query(KontaktSporocilo)
+            .order_by(KontaktSporocilo.datum.desc())
+            .all()
+        )
+    finally:
+        session.close()
 
-    id = db.Column(db.Integer, primary_key=True)
 
-    ime = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(120), nullable=False)
+def get_neprebrana_sporocila():
+    """Vrne samo neprebrana kontaktna sporočila."""
+    session = db.get_session()
+    try:
+        return (
+            session.query(KontaktSporocilo)
+            .filter(KontaktSporocilo.prebrano == False)
+            .order_by(KontaktSporocilo.datum.desc())
+            .all()
+        )
+    finally:
+        session.close()
 
-    naslov = db.Column(db.String(200), nullable=False)
-    vsebina = db.Column(db.Text, nullable=False)
 
-    datum = db.Column(db.DateTime, default=datetime.utcnow)
+def dodaj_sporocilo(ime, email, naslov, vsebina):
+    """Shrani novo kontaktno sporočilo."""
+    session = db.get_session()
+    try:
+        session.add(KontaktSporocilo(
+            ime=ime,
+            email=email,
+            naslov=naslov,
+            vsebina=vsebina
+        ))
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
-    prebrano = db.Column(db.Boolean, default=False)
+
+def oznaci_kot_prebrano(id_sporocila):
+    """Označi sporočilo kot prebrano."""
+    session = db.get_session()
+    try:
+        s = session.query(KontaktSporocilo).filter(
+            KontaktSporocilo.id == id_sporocila
+        ).first()
+        if s:
+            s.prebrano = True
+            session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()

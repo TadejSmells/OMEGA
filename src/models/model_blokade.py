@@ -1,24 +1,13 @@
 from datetime import datetime, date, time
-from sqlalchemy import Column, Integer, Date, Time, Text
-from sqlalchemy.orm import declarative_base, Session
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-from models.models import Frizer
-
-Base = declarative_base()
-
-class BlokiranTermin(Base):
-    __tablename__ = "blokiran_termin"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    id_frizerja = Column(Integer, nullable=False)
-    datum = Column(Date, nullable=False)
-    ura_od = Column(Time, nullable=False)
-    ura_do = Column(Time, nullable=False)
-    razlog = Column(Text, nullable=True)
+from models.models import BlokiranTermin, Frizer
 
 
 def get_blokade():
-    session: Session = db.get_session()
+    session = db.get_session()
     try:
         return (
             session.query(BlokiranTermin, Frizer)
@@ -37,9 +26,8 @@ def get_blokade():
 
 
 def dodaj_blokado(frizer_id, datum, ura_od, ura_do, razlog):
-    session: Session = db.get_session()
+    session = db.get_session()
     try:
-        # Convert incoming strings to date/time if necessary
         if isinstance(datum, str):
             datum = datetime.fromisoformat(datum).date()
         if isinstance(ura_od, str):
@@ -58,7 +46,7 @@ def dodaj_blokado(frizer_id, datum, ura_od, ura_do, razlog):
         session.commit()
         session.refresh(t)
         return t
-    except:
+    except Exception:
         session.rollback()
         raise
     finally:

@@ -125,7 +125,7 @@ def dodaj_frizer(ime, kontakt, salon_id):
         db_session.commit()
     except ValueError:
         raise
-    except:
+    except Exception:
         db_session.rollback()
         raise
     finally:

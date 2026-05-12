@@ -1,9 +1,9 @@
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
 import db
-from models.models import Salon, Storitev
+from models.models import Salon, Storitev, SaloniInStoritve
+
 
 def get_saloni():
     session = db.get_session()
@@ -19,8 +19,9 @@ def get_storitve_za_salon(salon_id):
     try:
         rows = (
             session.query(Storitev)
-            .join(Storitev.saloni)  # predpostavlja relacijo many-to-many ali FK
-            .filter(Salon.id == salon_id)
+            .join(SaloniInStoritve, Storitev.id_storitve == SaloniInStoritve.storitev_id)
+            .filter(SaloniInStoritve.salon_id == salon_id)
+            .order_by(Storitev.ime_storitve)
             .all()
         )
         return [(r.id_storitve, r.ime_storitve, r.cena, r.trajanje) for r in rows]

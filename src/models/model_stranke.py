@@ -69,7 +69,7 @@ def uredi_stranko(id_stranke, ime, priimek, mail, telefon, id_naj_frizer):
             s.id_naj_frizer = id_naj_frizer or None
             session.commit()
 
-    except:
+    except Exception:
         session.rollback()
         raise
 
@@ -94,7 +94,7 @@ def izbrisi_stranko(id_stranke):
 
         session.commit()
 
-    except:
+    except Exception:
         session.rollback()
         raise
 
