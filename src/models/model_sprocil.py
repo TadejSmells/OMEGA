@@ -1,67 +1,49 @@
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from sqlalchemy import func
 import db
-from models.models import KontaktSporocilo
+from models.models import Sporocilo, Stranka
 
 
-def get_vsa_sporocila():
-    """Vrne vsa kontaktna sporočila, najnovejša najprej."""
+def seznam_sporocil(id_frizerja):
     session = db.get_session()
     try:
         return (
-            session.query(KontaktSporocilo)
-            .order_by(KontaktSporocilo.datum.desc())
+            session.query(
+                Sporocilo.id,
+                Sporocilo.naslov,
+                Sporocilo.vsebina,
+                Sporocilo.datum,
+                Sporocilo.prebrano,
+                func.concat(Stranka.ime, ' ', Stranka.priimek).label('ime'),
+                Stranka.mail.label('email'),
+            )
+            .outerjoin(Stranka, Sporocilo.id_stranke == Stranka.id_stranke)
+            .filter(Sporocilo.id_frizerja == id_frizerja)
+            .order_by(Sporocilo.id.desc())
             .all()
         )
     finally:
         session.close()
 
 
-def get_neprebrana_sporocila():
-    """Vrne samo neprebrana kontaktna sporočila."""
+def podrobnosti_sporocila(id):
     session = db.get_session()
     try:
         return (
-            session.query(KontaktSporocilo)
-            .filter(KontaktSporocilo.prebrano == False)
-            .order_by(KontaktSporocilo.datum.desc())
-            .all()
+            session.query(
+                Sporocilo.id,
+                Sporocilo.naslov,
+                Sporocilo.vsebina,
+                Sporocilo.datum,
+                Sporocilo.prebrano,
+                func.concat(Stranka.ime, ' ', Stranka.priimek).label('ime'),
+                Stranka.mail.label('email'),
+            )
+            .outerjoin(Stranka, Sporocilo.id_stranke == Stranka.id_stranke)
+            .filter(Sporocilo.id == id)
+            .first()
         )
-    finally:
-        session.close()
-
-
-def dodaj_sporocilo(ime, email, naslov, vsebina):
-    """Shrani novo kontaktno sporočilo."""
-    session = db.get_session()
-    try:
-        session.add(KontaktSporocilo(
-            ime=ime,
-            email=email,
-            naslov=naslov,
-            vsebina=vsebina
-        ))
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
-
-def oznaci_kot_prebrano(id_sporocila):
-    """Označi sporočilo kot prebrano."""
-    session = db.get_session()
-    try:
-        s = session.query(KontaktSporocilo).filter(
-            KontaktSporocilo.id == id_sporocila
-        ).first()
-        if s:
-            s.prebrano = True
-            session.commit()
-    except Exception:
-        session.rollback()
-        raise
     finally:
         session.close()

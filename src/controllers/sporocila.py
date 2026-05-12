@@ -1,34 +1,28 @@
-from flask import Blueprint, render_template, redirect, url_for
-from models.model_sporocila import Sporocilo
+from flask import Blueprint, render_template, redirect, url_for, session
+import models.model_sprocil as Sporocilo
+import db
+from models.models import Frizer
 
-sporocila_bp = Blueprint("sporocila", __name__)
+def vsa_sporocila():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
 
+    s = db.get_session()
+    try:
+        frizer = s.query(Frizer).filter(Frizer.user_id == user_id).first()
+    finally:
+        s.close()
 
-# Seznam vseh sporočil
-def seznam_sporocil():
+    if not frizer:
+        return redirect(url_for('login'))
 
-    sporocila = Sporocilo.query.order_by(
-        Sporocilo.datum.desc()
-    ).all()
+    sporocila = Sporocilo.seznam_sporocil(frizer.id_frizer)
+    return render_template('sporocila.html', sporocila=sporocila)
 
-    return render_template(
-        "sporocila.html",
-        sporocila=sporocila
-    )
-
-
-# Podrobnosti sporočila
 def podrobnosti_sporocila(id):
-
-    sporocilo = Sporocilo.query.get_or_404(id)
-
-    # označi kot prebrano
-    sporocilo.prebrano = True
-
-    from db import db
-    db.session.commit()
-
-    return render_template(
-        "sporocilo_detail.html",
-        sporocilo=sporocilo
-    )
+    sporocilo = Sporocilo.podrobnosti_sporocila(id)
+    if sporocilo:
+        return render_template('sporocila_tedaili.html', sporocilo=sporocilo)
+    else:
+        return redirect(url_for('vsa_sporocila'))

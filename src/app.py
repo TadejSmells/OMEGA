@@ -22,7 +22,7 @@ import controllers.blokade_controller
 import controllers.moje_rezervacije_controller
 import controllers.pirkaz_stranke
 import controllers.preklic_rezervacije_controller
-
+import controllers.sporocila
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -247,8 +247,8 @@ def dodaj_frizer():
     return controllers.frizer_controller.dodaj_frizer()
 
 @f_app.route("/sporocila")
-def sporocila():
-    return controllers.sporocila.seznam_sporocil()
+def vsa_sporocila():
+    return controllers.sporocila.vsa_sporocila()
 
 @f_app.route("/sporocilo/<int:id>")
 def sporocilo_detail(id):
