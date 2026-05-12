@@ -131,3 +131,11 @@ CREATE TABLE IF NOT EXISTS public.komentar_storitve (
 );
 END;
 
+CREATE TABLE IF NOT EXISTS public.sporočilo (
+    id          serial PRIMARY KEY,
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    id_frizerja integer REFERENCES public.frizer (id_frizer),
+    vsebina     text NOT NULL,
+    datum       timestamp DEFAULT now(),
+    prebrano     boolean DEFAULT false
+);
