@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.salon (
     telefon   character varying(100)
 );
 
--- users (must exist before frizer/stranka reference it)
+-- users 
 CREATE TABLE IF NOT EXISTS public.users (
     id       serial PRIMARY KEY,
     username character varying(100) UNIQUE NOT NULL,
@@ -102,4 +102,32 @@ CREATE TABLE IF NOT EXISTS public.faq (
     aktiven    boolean DEFAULT true
 );
 
+-- komentarji (POSEBEJ, KER JE LAŽJE DOBIT VEN ZA VSAKO STVAR KOKR PA DODAJAM NEKE IDJE ZA REFERENCO)
+CREATE TABLE IF NOT EXISTS public.komentar_salona (
+    id_komentar serial PRIMARY KEY,
+    id_salona   integer REFERENCES public.salon (id),
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    ocena       integer CHECK (ocena >= 1 AND ocena <= 5),
+    komentar    text,
+    datum       timestamp DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS public.komentar_frizerja (
+    id_komentar serial PRIMARY KEY,
+    id_frizerja integer REFERENCES public.frizer (id_frizer),
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    ocena       integer CHECK (ocena >= 1 AND ocena <= 5),
+    komentar    text,
+    datum       timestamp DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS public.komentar_storitve (
+    id_komentar serial PRIMARY KEY,
+    id_storitve integer REFERENCES public.storitev (id_storitve),
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    ocena       integer CHECK (ocena >= 1 AND ocena <= 5),
+    komentar    text,
+    datum       timestamp DEFAULT now()
+);
 END;
+
