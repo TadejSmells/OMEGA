@@ -134,6 +134,7 @@ class Sporocilo(Base):
     id          = Column(Integer, primary_key=True)
     id_stranke  = Column(Integer, ForeignKey('stranka.id_stranke'))
     id_frizerja = Column(Integer, ForeignKey('frizer.id_frizer'))
+    naslov      = Column(String(200), nullable=False)
     vsebina     = Column(Text, nullable=False)
     datum       = Column(DateTime, server_default=func.now())
     prebrano    = Column(Boolean, default=False)
