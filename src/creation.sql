@@ -131,24 +131,14 @@ CREATE TABLE IF NOT EXISTS public.komentar_storitve (
 );
 
 
-CREATE TABLE IF NOT EXISTS public.sporočilo (
+CREATE TABLE IF NOT EXISTS public.sporocilo (
     id          serial PRIMARY KEY,
     id_stranke  integer REFERENCES public.stranka (id_stranke),
     id_frizerja integer REFERENCES public.frizer (id_frizer),
+    naslov       character varying(200) NOT NULL,
     vsebina     text NOT NULL,
     datum       timestamp DEFAULT now(),
     prebrano     boolean DEFAULT false
-);
-
---se bo umaknila/se bo ugotovilo
-CREATE TABLE sporocila (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ime VARCHAR(100) NOT NULL,
-    email VARCHAR(120) NOT NULL,
-    naslov VARCHAR(200) NOT NULL,
-    vsebina TEXT NOT NULL,
-    datum DATETIME DEFAULT CURRENT_TIMESTAMP,
-    prebrano BOOLEAN DEFAULT 0
 );
 
 --priljubljeni frizerji
@@ -173,4 +163,4 @@ CREATE TABLE IF NOT EXISTS public.priljubljeni_saloni(
     UNIQUE (id_stranke, id_salona)
 
 )
-END;
+
