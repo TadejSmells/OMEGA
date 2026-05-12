@@ -246,7 +246,13 @@ def frizer_profil(frizer_id):
 def dodaj_frizer():
     return controllers.frizer_controller.dodaj_frizer()
 
+@f_app.route("/sporocila")
+def sporocila():
+    return controllers.sporocila.seznam_sporocil()
 
+@f_app.route("/sporocilo/<int:id>")
+def sporocilo_detail(id):
+    return controllers.sporocila.podrobnosti_sporocila(id)
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #def "tvoja_pot"():

@@ -139,3 +139,13 @@ CREATE TABLE IF NOT EXISTS public.sporočilo (
     datum       timestamp DEFAULT now(),
     prebrano     boolean DEFAULT false
 );
+
+CREATE TABLE sporocila (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ime VARCHAR(100) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    naslov VARCHAR(200) NOT NULL,
+    vsebina TEXT NOT NULL,
+    datum DATETIME DEFAULT CURRENT_TIMESTAMP,
+    prebrano BOOLEAN DEFAULT 0
+);
