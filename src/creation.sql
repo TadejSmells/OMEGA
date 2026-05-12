@@ -135,9 +135,10 @@ CREATE TABLE IF NOT EXISTS public.sporocilo (
     id          serial PRIMARY KEY,
     id_stranke  integer REFERENCES public.stranka (id_stranke),
     id_frizerja integer REFERENCES public.frizer (id_frizer),
+    naslov       character varying(200) NOT NULL,
     vsebina     text NOT NULL,
     datum       timestamp DEFAULT now(),
-    prebrano    boolean DEFAULT false
+    prebrano     boolean DEFAULT false
 );
 
 -- sporocila (kontaktni obrazec, brez vezave na stranko/frizerja)
