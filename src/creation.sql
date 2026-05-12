@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS public.komentar_storitve (
     komentar    text,
     datum       timestamp DEFAULT now()
 );
-END;
+
 
 CREATE TABLE IF NOT EXISTS public.sporočilo (
     id          serial PRIMARY KEY,
@@ -140,6 +140,7 @@ CREATE TABLE IF NOT EXISTS public.sporočilo (
     prebrano     boolean DEFAULT false
 );
 
+--se bo umaknila/se bo ugotovilo
 CREATE TABLE sporocila (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ime VARCHAR(100) NOT NULL,
@@ -149,3 +150,27 @@ CREATE TABLE sporocila (
     datum DATETIME DEFAULT CURRENT_TIMESTAMP,
     prebrano BOOLEAN DEFAULT 0
 );
+
+--priljubljeni frizerji
+CREATE TABLE IF NOT EXISTS public.priljubljeni_frizerji (
+    id serial PRIMARY KEY,
+    id_stranke integer REFERENCES public.stranka (id_stranke),
+    id_frizerja integer REFERENCES public.frizer (id_frizer),
+    UNIQUE (id_stranke, id_frizerja)
+);
+
+CREATE TABLE IF NOT EXISTS public.priljubljene_storitve (
+    id serial PRIMARY KEY,
+    id_stranke integer REFERENCES public.stranka (id_stranke),
+    id_storitve integer REFERENCES public.storitev (id_storitve),
+    UNIQUE (id_stranke, id_storitve)
+);
+
+CREATE TABLE IF NOT EXISTS public.priljubljeni_saloni(
+    id serial PRIMARY KEY,
+    id_stranke integer REFERENCES public.stranka (id_stranke),
+    id_salona integer REFERENCES public.salon (id),
+    UNIQUE (id_stranke, id_salona)
+
+)
+END;
