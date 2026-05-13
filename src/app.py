@@ -175,6 +175,17 @@ def seznam_storitev_alias():
 def dodaj_storitev():
     return controllers.storitve.dodaj_storitev()
 
+@f_app.route('/storitve/priljubljena/<int:id_storitve>', methods=['POST'])
+@login_required
+def priljubljena_storitev(id_storitve):
+    return controllers.priljubljene_storitve_controller.toggle_priljubljeno(id_storitve)
+
+@f_app.route('/storitve/priljubljene')
+@login_required
+def moje_priljubljene_storitve():
+    return controllers.priljubljene_storitve_controller.moje_priljubljene()
+import controllers.priljubljene_storitve_controller
+
 # ── OSTALO ────────────────────────────────────────────────────────────────────
 @f_app.route('/stranke')
 @login_required

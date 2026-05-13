@@ -8,10 +8,21 @@ def pridobi_storitve():
     except Exception:
         podatki = []
 
+    priljubljeni_ids = set()
+    if session.get("user_id") and session.get("role") == "stranka":
+        try:
+            priljubljeni_ids = model_priljubljene_storitve.get_priljubljene_ids(
+                session["user_id"]
+            )
+        except Exception:
+            priljubljeni_ids = set()
+
     return render_template(
         "seznam_storitev.html",
-        podatki=podatki
+        podatki=podatki,
+        priljubljeni_ids=priljubljeni_ids,
     )
+    
 
 
 def dodaj_storitev():
