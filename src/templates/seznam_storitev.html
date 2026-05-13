@@ -166,6 +166,7 @@
         border: 1px solid #F2D6CE;
         display: flex;
         flex-direction: column;
+        position: relative; /* za absolutno pozicioniran srček */
     }
 
     .card-img {
@@ -202,6 +203,47 @@
         margin-top: 3px;
     }
 
+    /* ── PRILJUBLJENO (srček) ───────────────────────────────────────────── */
+    .favorite-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        margin: 0;
+        z-index: 2;
+    }
+
+    .favorite-btn {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid #F2D6CE;
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+        color: #CA8E82;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+        padding: 0;
+    }
+
+    .favorite-btn:hover {
+        background: #FFFFFF;
+        transform: scale(1.08);
+    }
+
+    .favorite-btn.is-favorite {
+        color: #A75F37;
+        background: #FFFFFF;
+        border-color: #A75F37;
+    }
+
+    .favorite-btn.is-favorite:hover {
+        color: #7A2F12;
+    }
+
     .arrow-btn {
         background: none;
         border: none;
@@ -229,6 +271,19 @@
     .nav-footer a:hover {
         text-decoration: underline;
     }
+
+    /* ── FLASH SPOROČILA ────────────────────────────────────────────────── */
+    .flash-area {
+        padding: 8px 32px 0;
+    }
+    .flash-msg {
+        padding: 8px 14px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        font-size: 13px;
+    }
+    .flash-msg.success { background: #E8F0E2; color: #3B5C2E; }
+    .flash-msg.error   { background: #FAD8D0; color: #7A2F12; }
 
     @media (max-width: 900px) {
         .page-header {
@@ -266,9 +321,11 @@
 </style>
 
 <div class="page-header">
-    <div class="page-header-title">SEZNAM STORITEV</div>
+    <div class="page-header-title">
+        {% if samo_priljubljene %}MOJE PRILJUBLJENE STORITVE{% else %}SEZNAM STORITEV{% endif %}
+    </div>
     <div class="header-right">
-        <span class="header-username">Ime priimek</span>
+        <span class="header-username">{{ session.get("username") or "Ime priimek" }}</span>
         <a href="/profil" class="user-avatar">&#128100;</a>
     </div>
 </div>
@@ -276,10 +333,23 @@
 <nav class="navbar">
     <a href="/">Domov</a>
     <a href="/saloni">Saloni</a>
-    <a href="/storitve" class="active">Storitve</a>
+    <a href="/storitve" class="{% if not samo_priljubljene %}active{% endif %}">Storitve</a>
+    {% if session.get("role") == "stranka" %}
+    <a href="/storitve/priljubljene" class="{% if samo_priljubljene %}active{% endif %}">&#10084; Priljubljene</a>
+    {% endif %}
     <a href="/rezervacije">Termini</a>
     <a href="/faq">O &amp; A</a>
 </nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-area">
+        {% for category, msg in messages %}
+            <div class="flash-msg {{ category }}">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endwith %}
 
 <div class="storitve-page">
     <div class="iskanjebox">
@@ -300,6 +370,32 @@
         <div class="carousel" id="carouselContainer">
             {% for st in podatki %}
                 <div class="card" data-name="{{ st[1]|lower }}">
+
+                    {# ── SRČEK ZA PRILJUBLJENO (samo prijavljena stranka) ── #}
+                    {% if session.get("user_id") and session.get("role") == "stranka" %}
+                    <form method="POST"
+                          action="/storitve/priljubljena/{{ st[0] }}"
+                          class="favorite-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        {% if priljubljeni_ids and st[0] in priljubljeni_ids %}
+                            <button type="submit"
+                                    class="favorite-btn is-favorite"
+                                    title="Odstrani iz priljubljenih"
+                                    aria-label="Odstrani iz priljubljenih">
+                                &#10084;
+                            </button>
+                        {% else %}
+                            <button type="submit"
+                                    class="favorite-btn"
+                                    title="Dodaj med priljubljene"
+                                    aria-label="Dodaj med priljubljene">
+                                &#9825;
+                            </button>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+
                     <div class="card-img"></div>
 
                     <div class="card-body">
@@ -318,7 +414,14 @@
             {% else %}
                 <div class="card">
                     <div class="card-body">
-                        <div class="opis">Ni vpisanih storitev.</div>
+                        <div class="opis">
+                            {% if samo_priljubljene %}
+                                Nimaš še nobene priljubljene storitve. Pojdi na
+                                <a href="/storitve">seznam storitev</a> in klikni srček. ❤
+                            {% else %}
+                                Ni vpisanih storitev.
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endfor %}
