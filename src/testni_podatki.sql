@@ -125,3 +125,82 @@ INSERT INTO blokiran_termin (id_frizerja, datum, ura_od, ura_do, razlog) VALUES
     (1, '2026-05-07', '12:00:00', '14:00:00', 'Kosilo'),
     (2, '2026-05-08', '09:00:00', '17:00:00', 'Dopust'),
     (3, '2026-05-09', '08:00:00', '10:00:00', 'Sestanek');
+
+--13/05/26: testni podatki za priljubljene vse, komentarji, še testni uporabniki(na njih so fav/komentarji)
+-- up:stranka123    geslo: stranka123
+-- up:frizer123     geslo: frizer123
+INSERT INTO users (username, password, vloga) VALUES
+    ('stranka123',
+     'scrypt:32768:8:1$xtNfx7F7ooSrRTMI$66e165041671151e58141e9b52934609c4ecbe46da0172f335a42f1282151ed2f063a9c7392ada53fe8d29d2c5c6a23d934f93df1900170a6e9f2bfa9ab8a812',
+     'stranka'),
+    ('frizer123',
+     'scrypt:32768:8:1$FG79VGxms9nbcxZ8$3a52dfa96e23111af0ea94163f6dd082e470c82cae4f652957a4b1e8a043931d255621fabe5e971a89a01bc818ff6036fcb46d002b10da4f01d144d686dbc765',
+     'frizer')
+ON CONFLICT (username) DO NOTHING;
+
+--insert v tabelo stranka  
+INSERT INTO stranka (ime, priimek, mail, telefon, user_id, id_naj_frizer)
+SELECT 'Testna', 'Stranka', 'stranka@test.si', '040-000-001',
+       u.id,
+       (SELECT id_frizer FROM frizer WHERE ime = 'Ana Kovač')   -- najljubši frizer
+FROM users u
+WHERE u.username = 'stranka123'
+ON CONFLICT DO NOTHING;
+
+-- insertv v tabelo frizer
+INSERT INTO frizer (salon_id, ime, kontakt, user_id)
+SELECT 1, 'Testni Frizer', '040-000-002', u.id
+FROM users u
+WHERE u.username = 'frizer123'
+ON CONFLICT DO NOTHING;
+
+-- Najljubši saloni
+INSERT INTO priljubljeni_saloni (id_stranke, id_salona) VALUES
+    ((SELECT id_stranke FROM stranka WHERE ime = 'Testna'), 1),
+    ((SELECT id_stranke FROM stranka WHERE ime = 'Testna'), 2)
+ON CONFLICT DO NOTHING;
+
+-- Najljubši frizerji
+INSERT INTO priljubljeni_frizerji (id_stranke, id_frizerja) VALUES
+    ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 1),  
+    ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 3)
+ON CONFLICT DO NOTHING;
+
+-- Najljubše storitve
+INSERT INTO priljubljene_storitve (id_stranke, id_storitve) VALUES
+    ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 1), 
+    ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 2)  
+ON CONFLICT DO NOTHING;
+
+-- ── Komentarji salonov ──
+INSERT INTO komentar_salona (id_salona, id_stranke, ocena, komentar, datum) VALUES
+    (1, 1, 5, 'Vrhunska storitev, prijazno osebje. Definitivno se vrnem!',           '2026-05-01 14:20'),
+    (1, 5, 4, 'Lepo urejen salon, le na termin sem čakala kar nekaj časa.',          '2026-04-22 10:05'),
+    (1, (SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'),
+        5, 'Ana je čudovita frizerka, salon pa zelo prijeten. Priporočam!',          '2026-05-10 16:45'),
+    (2, 2, 4, 'Profesionalen pristop, cene pa malce višje od povprečja.',            '2026-04-30 11:00'),
+    (2, 9, 3, 'V redu izkušnja, ničesar posebnega.',                                 '2026-04-15 09:30'),
+    (3, 3, 5, 'Najboljši salon v Celju! Miha je pravi mojster.',                     '2026-05-05 17:10'),
+    (3, 7, 4, 'Zelo dobro, samo parkirišča je premalo.',                             '2026-04-28 13:15')
+ON CONFLICT DO NOTHING;
+
+-- ── Komentarji frizerjev ──
+INSERT INTO komentar_frizerja (id_frizerja, id_stranke, ocena, komentar, datum) VALUES
+    (1, 1, 5, 'Ana je natančna in zelo prijazna. Vedno odlična frizura.',            '2026-05-01 14:25'),
+    (1, 5, 5, 'Najboljša frizerka v Ljubljani, brez dvoma.',                         '2026-04-22 10:10'),
+    (1, (SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'),
+        5, 'Razume, kaj rabim, brez dolgih razlag. Top!',                            '2026-05-10 16:50'),
+    (2, 2, 4, 'Tina dobro svetuje pri barvanju las.',                                '2026-04-30 11:05'),
+    (3, 3, 5, 'Miha je čaroben — kratke pričeske so njegov forte.',                  '2026-05-05 17:15'),
+    (3, 7, 4, 'Hiter in učinkovit, brez nepotrebnega klepetanja.',                   '2026-04-28 13:20')
+ON CONFLICT DO NOTHING;
+
+-- ── Komentarji storitev ──
+INSERT INTO komentar_storitve (id_storitve, id_stranke, ocena, komentar, datum) VALUES
+    (1, 1, 5, 'Odlična kakovost izdelkov, učinek viden takoj.',                      '2026-05-01 14:30'),
+    (1, 3, 4, 'V redu, le cena bi lahko bila nižja.',                                '2026-05-05 17:20'),
+    (2, 2, 5, 'Barva je popolnoma takšna, kot sem želela.',                          '2026-04-30 11:10'),
+    (2, 5, 4, 'Trajalo malo dlje od napovedanega, sicer pa OK.',                     '2026-04-22 10:15'),
+    (2, (SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'),
+        5, 'Barvanje las brez poškodb — natančen postopek.',                         '2026-05-10 17:00')
+ON CONFLICT DO NOTHING;
