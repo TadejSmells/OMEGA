@@ -1,5 +1,5 @@
 from flask import session, redirect, request, flash, render_template
-from models import model_priljubljene_storitve
+from models import model_oznacevanje_priljubljenih_storitev as model_priljubljene_storitve
 
 
 def toggle_priljubljeno(id_storitve):

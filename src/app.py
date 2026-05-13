@@ -23,6 +23,7 @@ import controllers.moje_rezervacije_controller
 import controllers.pirkaz_stranke
 import controllers.preklic_rezervacije_controller
 import controllers.sporocila
+import controllers.oznacevanje_priljubljenih_storitev
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -183,12 +184,12 @@ def dodaj_storitev():
 @f_app.route('/storitve/priljubljena/<int:id_storitve>', methods=['POST'])
 @login_required
 def priljubljena_storitev(id_storitve):
-    return controllers.priljubljene_storitve_controller.toggle_priljubljeno(id_storitve)
+    return controllers.oznacevanje_priljubljenih_storitev.toggle_priljubljeno(id_storitve)
 
 @f_app.route('/storitve/priljubljene')
 @login_required
 def moje_priljubljene_storitve():
-    return controllers.priljubljene_storitve_controller.moje_priljubljene()
+    return controllers.oznacevanje_priljubljenih_storitev.moje_priljubljene()
 import controllers.priljubljene_storitve_controller
 
 # ── OSTALO ────────────────────────────────────────────────────────────────────
