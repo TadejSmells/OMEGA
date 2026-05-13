@@ -24,7 +24,7 @@ import controllers.pirkaz_stranke
 import controllers.preklic_rezervacije_controller
 import controllers.sporocila
 import controllers.oznacevanje_priljubljenih_storitev
-
+import controllers.komentar_salona
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -107,6 +107,11 @@ def salon_pregled():
 @f_app.route("/saloni_view")
 def saloni_view():
     return controllers.sv_salon.saloni_view()
+
+@f_app.route('/salon/<int:salon_id>/komentar', methods=['POST'])
+@login_required
+def salon_komentar(salon_id):
+    return controllers.komentar_salona.dodaj_komentar_salonu(salon_id)
 
 # ── REZERVACIJE ───────────────────────────────────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
