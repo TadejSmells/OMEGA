@@ -1,5 +1,5 @@
 from flask import session
-from models import model_frizer_opomnik as model_opomnik
+from models import model_opomnik_rezervacij as model_opomnik
 
 
 def get_danasnje_rezervacije(user_id):

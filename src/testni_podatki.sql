@@ -36,10 +36,26 @@ ON CONFLICT DO NOTHING;
 -- ── STRANKE ───────────────────────────────────────────────────────────────────
 INSERT INTO stranka (ime, priimek, mail, telefon)
 VALUES
-    ('Luka',  'Novak', 'luka@test.si',   '031-999-888'),
-    ('Damjan','Kovac', 'damjan@test.si', '031-777-858'),
-    ('Zoja',  'Luč',   'zoja@test.si',   '041-342-678'),
-    ('Maja',  'Kralj', 'maja@test.si',   '031-111-222')
+    ('Luka',    'Novak',     'luka@test.si',      '031-999-888'),
+    ('Damjan',  'Kovac',     'damjan@test.si',    '031-777-858'),
+    ('Zoja',    'Luč',       'zoja@test.si',      '041-342-678'),
+    ('Maja',    'Kralj',     'maja@test.si',      '031-111-222'),
+    ('Ana',     'Horvat',    'ana@test.si',       '040-123-456'),
+    ('Miha',    'Zupan',     'miha@test.si',      '031-234-567'),
+    ('Sara',    'Mlakar',    'sara@test.si',      '041-345-678'),
+    ('Tilen',   'Kranjc',    'tilen@test.si',     '051-456-789'),
+    ('Nika',    'Vidmar',    'nika@test.si',      '040-567-890'),
+    ('Jan',     'Kos',       'jan@test.si',       '031-678-901'),
+    ('Eva',     'Turk',      'eva@test.si',       '041-789-012'),
+    ('Marko',   'Potočnik',  'marko@test.si',     '051-890-123'),
+    ('Tjaša',   'Bizjak',    'tjasa@test.si',     '040-901-234'),
+    ('Nejc',    'Petek',     'nejc@test.si',      '031-112-233'),
+    ('Klara',   'Golob',     'klara@test.si',     '041-223-344'),
+    ('Rok',     'Božič',     'rok@test.si',       '051-334-455'),
+    ('Urška',   'Korošec',   'urska@test.si',     '040-445-566'),
+    ('Jure',    'Hribar',    'jure@test.si',      '031-556-677'),
+    ('Pia',     'Bavdek',    'pia@test.si',       '041-667-788'),
+    ('Aljaž',   'Rozman',    'aljaz@test.si',     '051-778-899')
 ON CONFLICT DO NOTHING;
 
 -- ── STORITVE ──────────────────────────────────────────────────────────────────

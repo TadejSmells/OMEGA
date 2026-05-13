@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>📩 Sporočila strank</h2>
+
+    <table class="table table-striped mt-4">
+
+        <thead>
+            <tr>
+                <th>Stranka</th>
+                <th>Naslov</th>
+                <th>Datum</th>
+                <th>Status</th>
+                <th>Akcija</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for sporocilo in sporocila %}
+
+            <tr>
+
+                <td>{{ sporocilo.ime }}</td>
+
+                <td>{{ sporocilo.naslov }}</td>
+
+                <td>{{ sporocilo.datum.strftime('%d.%m.%Y %H:%M') }}</td>
+
+                <td>
+
+                    {% if sporocilo.prebrano %}
+                        <span class="badge bg-success">
+                            Prebrano
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger">
+                            Novo
+                        </span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+                    <a href="/sporocilo/{{ sporocilo.id }}"
+                       class="btn btn-dark btn-sm">
+
+                        Odpri
+                    </a>
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

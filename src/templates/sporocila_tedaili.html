@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <h3>{{ sporocilo.naslov }}</h3>
+
+            <hr>
+
+            <p>
+                <strong>Stranka:</strong>
+                {{ sporocilo.ime }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ sporocilo.email }}
+            </p>
+
+            <p>
+                <strong>Datum:</strong>
+                {{ sporocilo.datum.strftime('%d.%m.%Y %H:%M') }}
+            </p>
+
+            <hr>
+
+            <p>
+                {{ sporocilo.vsebina }}
+            </p>
+
+            <a href="/sporocila"
+               class="btn btn-secondary">
+
+               Nazaj
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

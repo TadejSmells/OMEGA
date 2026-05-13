@@ -10,6 +10,12 @@ def nova_rezervacija():
         salon_id    = request.form.get('salon_id')
         storitev_id = request.form.get('storitev_id')
 
+        rezervacije = model_rezervacije.get_vse_rezervacije()
+
+        for r in rezervacije:
+            if str(r[1]) == stranka_id and str(r[2]) == frizer_id:
+                return "Ta termin je že rezerviran!"
+
         model_rezervacije.dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id)
         return redirect('/rezervacije')
 

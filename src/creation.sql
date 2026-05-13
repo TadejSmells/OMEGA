@@ -9,13 +9,15 @@ CREATE TABLE IF NOT EXISTS public.salon (
     telefon   character varying(100)
 );
 
--- users (must exist before frizer/stranka reference it)
+-- users
 CREATE TABLE IF NOT EXISTS public.users (
     id       serial PRIMARY KEY,
     username character varying(100) UNIQUE NOT NULL,
     password character varying(200) NOT NULL,
     vloga    character varying(50) DEFAULT 'stranka'
 );
+
+ALTER TABLE public.users ADD COLUMN IF NOT EXISTS vloga character varying(50) DEFAULT 'stranka';
 
 -- frizer
 CREATE TABLE IF NOT EXISTS public.frizer (
@@ -25,6 +27,8 @@ CREATE TABLE IF NOT EXISTS public.frizer (
     kontakt   character varying(100),
     user_id   integer REFERENCES public.users (id) ON DELETE SET NULL
 );
+
+ALTER TABLE public.frizer ADD COLUMN IF NOT EXISTS user_id integer REFERENCES public.users (id) ON DELETE SET NULL;
 
 -- storitev
 CREATE TABLE IF NOT EXISTS public.storitev (
@@ -52,6 +56,8 @@ CREATE TABLE IF NOT EXISTS public.stranka (
     user_id       integer REFERENCES public.users (id) ON DELETE SET NULL
 );
 
+ALTER TABLE public.stranka ADD COLUMN IF NOT EXISTS user_id integer REFERENCES public.users (id) ON DELETE SET NULL;
+
 -- rezervacija
 CREATE TABLE IF NOT EXISTS public.rezervacija (
     id_rezervacije serial PRIMARY KEY,
@@ -64,6 +70,10 @@ CREATE TABLE IF NOT EXISTS public.rezervacija (
     status         character varying(20) DEFAULT 'active'
         CHECK (status IN ('active', 'cancelled'))
 );
+
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS datum date;
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS ura time without time zone;
+ALTER TABLE public.rezervacija ADD COLUMN IF NOT EXISTS status character varying(20) DEFAULT 'active';
 
 -- urnik
 CREATE TABLE IF NOT EXISTS public.urnik (
@@ -90,6 +100,80 @@ CREATE TABLE IF NOT EXISTS public.faq (
     odgovor    text NOT NULL,
     vrstni_red integer DEFAULT 0,
     aktiven    boolean DEFAULT true
+);
+
+-- komentarji
+CREATE TABLE IF NOT EXISTS public.komentar_salona (
+    id_komentar serial PRIMARY KEY,
+    id_salona   integer REFERENCES public.salon (id),
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    ocena       integer CHECK (ocena >= 1 AND ocena <= 5),
+    komentar    text,
+    datum       timestamp DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS public.komentar_frizerja (
+    id_komentar serial PRIMARY KEY,
+    id_frizerja integer REFERENCES public.frizer (id_frizer),
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    ocena       integer CHECK (ocena >= 1 AND ocena <= 5),
+    komentar    text,
+    datum       timestamp DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS public.komentar_storitve (
+    id_komentar serial PRIMARY KEY,
+    id_storitve integer REFERENCES public.storitev (id_storitve),
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    ocena       integer CHECK (ocena >= 1 AND ocena <= 5),
+    komentar    text,
+    datum       timestamp DEFAULT now()
+);
+
+-- sporocilo (direktno med stranko in frizerjem)
+CREATE TABLE IF NOT EXISTS public.sporocilo (
+    id          serial PRIMARY KEY,
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    id_frizerja integer REFERENCES public.frizer (id_frizer),
+    naslov       character varying(200) NOT NULL,
+    vsebina     text NOT NULL,
+    datum       timestamp DEFAULT now(),
+    prebrano     boolean DEFAULT false
+);
+
+-- sporocila (kontaktni obrazec, brez vezave na stranko/frizerja)
+CREATE TABLE IF NOT EXISTS public.sporocila (
+    id       serial PRIMARY KEY,
+    ime      character varying(100) NOT NULL,
+    email    character varying(120) NOT NULL,
+    naslov   character varying(200) NOT NULL,
+    vsebina  text NOT NULL,
+    datum    timestamp DEFAULT now(),
+    prebrano boolean DEFAULT false
+);
+
+-- priljubljeni frizerji
+CREATE TABLE IF NOT EXISTS public.priljubljeni_frizerji (
+    id          serial PRIMARY KEY,
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    id_frizerja integer REFERENCES public.frizer (id_frizer),
+    UNIQUE (id_stranke, id_frizerja)
+);
+
+-- priljubljene storitve
+CREATE TABLE IF NOT EXISTS public.priljubljene_storitve (
+    id          serial PRIMARY KEY,
+    id_stranke  integer REFERENCES public.stranka (id_stranke),
+    id_storitve integer REFERENCES public.storitev (id_storitve),
+    UNIQUE (id_stranke, id_storitve)
+);
+
+-- priljubljeni saloni
+CREATE TABLE IF NOT EXISTS public.priljubljeni_saloni (
+    id         serial PRIMARY KEY,
+    id_stranke integer REFERENCES public.stranka (id_stranke),
+    id_salona  integer REFERENCES public.salon (id),
+    UNIQUE (id_stranke, id_salona)
 );
 
 END;

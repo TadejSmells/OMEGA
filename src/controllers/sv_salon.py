@@ -79,3 +79,9 @@ def frizer():
         return "Nimaš dostopa"
 
     return "Frizer panel"
+
+def prosti_termini():
+    return render_template(
+        "prosti_termini.html",
+        urnik=model_salon.get_vse('urnik')
+    )

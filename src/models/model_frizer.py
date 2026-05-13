@@ -94,3 +94,39 @@ def get_vsi_frizerji():
         ]
     finally:
         session.close()
+
+
+def get_vsi_saloni():
+    """Vrne seznam vseh salonov — za dropdown pri dodajanju frizerja."""
+    session = db.get_session()
+    try:
+        rows = session.query(Salon).order_by(Salon.ime).all()
+        return [{"id": s.id, "ime": s.ime} for s in rows]
+    finally:
+        session.close()
+
+
+def dodaj_frizer(ime, kontakt, salon_id):
+    """
+    Doda novega frizerja v bazo.
+    Vrže ValueError če frizer s tem imenom že obstaja.
+    """
+    db_session = db.get_session()
+    try:
+        obstoječ = db_session.query(Frizer).filter(Frizer.ime == ime).first()
+        if obstoječ:
+            raise ValueError(f"Frizer z imenom '{ime}' že obstaja.")
+
+        db_session.add(Frizer(
+            ime=ime,
+            kontakt=kontakt or None,
+            salon_id=salon_id or None
+        ))
+        db_session.commit()
+    except ValueError:
+        raise
+    except Exception:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()

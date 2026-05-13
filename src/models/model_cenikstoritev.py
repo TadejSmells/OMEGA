@@ -35,7 +35,7 @@ def dodaj_storitev(ime_storitve, cena, trajanje):
         db_session.commit()
     except ValueError:
         raise
-    except:
+    except Exception:
         db_session.rollback()
         raise
     finally:

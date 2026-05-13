@@ -36,7 +36,7 @@ def uredi_rezervacijo(id_rezervacije, stranka_id, frizer_id, salon_id, storitev_
             r.id_salona   = salon_id or None
             r.id_storitve = storitev_id or None
             session.commit()
-    except:
+    except Exception:
         session.rollback()
         raise
     finally:

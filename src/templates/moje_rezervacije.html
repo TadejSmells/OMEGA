@@ -117,8 +117,8 @@
                 </td>
                 <td style="display:flex; gap:6px; flex-wrap:wrap;">
                     {% if r.status == 'active' %}
-                        <a href="/moje_rezervacije/uredi/{{ r.id_rezervacije }}" class="btn btn-uredi">Uredi</a>
-                        <form method="POST" action="/moje_rezervacije/preklic/{{ r.id_rezervacije }}"
+                        <a href="/moje/uredi/{{ r.id_rezervacije }}" class="btn btn-uredi">Uredi</a>
+                        <form method="POST" action="/moje/preklic/{{ r.id_rezervacije }}"
                               onsubmit="return confirm('Res želiš preklicati rezervacijo #{{ r.id_rezervacije }}?')" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-preklic">Prekliči</button>

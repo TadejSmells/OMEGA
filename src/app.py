@@ -20,7 +20,9 @@ import controllers.rezervacije_stranke_controller
 import controllers.frizer_controller
 import controllers.blokade_controller
 import controllers.moje_rezervacije_controller
+import controllers.pirkaz_stranke
 import controllers.preklic_rezervacije_controller
+import controllers.sporocila
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -137,6 +139,9 @@ def zgodovina():
 def uredi_rezervacijo(id_rezervacije):
     return controllers.uredi_rezervacijo.uredi_rezervacijo(id_rezervacije)
 
+@f_app.route('/prosti_termini')
+def prosti_termini():
+    return controllers.sv_salon.prosti_termini()
 @f_app.route('/blokade', methods=['GET', 'POST'])
 @frizer_required
 def blokade():
@@ -145,7 +150,7 @@ def blokade():
 @f_app.route('/moje')
 @login_required
 def moje():
-    return controllers.moje_rezervacije_controller.moje()
+    return controllers.moje_rezervacije_controller.moje_rezervacije()
 
 @f_app.route('/moje/uredi/<int:id_rezervacije>', methods=['GET', 'POST'])
 @login_required
@@ -187,10 +192,20 @@ def moje_priljubljene_storitve():
 import controllers.priljubljene_storitve_controller
 
 # ── OSTALO ────────────────────────────────────────────────────────────────────
-@f_app.route('/stranke')
+@f_app.route('/stranke_uredi', methods=['GET', 'POST'])
 @login_required
 def stranke():
-    return controllers.sv_salon.seznam_stranke()
+    return controllers.pirkaz_stranke.seznam_stranke()
+
+@f_app.route('/stranke_uredi/shrani', methods=['POST'])
+@login_required
+def stranke_shrani():
+    return controllers.pirkaz_stranke.shrani_stranko()
+
+@f_app.route('/stranke_uredi/izbrisi', methods=['POST'])
+@login_required
+def izbrisi_stranko():
+    return controllers.pirkaz_stranke.izbrisi_stranko()
 
 @f_app.route('/urnik', methods=['GET', 'POST'])
 @login_required
@@ -237,7 +252,18 @@ def seznam_frizerjev():
 def frizer_profil(frizer_id):
     return controllers.frizer_controller.frizer_profil(frizer_id)
 
+@f_app.route('/frizerji/dodaj', methods=['GET', 'POST'])
+@admin_required
+def dodaj_frizer():
+    return controllers.frizer_controller.dodaj_frizer()
 
+@f_app.route("/sporocila")
+def vsa_sporocila():
+    return controllers.sporocila.vsa_sporocila()
+
+@f_app.route("/sporocilo/<int:id>")
+def sporocilo_detail(id):
+    return controllers.sporocila.podrobnosti_sporocila(id)
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #def "tvoja_pot"():
