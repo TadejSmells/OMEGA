@@ -170,10 +170,8 @@ CREATE TABLE IF NOT EXISTS public.priljubljene_storitve (
 
 -- priljubljeni saloni
 CREATE TABLE IF NOT EXISTS public.priljubljeni_saloni (
-    id         serial PRIMARY KEY,
-    id_stranke integer REFERENCES public.stranka (id_stranke),
-    id_salona  integer REFERENCES public.salon (id),
-    UNIQUE (id_stranke, id_salona)
+    id_stranke  integer REFERENCES public.stranka(id_stranke) ON DELETE CASCADE,
+    id_salona   integer REFERENCES public.salon(id) ON DELETE CASCADE,
+    PRIMARY KEY (id_stranke, id_salona)
 );
-
 END;

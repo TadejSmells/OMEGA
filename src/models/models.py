@@ -170,6 +170,5 @@ class PriljubljeneStoritve(Base):
 
 class PriljubljeniSaloni(Base):
     __tablename__ = 'priljubljeni_saloni'
-    id         = Column(Integer, primary_key=True)
-    id_stranke = Column(Integer, ForeignKey('stranka.id_stranke'))
-    id_salona  = Column(Integer, ForeignKey('salon.id'))
+    id_stranke = Column(Integer, ForeignKey('stranka.id_stranke'), primary_key=True)
+    id_salona  = Column(Integer, ForeignKey('salon.id'), primary_key=True)
