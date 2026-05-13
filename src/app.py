@@ -25,6 +25,7 @@ import controllers.preklic_rezervacije_controller
 import controllers.sporocila
 import controllers.oznacevanje_priljubljenih_storitev
 
+
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
 f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
@@ -190,7 +191,7 @@ def priljubljena_storitev(id_storitve):
 @login_required
 def moje_priljubljene_storitve():
     return controllers.oznacevanje_priljubljenih_storitev.moje_priljubljene()
-import controllers.priljubljene_storitve_controller
+
 
 # ── OSTALO ────────────────────────────────────────────────────────────────────
 @f_app.route('/stranke_uredi', methods=['GET', 'POST'])
