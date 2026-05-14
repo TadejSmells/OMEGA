@@ -61,8 +61,13 @@ ON CONFLICT DO NOTHING;
 -- ── STORITVE ──────────────────────────────────────────────────────────────────
 INSERT INTO storitev (ime_storitve, cena, trajanje)
 VALUES
-    ('Upravljanje s kosmetskimi izdelki', 50.0, '01:00:00'),
-    ('Barvanje las',                       70.0, '01:30:00')
+    ('Upravljanje s kozmetičnimi izdelki', 50.0, '01:00:00'),
+    ('Barvanje las',                       70.0, '01:30:00'),
+    ('Striženje las',                      30.0, '00:45:00'),
+    ('Podaljševanje las',                  100.0, '02:00:00'),
+    ('Nega las',                           40.0, '01:15:00'),
+    ('Frizura za posebne priložnosti',     60.0, '01:00:00')
+
 ON CONFLICT DO NOTHING;
 
 INSERT INTO saloni_in_storitve (salon_id, storitev_id)
