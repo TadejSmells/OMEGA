@@ -25,6 +25,7 @@ import controllers.preklic_rezervacije_controller
 import controllers.sporocila
 import controllers.oznacevanje_priljubljenih_storitev
 import controllers.komentar_salona
+import controllers.priljubljeni_saloni
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -275,6 +276,8 @@ def sporocilo_detail(id):
 #@f_app.route('/"tvoja_pot"')
 #def "tvoja_pot"():
 #    return controllers.ime_controllerja.funkcija()
-
+@f_app.route('/salon/<int:salon_id>/favorite', methods=['POST'])
+def toggle_favorite(salon_id):
+    return controllers.priljubljeni_saloni.toggle_favorite(salon_id)
 if __name__ == "__main__":
     f_app.run(host="0.0.0.0", port=5000, debug=True)

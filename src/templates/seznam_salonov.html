@@ -271,6 +271,18 @@
         text-decoration: none;
         font-style: italic;
     }
+    
+    .favorite-btn {
+    border: none;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #ccc;   /* siva */
+}
+
+.favorite-btn.active {
+    color: black;  /* črna */
+}
 
     .card a:hover {
         text-decoration: underline;
@@ -405,6 +417,13 @@
                 {% set storitve = item.storitve %}
                 <div class="card" data-name="{{ s[1]|lower }}">
                     <div class="card-img"></div>
+                     <form action="/salon/{{ s[0] }}/favorite" method="POST">
+                            <button type="submit"
+                                     class="favorite-btn {% if s[0] in priljubljeni_ids %}active{% endif %}">
+                               ★
+                             </button>
+                        </form>
+
                     <h2>{{ s[1] }}</h2>
 
                     <div class="oznaka">Okvirna cena storitev:</div>
