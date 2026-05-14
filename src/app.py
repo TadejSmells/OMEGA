@@ -26,6 +26,7 @@ import controllers.sporocila
 import controllers.oznacevanje_priljubljenih_storitev
 import controllers.komentar_salona
 import controllers.priljubljeni_saloni
+import controllers.prosti_termini_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -88,6 +89,9 @@ def logout():
 def profil():
     return controllers.auth.profil()
 
+@f_app.route('/salon/<int:salon_id>/termini')
+def salon_termini_view(salon_id):
+    return controllers.prosti_termini_controller.prikazi_termine_za_salon(salon_id)
 # ── SALONI ────────────────────────────────────────────────────────────────────
 @f_app.route('/saloni', methods=['GET', 'POST'])
 def saloni():

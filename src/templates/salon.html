@@ -3,7 +3,9 @@
 
 {% block content %}
 <style>
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
@@ -51,7 +53,7 @@
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.7);
+        background: rgba(255, 255, 255, 0.7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -75,11 +77,11 @@
     }
 
     .navbar a.active {
-        background: rgba(0,0,0,0.2);
+        background: rgba(0, 0, 0, 0.2);
     }
 
     .navbar a:hover {
-        background: rgba(0,0,0,0.15);
+        background: rgba(0, 0, 0, 0.15);
     }
 
     .salon-page {
@@ -302,20 +304,32 @@
 
 <div class="page-header">
     <div class="page-header-title">SALON</div>
-
     <div class="header-right">
         <span class="header-username">Ime priimek</span>
         <a href="/profil" class="user-avatar">&#128100;</a>
     </div>
 </div>
 
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni" class="active">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije">Termini</a>
-    <a href="/faq">O &amp; A</a>
-</nav>
+{% if session.get('user_id') %}
+    {# ── NAVBAR ZA PRIJAVLJENE ── #}
+    <nav class="navbar">
+        <a href="/">Domov</a>
+        <a href="/saloni" class="active">Saloni</a>
+        <a href="/storitve">Storitve</a>
+        <a href="/rezervacije">Termini</a>
+        <a href="/faq">O &amp; A</a>
+    </nav>
+{% else %}
+    {# ── NAVBAR ZA GOSTA ── #}
+    <nav class="navbar">
+        <a href="/">Domov</a>
+        <a href="/saloni" class="active">Saloni</a>
+        <a href="/storitve">Storitve</a>
+        <a href="/salon/{{ salon[0] }}/termini">Prosti termini</a>
+        <a href="/faq">O &amp; A</a>
+        <a href="/login">Prijava</a>
+    </nav>
+{% endif %}
 
 <div class="salon-page">
     <div class="back-wrap">
@@ -329,30 +343,46 @@
             <div class="salon-info">
                 <h2>{{ salon[1] }}</h2>
 
-                <div class="oznaka">
-                    Lokacija: {{ salon[2] }}, {{ salon[3] }}
-                </div>
-
-                <div class="oznaka">
-                    Okvirna cena: [cena]
-                </div>
+                <div class="oznaka">Lokacija: {{ salon[2] }}, {{ salon[3] }}</div>
+                <div class="oznaka">Okvirna cena: [cena]</div>
 
                 <div class="oznaka">
                     Storitve:
                     {% for st in storitve %}
-                        {{ st[1] }}{% if not loop.last %}, {% endif %}
+                    {{ st[1] }}{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 </div>
 
-                <div class="oznaka">
-                    Frizerji: [frizerji]
-                </div>
+                <div class="oznaka">Frizerji: [frizerji]</div>
 
                 <div class="opis-text">
                     Mauris nisl mauris, ultrices eget mauris vitae, pellentesque porta nisl.
                     Nam ut mollis risus. Pellentesque faucibus risus eu ligula suscipit,
                     eu tempor nisl rhoncus. Morbi nec aliquam mi. Sed ut sem a arcu consequat euismod.
                 </div>
+
+                {# ── OBRAZEC ZA KOMENTAR — samo prijavljena stranka ── #}
+                {% if session.get('role') == 'stranka' %}
+                <div class="oznaka">
+                    <strong>Oddaj komentar</strong>
+                    <form method="POST" action="/salon/{{ salon[0] }}/komentar">
+                        <div>
+                            Ocena:
+                            {% for i in range(1, 6) %}
+                            <label>
+                                <input type="radio" name="ocena" value="{{ i }}" required>
+                                {{ i }}
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <textarea name="komentar" placeholder="Tvoj komentar (neobvezno)…" rows="3"
+                                maxlength="2000"></textarea>
+                        </div>
+                        <button type="submit">Objavi</button>
+                    </form>
+                </div>
+                {% endif %}
 
                 <a href="/salon/rezerviraj" class="gumb">Naroči se</a>
             </div>
@@ -364,36 +394,20 @@
                 <span class="ratings-score">4.7 / 5</span>
             </div>
 
-            {% if ocene is defined and ocene %}
-                {% for o in ocene %}
-                <div class="review-card">
-                    <div class="review-avatar">&#128100;</div>
-
-                    <div class="review-content">
-                        <div class="review-username">{{ o[0] }}</div>
-                        <div class="review-date">{{ o[1] }}</div>
-                        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                        <div class="review-text">{{ o[3] }}</div>
+            {% for i in range(3) %}
+            <div class="review-card">
+                <div class="review-avatar">&#128100;</div>
+                <div class="review-content">
+                    <div class="review-username">USERNAME1</div>
+                    <div class="review-date">22.4.2025</div>
+                    <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <div class="review-text">
+                        Mauris nisl mauris, ultrices eget mauris vitae,
+                        pellentesque porta nisl. Nam ut mollis risus.
                     </div>
                 </div>
-                {% endfor %}
-            {% else %}
-                {% for i in range(3) %}
-                <div class="review-card">
-                    <div class="review-avatar">&#128100;</div>
-
-                    <div class="review-content">
-                        <div class="review-username">USERNAME1</div>
-                        <div class="review-date">22.4.2025</div>
-                        <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                        <div class="review-text">
-                            Mauris nisl mauris, ultrices eget mauris vitae,
-                            pellentesque porta nisl. Nam ut mollis risus.
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% endif %}
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

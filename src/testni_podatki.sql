@@ -94,42 +94,54 @@ VALUES
      5, TRUE)
 ON CONFLICT DO NOTHING;
 
--- ── REZERVACIJE ───────────────────────────────────────────────────────────────
+-- ── URNIK (dinamično: od CURRENT_DATE naprej 14 dni) ─────────────────────────
+-- Ana (frizer 1): vsak dan ob 09:00, 10:00, 11:00, 14:00, 15:00
+INSERT INTO urnik (id_frizerja, dan, ura)
+SELECT 1, CURRENT_DATE + d, u::time
+FROM generate_series(0, 13) AS d
+CROSS JOIN unnest(ARRAY['09:00','10:00','11:00','14:00','15:00']) AS u;
+
+-- Tina (frizer 2): vsak drugi dan ob 10:00, 12:00, 16:00
+INSERT INTO urnik (id_frizerja, dan, ura)
+SELECT 2, CURRENT_DATE + d, u::time
+FROM generate_series(0, 13, 2) AS d
+CROSS JOIN unnest(ARRAY['10:00','12:00','16:00']) AS u;
+
+-- Miha (frizer 3): delovni dnevi (pon–pet) ob 08:00, 09:00, 13:00, 14:00
+INSERT INTO urnik (id_frizerja, dan, ura)
+SELECT 3, CURRENT_DATE + d, u::time
+FROM generate_series(0, 13) AS d
+CROSS JOIN unnest(ARRAY['08:00','09:00','13:00','14:00']) AS u
+WHERE EXTRACT(DOW FROM CURRENT_DATE + d) NOT IN (0, 6);
+
+-- ── REZERVACIJE (dinamično glede na CURRENT_DATE) ────────────────────────────
 INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
-VALUES
-    (1, 1, 1, 1, '2026-05-07', '10:00:00', 'active'),
-    (2, 2, 2, 2, '2026-05-07', '11:30:00', 'active'),
-    (3, 3, 3, 1, '2026-05-07', '14:00:00', 'cancelled'),
-    (4, 1, 1, 2, '2026-05-07', '09:30:00', 'cancelled')
-ON CONFLICT DO NOTHING;
+VALUES (1, 1, 1, 1, CURRENT_DATE, '09:00'::time, 'active');
 
--- ── URNIK ─────────────────────────────────────────────────────────────────────
-INSERT INTO urnik (id_frizerja, dan, ura) VALUES
-    -- Ana: pon–pet 9:00–16:00
-    (1, '2026-05-07', '09:00:00'), (1, '2026-05-07', '10:00:00'),
-    (1, '2026-05-07', '11:00:00'), (1, '2026-05-07', '12:00:00'),
-    (1, '2026-05-07', '13:00:00'), (1, '2026-05-07', '14:00:00'),
-    (1, '2026-05-07', '15:00:00'), (1, '2026-05-07', '16:00:00'),
-    (1, '2026-05-08', '09:00:00'), (1, '2026-05-08', '10:00:00'),
-    (1, '2026-05-08', '11:00:00'), (1, '2026-05-08', '12:00:00'),
-    -- Tina: pon–sre 10:00–17:00
-    (2, '2026-05-07', '10:00:00'), (2, '2026-05-07', '11:00:00'),
-    (2, '2026-05-07', '12:00:00'), (2, '2026-05-07', '13:00:00'),
-    (2, '2026-05-07', '14:00:00'), (2, '2026-05-07', '15:00:00'),
-    (2, '2026-05-08', '10:00:00'), (2, '2026-05-08', '11:00:00'),
-    (2, '2026-05-08', '12:00:00'), (2, '2026-05-08', '13:00:00'),
-    -- Miha: tor–pet 08:00–15:00
-    (3, '2026-05-08', '08:00:00'), (3, '2026-05-08', '09:00:00'),
-    (3, '2026-05-08', '10:00:00'), (3, '2026-05-08', '11:00:00'),
-    (3, '2026-05-08', '12:00:00'), (3, '2026-05-08', '13:00:00'),
-    (3, '2026-05-09', '08:00:00'), (3, '2026-05-09', '09:00:00'),
-    (3, '2026-05-09', '10:00:00'), (3, '2026-05-09', '11:00:00');
+INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
+VALUES (1, 1, 1, 2, CURRENT_DATE, '10:00'::time, 'active');
 
--- ── BLOKIRANI TERMINI ─────────────────────────────────────────────────────────
-INSERT INTO blokiran_termin (id_frizerja, datum, ura_od, ura_do, razlog) VALUES
-    (1, '2026-05-07', '12:00:00', '14:00:00', 'Kosilo'),
-    (2, '2026-05-08', '09:00:00', '17:00:00', 'Dopust'),
-    (3, '2026-05-09', '08:00:00', '10:00:00', 'Sestanek');
+INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
+VALUES (2, 1, 1, 1, CURRENT_DATE + 1, '14:00'::time, 'active');
+
+INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
+VALUES (3, 2, 1, 2, CURRENT_DATE + 3, '10:00'::time, 'active');
+
+INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
+VALUES (5, 2, 1, 2, CURRENT_DATE + 3, '12:00'::time, 'active');
+
+INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
+VALUES (7, 2, 1, 1, CURRENT_DATE + 3, '16:00'::time, 'active');
+
+INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
+VALUES (1, 3, 3, 1, CURRENT_DATE + 5, '13:00'::time, 'active');
+
+-- ── BLOKIRANI TERMINI (dinamično glede na CURRENT_DATE) ──────────────────────
+INSERT INTO blokiran_termin (id_frizerja, datum, ura_od, ura_do, razlog)
+VALUES (1, CURRENT_DATE + 2, '10:00'::time, '12:00'::time, 'Zdravniški pregled');
+
+INSERT INTO blokiran_termin (id_frizerja, datum, ura_od, ura_do, razlog)
+VALUES (2, CURRENT_DATE + 7, '00:00'::time, '23:59'::time, 'Dopust');
 
 --13/05/26: testni podatki za priljubljene vse, komentarji, še testni uporabniki(na njih so fav/komentarji)
 -- up:stranka123    geslo: stranka123
