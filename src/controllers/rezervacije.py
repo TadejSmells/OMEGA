@@ -9,14 +9,19 @@ def nova_rezervacija():
         frizer_id   = request.form.get('frizer_id')
         salon_id    = request.form.get('salon_id')
         storitev_id = request.form.get('storitev_id')
+        datum       = request.form.get('datum')
+        ura         = request.form.get('ura')
+
+        if not datum or not ura:
+            return "Datum in ura sta obvezna!"
 
         rezervacije = model_rezervacije.get_vse_rezervacije()
 
         for r in rezervacije:
-            if str(r[1]) == stranka_id and str(r[2]) == frizer_id:
-                return "Ta termin je že rezerviran!"
+            if str(r[2]) == frizer_id and str(r[5]) == datum and str(r[6]) == ura:
+                return "Ta termin je že zaseden!"
 
-        model_rezervacije.dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id)
+        model_rezervacije.dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum, ura)
         return redirect('/rezervacije')
 
     return render_template(

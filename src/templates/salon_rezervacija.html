@@ -65,6 +65,28 @@
               </select>
             </div>
 
+            <div class="mb-3">
+              <label for="datum" class="form-label fw-semibold">Datum</label>
+              <input
+                type="date"
+                class="form-control"
+                id="datum"
+                name="datum"
+                required
+              >
+            </div>
+
+            <div class="mb-4">
+              <label for="ura" class="form-label fw-semibold">Ura</label>
+              <input
+                type="time"
+                class="form-control"
+                id="ura"
+                name="ura"
+                required
+              >
+            </div>
+
             <button type="submit" class="btn btn-primary w-100">
               ＋ Dodaj rezervacijo
             </button>
@@ -72,4 +94,7 @@
         </div>
       </div>
     </div>
-    {% endblock %}
+
+  </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

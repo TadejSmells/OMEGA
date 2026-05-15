@@ -34,7 +34,7 @@ def get_vse_rezervacije():
 
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum, ura):
     """
-    Doda novo rezervacijo. datum in ura sta obvezna.
+    Doda novo rezervacijo z statusom 'aktiven'. datum in ura sta obvezna.
     """
     session = db.get_session()
     try:
@@ -45,6 +45,7 @@ def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum, ura):
             id_storitve=storitev_id or None,
             datum=datum,
             ura=ura,
+            status='active',
         ))
         session.commit()
     except Exception:
