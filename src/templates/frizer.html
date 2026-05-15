@@ -2,6 +2,51 @@
 {% block title %}Frizer Panel{% endblock %}
 
 {% block content %}
+
+{% set obvestila = get_obvestila_frizer() %}
+{% if obvestila %}
+<style>
+    .obvestila-wrap { margin: 16px 0; display: flex; flex-direction: column; gap: 8px; }
+    .obvestilo {
+        display: flex; align-items: flex-start; gap: 12px;
+        background: #fff3cd; border-left: 4px solid #d9a236;
+        border-radius: 6px; padding: 12px 14px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .obvestilo-icon { font-size: 18px; padding-top: 2px; }
+    .obvestilo-body { flex: 1; }
+    .obvestilo-naslov { font-weight: 700; color: #6b4a00; font-size: 13px; margin-bottom: 2px; }
+    .obvestilo-vsebina { font-size: 13px; color: #4a3500; margin-bottom: 4px; }
+    .obvestilo-datum { font-size: 11px; color: #8a7330; }
+    .obvestilo-close-form { margin: 0; }
+    .obvestilo-close {
+        background: transparent; border: none; color: #6b4a00;
+        font-size: 20px; line-height: 1; cursor: pointer;
+        padding: 2px 8px; border-radius: 4px;
+    }
+    .obvestilo-close:hover { background: rgba(0,0,0,0.08); }
+</style>
+
+<div class="obvestila-wrap">
+    {% for o in obvestila %}
+    <div class="obvestilo">
+        <div class="obvestilo-icon">🔔</div>
+        <div class="obvestilo-body">
+            <div class="obvestilo-naslov">{{ o.naslov }}</div>
+            <div class="obvestilo-vsebina">{{ o.vsebina }}</div>
+            <div class="obvestilo-datum">
+                {{ o.datum.strftime('%d.%m.%Y %H:%M') if o.datum else '' }}
+            </div>
+        </div>
+        <form method="POST" action="/frizer/obvestilo/opusti/{{ o.id }}" class="obvestilo-close-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="obvestilo-close" title="Opusti">×</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <h2>✂️ Frizer Panel</h2>
 <p>Dobrodošel, <strong>{{ session.get('username') }}</strong>.</p>
 

@@ -27,10 +27,14 @@ import controllers.oznacevanje_priljubljenih_storitev
 import controllers.komentar_salona
 import controllers.priljubljeni_saloni
 import controllers.prosti_termini_controller
+import controllers.obvestila_frizer_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
 f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
+f_app.jinja_env.globals['get_obvestila_frizer'] = (
+    controllers.obvestila_frizer_controller.obvestila_za_frizerja
+)
 
 # ── INDEX ─────────────────────────────────────────────────────────────────────
 @f_app.get('/')
@@ -133,6 +137,12 @@ def rezervacije_izbrisi(id_rezervacije):
 @login_required
 def rezervacije_preklic(id_rezervacije):
     return controllers.rezervacije.preklici_rezervacijo(id_rezervacije)
+
+
+@f_app.route("/frizer/obvestilo/opusti/<int:id_sporocila>", methods=["POST"])
+@frizer_required
+def frizer_opusti_obvestilo(id_sporocila):
+    return controllers.obvestila_frizer_controller.opusti_obvestilo(id_sporocila)
 
 
 
