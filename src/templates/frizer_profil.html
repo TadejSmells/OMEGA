@@ -279,6 +279,99 @@
             width: auto;
         }
     }
+
+    .komentarji-box { margin-top: 0; }
+
+    .komentar-item {
+        border-bottom: 1px solid #F2D6CE;
+        padding: 16px 0;
+    }
+    .komentar-item:last-child { border-bottom: none; }
+
+    .komentar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+    .komentar-avtor {
+        font-weight: 700;
+        font-size: 14px;
+        color: #292421;
+    }
+    .komentar-datum {
+        font-size: 11px;
+        color: #CA8E82;
+    }
+    .komentar-ocena {
+        color: #A75F37;
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+    .komentar-text {
+        font-size: 14px;
+        color: #7A958F;
+        line-height: 1.6;
+    }
+    .prazno-komentarji {
+        color: #CA8E82;
+        font-style: italic;
+        font-size: 14px;
+    }
+
+    .komentar-form { margin-top: 24px; }
+    .komentar-form h4 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1rem;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .form-vrstica { margin-bottom: 14px; }
+    .form-vrstica label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #A75F37;
+        margin-bottom: 4px;
+    }
+    .form-vrstica select,
+    .form-vrstica textarea {
+        width: 100%;
+        border: 1px solid #F2D6CE;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #292421;
+        background: #FDFAF7;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .form-vrstica select:focus,
+    .form-vrstica textarea:focus { border-color: #A75F37; }
+    .form-vrstica textarea { resize: vertical; min-height: 80px; }
+    .oddaj-btn {
+        background: #A75F37;
+        color: white;
+        border: none;
+        border-radius: 28px;
+        padding: 10px 32px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .oddaj-btn:hover { background: #CA8E82; }
+    .login-hint {
+        font-size: 13px;
+        color: #CA8E82;
+        font-style: italic;
+        margin-top: 16px;
+    }
+    .login-hint a { color: #A75F37; }
+
 </style>
 
 <div class="page-header">
@@ -380,8 +473,58 @@
                     <p>Ni vpisanih storitev.</p>
                 {% endif %}
             </div>
+
+            <div class="box komentarji-box">
+                <h3>Komentarji</h3>
+                <div class="line"></div>
+
+                {% if komentarji %}
+                    {% for k in komentarji %}
+                    <div class="komentar-item">
+                        <div class="komentar-header">
+                            <span class="komentar-avtor">{{ k['avtor'] }}</span>
+                            <span class="komentar-datum">{{ k['datum'] }}</span>
+                        </div>
+                        <div class="komentar-ocena">
+                            {% for i in range(k['ocena']) %}★{% endfor %}{% for i in range(5 - k['ocena']) %}☆{% endfor %}
+                        </div>
+                        <div class="komentar-text">{{ k['komentar'] }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="prazno-komentarji">Še ni komentarjev. Bodi prvi!</div>
+                {% endif %}
+
+                {% if session.get('user_id') %}
+                <div class="komentar-form">
+                    <h4>Dodaj komentar</h4>
+                    <form method="POST" action="/frizer/{{ frizer['id'] }}/komentar">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-vrstica">
+                            <label>Ocena</label>
+                            <select name="ocena" required>
+                                <option value="">— izberi oceno —</option>
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+                        <div class="form-vrstica">
+                            <label>Komentar</label>
+                            <textarea name="komentar" placeholder="Napiši svoje mnenje..." required></textarea>
+                        </div>
+                        <button type="submit" class="oddaj-btn">Oddaj komentar</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="login-hint"><a href="/login">Prijavi se</a>, da pustiš komentar.</div>
+                {% endif %}
+            </div>
         </div>
     </div>
+
 </div>
 
 <div class="nav-footer">
