@@ -5,10 +5,8 @@ import db
 from models.models import Salon, Frizer, Stranka, Storitev, Urnik, Rezervacija, SaloniInStoritve
 
 # ── DB SETUP ──────────────────────────────────────────────────────────────────
-# setup_db in polni_db ostaneta z raw SQL
 def setup_db():
     import psycopg2
-    from urllib.parse import quote_plus
     conn = psycopg2.connect(
         dbname=os.environ['DBNAME'],
         user=os.environ['DBUSER'],
@@ -124,3 +122,30 @@ def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):
         raise
     finally:
         session.close()
+
+
+def dodaj_salon(ime, naslov, mesto, telefon):
+    """
+    Doda nov salon v bazo.
+    Vrže ValueError če salon s tem imenom že obstaja.
+    """
+    db_session = db.get_session()
+    try:
+        obstoječ = db_session.query(Salon).filter(Salon.ime == ime).first()
+        if obstoječ:
+            raise ValueError(f"Salon z imenom '{ime}' že obstaja.")
+
+        db_session.add(Salon(
+            ime=ime,
+            naslov=naslov or None,
+            mesto=mesto or None,
+            telefon=telefon or None
+        ))
+        db_session.commit()
+    except ValueError:
+        raise
+    except:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()
