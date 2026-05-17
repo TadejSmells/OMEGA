@@ -153,7 +153,7 @@ def dodaj_frizer():
 
 @f_app.route('/storitve', methods=['GET', 'POST'])
 def storitve():
-    return controllers.sv_salon.storitve()
+    return controllers.storitve.pridobi_storitve()
 
 @f_app.get('/cenik')
 def cenik():
