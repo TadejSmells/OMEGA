@@ -5,17 +5,8 @@
 <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #F2E7DD;
-        color: #292421;
-    }
-
-    main {
-        min-height: calc(100vh - 140px);
-        display: flex;
-        flex-direction: column;
-    }
+    body { font-family: Arial, Helvetica, sans-serif; background: #F2E7DD; color: #292421; }
+    main { min-height: calc(100vh - 140px); display: flex; flex-direction: column; }
 
     .page-header {
         background: #D9B99F;
@@ -29,39 +20,27 @@
         font-family: Georgia, "Times New Roman", serif;
         font-size: 2rem;
         font-weight: 700;
-        color: #292421;
-        letter-spacing: 0.02em;
     }
 
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
+    .header-right { display: flex; align-items: center; gap: 20px; }
     .header-username {
         font-size: 13px;
-        color: #292421;
+        background: rgba(255,255,255,0.7);
+        padding: 7px 18px;
+        border-radius: 20px;
     }
 
     .user-avatar {
-        width: 44px;
-        height: 44px;
+        width: 44px; height: 44px;
         border-radius: 50%;
         background: rgba(255,255,255,0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: flex; align-items: center; justify-content: center;
         text-decoration: none;
         font-size: 22px;
         color: #D9B99F;
     }
 
-    .navbar {
-        background: #A75F37;
-        display: flex;
-    }
-
+    .navbar { background: #A75F37; display: flex; }
     .navbar a {
         font-size: 13px;
         color: #FFFFFF;
@@ -70,14 +49,7 @@
         display: block;
         font-weight: 600;
     }
-
-    .navbar a.active {
-        background: rgba(0,0,0,0.2);
-    }
-
-    .navbar a:hover {
-        background: rgba(0,0,0,0.15);
-    }
+    .navbar a.active { background: rgba(0,0,0,0.2); }
 
     .storitve-page {
         flex: 1;
@@ -87,16 +59,14 @@
         flex-direction: column;
     }
 
-    .iskanjebox {
-        background: #F2E7DD;
+    .top-row {
         padding: 16px 32px 0;
         display: flex;
         align-items: center;
         gap: 12px;
-        position: relative;
     }
 
-    .iskanjabar {
+    .search-box {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -107,151 +77,113 @@
         border: 1px solid #D9B99F;
     }
 
-    .iskanjabar input {
+    .search-box input {
         border: none;
-        background: transparent;
         outline: none;
-        font-size: 13px;
+        background: transparent;
         width: 100%;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .dodaj-btn {
-        background: #A75F37;
-        color: #FFFFFF;
-        border: none;
-        border-radius: 30px;
-        padding: 9px 18px;
         font-size: 13px;
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-    .dodaj-btn:hover {
-        background: #CA8E82;
     }
 
     .back-btn {
         margin-left: auto;
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 26px;
         color: #CA8E82;
         text-decoration: none;
+        font-size: 28px;
     }
 
-    .carousel-wrapper {
+    .cards-wrapper {
         flex: 1;
-        padding: 12px 32px 26px;
+        padding: 18px 32px 24px;
         display: flex;
         align-items: center;
         gap: 12px;
     }
 
-    .carousel {
+    .cards-viewport { flex: 1; overflow: hidden; }
+
+    .cards {
         display: flex;
-        gap: 14px;
-        flex: 1;
-        overflow: hidden;
-        align-items: stretch;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
     }
 
+    .cards::-webkit-scrollbar { display: none; }
+
     .card {
-        flex: 0 0 calc(25% - 11px);
+        flex: 0 0 calc((100% - 48px) / 4);
         min-height: 430px;
         background: #FFFFFF;
         border-radius: 14px;
-        overflow: hidden;
         border: 1px solid #F2D6CE;
+        overflow: hidden;
+        position: relative;
         display: flex;
         flex-direction: column;
-        position: relative; /* za absolutno pozicioniran srček */
+        scroll-snap-align: start;
     }
 
+    .card.hidden-search { display: none; }
+
     .card-img {
-        width: 100%;
-        height: 190px;
+        height: 150px;
         background: #F2D6CE;
+    }
+
+    .favorite-btn {
+        position: absolute;
+        top: 136px;
+        right: 10px;
+        border: none;
+        background: transparent;
+        font-size: 30px;
+        cursor: pointer;
+        color: #CA8E82;
+        z-index: 2;
+    }
+
+    .favorite-btn.active {
+        color: #F2C94C;
+        text-shadow: 0 0 1px #A75F37;
     }
 
     .card-body {
         padding: 18px 18px 20px;
         flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .card-body h2 {
         font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.2rem;
-        color: #292421;
-        margin-bottom: 14px;
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        text-transform: uppercase;
     }
 
-    .card-body .oznaka {
+    .oznaka {
         font-size: 11px;
         font-weight: 700;
-        letter-spacing: 0.06em;
         color: #CA8E82;
         text-transform: uppercase;
-        margin-top: 10px;
+        margin-top: 8px;
     }
 
-    .card-body .opis {
-        font-size: 14px;
-        color: #7A958F;
-        line-height: 1.5;
-        margin-top: 3px;
-    }
-
-    /* ── PRILJUBLJENO (srček) ───────────────────────────────────────────── */
-    .favorite-form {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        margin: 0;
-        z-index: 2;
-    }
-
-    .favorite-btn {
-        background: rgba(255, 255, 255, 0.92);
-        border: 1px solid #F2D6CE;
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        font-size: 20px;
-        line-height: 1;
-        cursor: pointer;
-        color: #CA8E82;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
-        padding: 0;
-    }
-
-    .favorite-btn:hover {
-        background: #FFFFFF;
-        transform: scale(1.08);
-    }
-
-    .favorite-btn.is-favorite {
-        color: #A75F37;
-        background: #FFFFFF;
-        border-color: #A75F37;
-    }
-
-    .favorite-btn.is-favorite:hover {
-        color: #7A2F12;
+    .opis {
+        font-size: 13px;
+        line-height: 1.45;
+        margin-top: 2px;
     }
 
     .arrow-btn {
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 26px;
+        font-size: 34px;
         color: #CA8E82;
-        flex-shrink: 0;
-        align-self: center;
     }
 
     .nav-footer {
@@ -267,65 +199,12 @@
         text-decoration: none;
         font-style: italic;
     }
-
-    .nav-footer a:hover {
-        text-decoration: underline;
-    }
-
-    /* ── FLASH SPOROČILA ────────────────────────────────────────────────── */
-    .flash-area {
-        padding: 8px 32px 0;
-    }
-    .flash-msg {
-        padding: 8px 14px;
-        border-radius: 8px;
-        margin-bottom: 6px;
-        font-size: 13px;
-    }
-    .flash-msg.success { background: #E8F0E2; color: #3B5C2E; }
-    .flash-msg.error   { background: #FAD8D0; color: #7A2F12; }
-
-    @media (max-width: 900px) {
-        .page-header {
-            padding: 12px 18px;
-        }
-
-        .page-header-title {
-            font-size: 1.4rem;
-        }
-
-        .navbar a {
-            padding: 10px 14px;
-            font-size: 12px;
-        }
-
-        .carousel-wrapper {
-            padding: 12px 18px 24px;
-        }
-
-        .carousel {
-            flex-direction: column;
-            overflow: visible;
-        }
-
-        .card {
-            flex: 1 1 auto;
-            width: 100%;
-            min-height: 360px;
-        }
-
-        .arrow-btn {
-            display: none;
-        }
-    }
 </style>
 
 <div class="page-header">
-    <div class="page-header-title">
-        {% if samo_priljubljene %}MOJE PRILJUBLJENE STORITVE{% else %}SEZNAM STORITEV{% endif %}
-    </div>
+    <div class="page-header-title">SEZNAM STORITEV</div>
     <div class="header-right">
-        <span class="header-username">{{ session.get("username") or "Ime priimek" }}</span>
+        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
         <a href="/profil" class="user-avatar">&#128100;</a>
     </div>
 </div>
@@ -333,106 +212,61 @@
 <nav class="navbar">
     <a href="/">Domov</a>
     <a href="/saloni">Saloni</a>
-    <a href="/storitve" class="{% if not samo_priljubljene %}active{% endif %}">Storitve</a>
-    {% if session.get("role") == "stranka" %}
-    <a href="/storitve/priljubljene" class="{% if samo_priljubljene %}active{% endif %}">&#10084; Priljubljene</a>
-    {% endif %}
+    <a href="/storitve" class="active">Storitve</a>
     <a href="/rezervacije">Termini</a>
     <a href="/faq">O &amp; A</a>
 </nav>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="flash-area">
-        {% for category, msg in messages %}
-            <div class="flash-msg {{ category }}">{{ msg }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-{% endwith %}
-
 <div class="storitve-page">
-    <div class="iskanjebox">
-        <div class="iskanjabar">
+    <div class="top-row">
+        <div class="search-box">
             <span>&#128269;</span>
             <input type="text" placeholder="Išči storitev..." id="searchInput" oninput="filterCards()">
         </div>
 
-        {% if session.get("role") == "admin" %}
-        <a href="/storitve/dodaj" class="dodaj-btn">＋ Dodaj storitev</a>
-        {% endif %}
         <a href="/" class="back-btn">&#8617;</a>
     </div>
 
-    <div class="carousel-wrapper">
-        <button class="arrow-btn" onclick="prevPage()">&#8592;</button>
+    <div class="cards-wrapper">
+        <button class="arrow-btn" onclick="scrollCards(-1)">&#8592;</button>
 
-        <div class="carousel" id="carouselContainer">
-            {% for st in podatki %}
-                <div class="card" data-name="{{ st[1]|lower }}">
+        <div class="cards-viewport">
+            <div class="cards" id="cardsContainer">
+                {% for st in podatki %}
+                    <div class="card" data-id="{{ st[0] }}" data-name="{{ st[1]|lower }}">
+                        <button type="button" class="favorite-btn" onclick="toggleFavorite('{{ st[0] }}', this)">☆</button>
 
-                    {# ── SRČEK ZA PRILJUBLJENO (samo prijavljena stranka) ── #}
-                    {% if session.get("user_id") and session.get("role") == "stranka" %}
-                    <form method="POST"
-                          action="/storitve/priljubljena/{{ st[0] }}"
-                          class="favorite-form">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="next" value="{{ request.path }}">
-                        {% if priljubljeni_ids and st[0] in priljubljeni_ids %}
-                            <button type="submit"
-                                    class="favorite-btn is-favorite"
-                                    title="Odstrani iz priljubljenih"
-                                    aria-label="Odstrani iz priljubljenih">
-                                &#10084;
-                            </button>
-                        {% else %}
-                            <button type="submit"
-                                    class="favorite-btn"
-                                    title="Dodaj med priljubljene"
-                                    aria-label="Dodaj med priljubljene">
-                                &#9825;
-                            </button>
-                        {% endif %}
-                    </form>
-                    {% endif %}
+                        <div class="card-img"></div>
 
-                    <div class="card-img"></div>
+                        <div class="card-body">
+                            <h2>{{ st[1] }}</h2>
 
-                    <div class="card-body">
-                        <h2>{{ st[1] | upper }}</h2>
+                            <div class="oznaka">Okvirna cena storitve:</div>
+                            <div class="opis">{{ st[2] }}€</div>
 
-                        <div class="oznaka">Okvirna cena storitve:</div>
-                        <div class="opis">{{ st[2] }}€</div>
+                            <div class="oznaka">Okviren čas trajanja storitve:</div>
+                            <div class="opis">{{ st[3] }}</div>
 
-                        <div class="oznaka">Okviren čas trajanja storitve:</div>
-                        <div class="opis">{{ st[3] }}</div>
-
-                        <div class="oznaka">Opis storitve:</div>
-                        <div class="opis">—</div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="opis">
-                            {% if samo_priljubljene %}
-                                Nimaš še nobene priljubljene storitve. Pojdi na
-                                <a href="/storitve">seznam storitev</a> in klikni srček. ❤
-                            {% else %}
-                                Ni vpisanih storitev.
-                            {% endif %}
+                            <div class="oznaka">Opis storitve:</div>
+                            <div class="opis">—</div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% else %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="opis">Ni vpisanih storitev.</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
 
-        <button class="arrow-btn" onclick="nextPage()">&#8594;</button>
+        <button class="arrow-btn" onclick="scrollCards(1)">&#8594;</button>
     </div>
 </div>
 
 <div class="nav-footer">
-    <a href="/faq">News</a>
+    <a href="/faq">Novice</a>
     <a href="/rezervacije">Vaši termini</a>
     <a href="/saloni">Informacije</a>
 </div>
@@ -440,36 +274,54 @@
 <script>
     function filterCards() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('.card[data-name]').forEach(c => {
-            c.style.display = c.dataset.name.includes(q) ? '' : 'none';
+
+        document.querySelectorAll('.card[data-name]').forEach(card => {
+            card.classList.toggle('hidden-search', !card.dataset.name.includes(q));
         });
     }
 
-    let page = 0;
-    const perPage = 4;
+    function scrollCards(direction) {
+        const container = document.getElementById('cardsContainer');
+        container.scrollBy({ left: direction * container.clientWidth, behavior: 'smooth' });
+    }
 
-    function updateVisible() {
-        const cards = [...document.querySelectorAll('.card[data-name]')];
-        cards.forEach((c, i) => {
-            c.style.display = (i >= page * perPage && i < (page + 1) * perPage) ? '' : 'none';
+    function getFavorites() {
+        return JSON.parse(localStorage.getItem('favoriteStoritve') || '[]');
+    }
+
+    function saveFavorites(ids) {
+        localStorage.setItem('favoriteStoritve', JSON.stringify(ids));
+    }
+
+    function toggleFavorite(id, button) {
+        let favorites = getFavorites();
+
+        if (favorites.includes(id)) {
+            favorites = favorites.filter(x => x !== id);
+            button.classList.remove('active');
+            button.textContent = '☆';
+        } else {
+            favorites.push(id);
+            button.classList.add('active');
+            button.textContent = '★';
+        }
+
+        saveFavorites(favorites);
+    }
+
+    function loadFavorites() {
+        const favorites = getFavorites();
+
+        document.querySelectorAll('.card[data-id]').forEach(card => {
+            const btn = card.querySelector('.favorite-btn');
+
+            if (favorites.includes(card.dataset.id)) {
+                btn.classList.add('active');
+                btn.textContent = '★';
+            }
         });
     }
 
-    function nextPage() {
-        const total = document.querySelectorAll('.card[data-name]').length;
-        if ((page + 1) * perPage < total) {
-            page++;
-            updateVisible();
-        }
-    }
-
-    function prevPage() {
-        if (page > 0) {
-            page--;
-            updateVisible();
-        }
-    }
-
-    updateVisible();
+    loadFavorites();
 </script>
 {% endblock %}
