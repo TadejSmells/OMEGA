@@ -21,7 +21,6 @@
         flex-direction: column;
     }
 
-
     .topbar {
         background: #D9B99F;
         padding: 12px 32px;
@@ -177,6 +176,68 @@
         text-decoration: underline;
     }
 
+    .popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .popup-box {
+        width: 380px;
+        background: #FFFFFF;
+        border-radius: 14px;
+        border: 1px solid #D9B99F;
+        padding: 28px;
+        text-align: center;
+    }
+
+    .popup-box h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        margin-bottom: 12px;
+        color: #292421;
+    }
+
+    .popup-box p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 14px;
+        color: #292421;
+    }
+
+    .popup-info {
+        background: #F2E7DD;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .popup-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .popup-buttons button,
+    .popup-buttons a {
+        border: none;
+        background: #A75F37;
+        color: white;
+        text-decoration: none;
+        padding: 10px 18px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .popup-buttons button:hover,
+    .popup-buttons a:hover {
+        opacity: 0.9;
+    }
+
     @media (max-width: 900px) {
         .topbar {
             padding: 12px 18px;
@@ -200,8 +261,35 @@
             width: 100%;
             height: 230px;
         }
+
+        .popup-box {
+            width: 90%;
+        }
     }
 </style>
+
+{% if preklicana_rezervacija %}
+<div class="popup-overlay" id="popup-preklic" data-rezervacija-id="{{ preklicana_rezervacija[0] }}">
+    <div class="popup-box">
+        <h2>Obvestilo</h2>
+
+        <p>
+            Vaša rezervacija je bila preklicana.
+        </p>
+
+        <p class="popup-info">
+            Frizer: {{ preklicana_rezervacija[1] or '—' }}<br>
+            Salon: {{ preklicana_rezervacija[2] or '—' }}<br>
+            Storitev: {{ preklicana_rezervacija[3] or '—' }}
+        </p>
+
+        <div class="popup-buttons">
+            <button onclick="zapriPopup()">V redu</button>
+            <a href="/moje_rezervacije">Moje rezervacije</a>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <div class="topbar">
     <div class="topbar-logo">HAIRSCULTURES</div>
@@ -266,4 +354,28 @@
     <a href="/rezervacije">Vaši termini</a>
     <a href="/saloni">Informacije</a>
 </div>
+
+<script>
+function zapriPopup() {
+    const popup = document.getElementById('popup-preklic');
+
+    if (popup) {
+        const id = popup.dataset.rezervacijaId;
+        localStorage.setItem('preklic_rezervacije_seen_' + id, '1');
+        popup.style.display = 'none';
+    }
+}
+
+(function skrijCeJeZeVideno() {
+    const popup = document.getElementById('popup-preklic');
+
+    if (popup) {
+        const id = popup.dataset.rezervacijaId;
+
+        if (localStorage.getItem('preklic_rezervacije_seen_' + id) === '1') {
+            popup.style.display = 'none';
+        }
+    }
+})();
+</script>
 {% endblock %}
