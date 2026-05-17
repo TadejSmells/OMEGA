@@ -2,99 +2,367 @@
 {% block title %}Rezervacije{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-  <!-- ── PAGE HEADER ───────────────────────────────────────────── -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">🗓️ Rezervacije</h2>
-    <a href="/" class="btn btn-outline-secondary btn-sm">← Domov</a>
-  </div>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
 
-  <div class="row g-4">
+    html, body {
+        min-height: 100vh;
+    }
 
-    <!-- ── ADD FORM ─────────────────────────────────────────────── -->
-    <div class="col-lg-4">
-      <div class="card shadow-sm h-100">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Nova rezervacija</h5>
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ── TOPBAR ─────────────────────────────────────────────── */
+    .topbar {
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .topbar-logo {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+    }
+
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .topbar-contact {
+        font-size: 12px;
+        color: #292421;
+        text-align: right;
+        line-height: 1.8;
+        font-style: italic;
+        font-weight: 600;
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    /* ── NAVBAR ─────────────────────────────────────────────── */
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    /* ── PANEL Z OBRAZCEM ───────────────────────────────────── */
+    .rezervacije-page {
+        flex: 1;
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 32px;
+    }
+
+    .rezervacije-panel {
+        width: 480px;
+        background: #F2E7DD;
+        padding: 28px 52px 34px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profil-ikona {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        color: #D9B99F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+        margin-bottom: 22px;
+    }
+
+    h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #111111;
+        margin-bottom: 24px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .obrazec {
+        width: 100%;
+    }
+
+    .polje {
+        margin-bottom: 14px;
+    }
+
+    .polje label {
+        display: block;
+        font-size: 11px;
+        color: #111111;
+        margin-bottom: 6px;
+    }
+
+    .polje select,
+    .polje input[type="date"],
+    .polje input[type="time"] {
+        width: 100%;
+        height: 32px;
+        border: none;
+        border-radius: 20px;
+        background: #FFFFFF;
+        padding: 0 14px;
+        font-size: 12px;
+        outline: none;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #292421;
+    }
+
+    .polje select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23A75F37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 32px;
+        cursor: pointer;
+    }
+
+    .polje input[type="date"],
+    .polje input[type="time"] {
+        cursor: pointer;
+        color-scheme: light;
+    }
+
+    .datum-ura {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .datum-ura .polje {
+        margin-bottom: 0;
+    }
+
+    .submit-wrap {
+        width: 100%;
+        text-align: center;
+        margin-top: 28px;
+    }
+
+    .gumb {
+        background: #A75F37;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 30px;
+        padding: 9px 42px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .gumb:hover {
+        background: #CA8E82;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    .nav-footer {
+        background: #D9B99F;
+        padding: 7px 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-footer a {
+        font-size: 13px;
+        color: #292421;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .nav-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+        .topbar {
+            padding: 12px 18px;
+        }
+
+        .topbar-logo {
+            font-size: 1.4rem;
+        }
+
+        .navbar a {
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .nav-footer {
+            padding: 7px 24px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .rezervacije-panel {
+            width: 100%;
+            padding: 28px 22px;
+        }
+
+        .datum-ura {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .datum-ura .polje {
+            margin-bottom: 14px;
+        }
+    }
+</style>
+
+<!-- ── TOPBAR ─────────────────────────────────────────────── -->
+<div class="topbar">
+    <a href="/" class="topbar-logo">HAIRSCULTURES</a>
+    <div class="topbar-right">
+        <div class="topbar-contact">
+            Tel: &nbsp; 000 - 000 - 000<br>
+            hairculture@gmail.com
         </div>
-        <div class="card-body">
-          <form method="POST" action="/rezervacije">
-
-            <div class="mb-3">
-              <label for="stranka_id" class="form-label fw-semibold">Stranka</label>
-              <select class="form-select" id="stranka_id" name="stranka_id" required>
-                <option value="" disabled selected>— izberi stranko —</option>
-                {% for stranka in stranke %}
-                <option value="{{ stranka[0] }}">
-                  {{ stranka[1] }} {{ stranka[2] }}
-                </option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="frizer_id" class="form-label fw-semibold">Frizer</label>
-              <select class="form-select" id="frizer_id" name="frizer_id" required>
-                <option value="" disabled selected>— izberi frizerja —</option>
-                {% for frizer in frizerji %}
-                <option value="{{ frizer[0] }}">{{ frizer[2] }}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="salon_id" class="form-label fw-semibold">Salon</label>
-              <select class="form-select" id="salon_id" name="salon_id">
-                <option value="">— brez salona —</option>
-                {% for salon in saloni %}
-                <option value="{{ salon[0] }}">{{ salon[1] }}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="mb-4">
-              <label for="storitev_id" class="form-label fw-semibold">Storitev</label>
-              <select class="form-select" id="storitev_id" name="storitev_id">
-                <option value="">— brez storitve —</option>
-                {% for storitev in storitve %}
-                <option value="{{ storitev[0] }}">
-                  {{ storitev[1] }} — {{ storitev[2] }} € ({{ storitev[3] }} min)
-                </option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="datum" class="form-label fw-semibold">Datum</label>
-              <input
-                type="date"
-                class="form-control"
-                id="datum"
-                name="datum"
-                required
-              >
-            </div>
-
-            <div class="mb-4">
-              <label for="ura" class="form-label fw-semibold">Ura</label>
-              <input
-                type="time"
-                class="form-control"
-                id="ura"
-                name="ura"
-                required
-              >
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-              ＋ Dodaj rezervacijo
-            </button>
-          </form>
-        </div>
-      </div>
+        <a href="/profil" class="user-avatar">&#128100;</a>
     </div>
+</div>
 
-  </div><!-- /.row -->
-</div><!-- /.container -->
+<!-- ── NAVBAR ─────────────────────────────────────────────── -->
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni">Saloni</a>
+    <a href="/frizerji">Frizerji</a>
+    <a href="/cenik">Storitve</a>
+    <a href="/rezervacije" class="active">Termini</a>
+    <a href="/faq">Q &amp; A</a>
+</nav>
+
+<!-- ── VSEBINA ────────────────────────────────────────────── -->
+<div class="rezervacije-page">
+    <div class="rezervacije-panel">
+        <div class="profil-ikona">&#128197;</div>
+
+        <h2>Nova rezervacija</h2>
+
+        <form method="POST" action="/rezervacije" class="obrazec">
+
+            <div class="polje">
+                <label for="stranka_id">Stranka</label>
+                <select name="stranka_id" id="stranka_id" required>
+                    <option value="" disabled selected>— izberi stranko —</option>
+                    {% for stranka in stranke %}
+                        <option value="{{ stranka[0] }}">{{ stranka[1] }} {{ stranka[2] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="polje">
+                <label for="frizer_id">Frizer</label>
+                <select name="frizer_id" id="frizer_id" required>
+                    <option value="" disabled selected>— izberi frizerja —</option>
+                    {% for frizer in frizerji %}
+                        <option value="{{ frizer[0] }}">{{ frizer[2] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="polje">
+                <label for="salon_id">Salon</label>
+                <select name="salon_id" id="salon_id">
+                    <option value="">— brez salona —</option>
+                    {% for salon in saloni %}
+                        <option value="{{ salon[0] }}">{{ salon[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="polje">
+                <label for="storitev_id">Storitev</label>
+                <select name="storitev_id" id="storitev_id">
+                    <option value="">— brez storitve —</option>
+                    {% for storitev in storitve %}
+                        <option value="{{ storitev[0] }}">
+                            {{ storitev[1] }} — {{ storitev[2] }} € ({{ storitev[3] }} min)
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="datum-ura">
+                <div class="polje">
+                    <label for="datum">Datum</label>
+                    <input type="date" id="datum" name="datum" required>
+                </div>
+
+                <div class="polje">
+                    <label for="ura">Ura</label>
+                    <input type="time" id="ura" name="ura" required>
+                </div>
+            </div>
+
+            <div class="submit-wrap">
+                <button type="submit" class="gumb">＋ Dodaj rezervacijo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<div class="nav-footer">
+    <a href="/faq">Novice</a>
+    <a href="/rezervacije">Vaši termini</a>
+    <a href="/saloni">Informacije</a>
+</div>
 {% endblock %}

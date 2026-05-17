@@ -3,41 +3,56 @@ from models import model_frizer
 
 
 def frizer_profil(frizer_id):
-    """Prikaže osebno stran posameznega frizerja."""
     frizer = model_frizer.get_frizer(frizer_id)
-
     if frizer is None:
         abort(404)
 
     salon = model_frizer.get_salon_frizerja(frizer_id)
     storitve = model_frizer.get_storitve_frizerja(frizer_id)
+    komentarji = model_frizer.get_komentarji_frizerja(frizer_id)
 
     return render_template(
         "frizer_profil.html",
         frizer=frizer,
         salon=salon,
-        storitve=storitve
+        storitve=storitve,
+        komentarji=komentarji
     )
+
+
+def dodaj_komentar(frizer_id):
+    """Logged-in users only — doda komentar frizerju."""
+    if "user_id" not in session:
+        return redirect("/login")
+
+    stranka_id = session.get("stranka_id")  # may be None for admin/frizer accounts
+
+    ocena    = request.form.get("ocena")
+    komentar = request.form.get("komentar", "").strip()
+
+    try:
+        model_frizer.dodaj_komentar_frizerja(frizer_id, stranka_id, ocena, komentar)
+        flash("Komentar je bil uspešno dodan.", "success")
+    except ValueError as e:
+        flash(str(e), "error")
+    except Exception:
+        flash("Napaka pri dodajanju komentarja. Poskusi znova.", "error")
+
+    return redirect(f"/frizer/{frizer_id}")
 
 
 def seznam_frizerjev():
-    """Prikaže seznam vseh frizerjev."""
     frizerji = model_frizer.get_vsi_frizerji()
-
-    return render_template(
-        "seznam_frizerjev.html",
-        frizerji=frizerji
-    )
+    return render_template("seznam_frizerjev.html", frizerji=frizerji)
 
 
 def dodaj_frizer():
-    """Admin only — doda novega frizerja."""
     if session.get("role") != "admin":
         return "Nimaš dostopa.", 403
 
     if request.method == "POST":
-        ime     = request.form.get("ime", "").strip()
-        kontakt = request.form.get("kontakt", "").strip()
+        ime      = request.form.get("ime", "").strip()
+        kontakt  = request.form.get("kontakt", "").strip()
         salon_id = request.form.get("salon_id") or None
 
         if not ime:

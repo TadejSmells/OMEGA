@@ -2,53 +2,224 @@
 {% block title %}Registracija{% endblock %}
 
 {% block content %}
-<h2>Registracija</h2>
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-<form method="POST" action="/register">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
 
-    <table>
-        <tr>
-            <td><label for="username">Uporabniško ime *</label></td>
-            <td><input type="text" id="username" name="username" required autofocus></td>
-        </tr>
-        <tr>
-            <td><label for="password">Geslo * <small>(vsaj 6 znakov)</small></label></td>
-            <td><input type="password" id="password" name="password" required minlength="6"></td>
-        </tr>
-        <tr>
-            <td><label for="ime">Ime</label></td>
-            <td><input type="text" id="ime" name="ime"></td>
-        </tr>
-        <tr>
-            <td><label for="priimek">Priimek <span id="priimek_required_label"></span></label></td>
-            <td><input type="text" id="priimek" name="priimek"></td>
-        </tr>
-        <tr>
-            <td><label for="mail">E-mail</label></td>
-            <td><input type="email" id="mail" name="mail"></td>
-        </tr>
-        <tr>
-            <td><label for="telefon">Telefon</label></td>
-            <td><input type="tel" id="telefon" name="telefon"></td>
-        </tr>
-        <tr>
-            <td><label for="vloga">Vrsta računa *</label></td>
-            <td>
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .auth-page {
+        flex: 1;
+        min-height: calc(100vh - 170px);
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 28px 32px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 30px;
+        text-decoration: none;
+    }
+
+    .auth-panel {
+        width: 460px;
+        background: #F2E7DD;
+        padding: 38px 52px 34px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profil-ikona {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        color: #D9B99F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 72px;
+        margin-bottom: 28px;
+    }
+
+    .obrazec {
+        width: 100%;
+    }
+
+    h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #111111;
+        margin-bottom: 24px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .polje {
+        margin-bottom: 14px;
+    }
+
+    .polje label {
+        display: block;
+        font-size: 11px;
+        color: #111111;
+        margin-bottom: 6px;
+    }
+
+    .polje label small {
+        color: #A75F37;
+        font-size: 10px;
+        font-weight: normal;
+    }
+
+    .polje input,
+    .polje select {
+        width: 100%;
+        height: 32px;
+        border: none;
+        border-radius: 20px;
+        background: #FFFFFF;
+        padding: 4px 14px;
+        font-size: 12px;
+        outline: none;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #292421;
+    }
+
+    .polje select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23A75F37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 32px;
+        cursor: pointer;
+    }
+
+    .submit-wrap {
+        width: 100%;
+        text-align: center;
+        margin-top: 28px;
+    }
+
+    .gumb {
+        background: #A75F37;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 30px;
+        padding: 9px 42px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .gumb:hover {
+        background: #CA8E82;
+    }
+
+    .auth-link {
+        margin-top: 22px;
+        font-size: 13px;
+        color: #292421;
+        text-align: center;
+    }
+
+    .auth-link a {
+        color: #A75F37;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .auth-link a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .auth-panel {
+            width: 100%;
+            padding: 30px 22px;
+        }
+    }
+</style>
+
+<div class="auth-page">
+    <a href="/" class="back-btn">&#8617;</a>
+
+    <div class="auth-panel">
+        <div class="profil-ikona">&#128100;</div>
+
+        <h2>Registracija</h2>
+
+        <form method="POST" action="/register" class="obrazec">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="polje">
+                <label for="username">Uporabniško ime *</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+
+            <div class="polje">
+                <label for="password">Geslo * <small>(vsaj 6 znakov)</small></label>
+                <input type="password" id="password" name="password" required minlength="6">
+            </div>
+
+            <div class="polje">
+                <label for="ime">Ime</label>
+                <input type="text" id="ime" name="ime">
+            </div>
+
+            <div class="polje">
+                <label for="priimek">Priimek <span id="priimek_required_label"></span></label>
+                <input type="text" id="priimek" name="priimek">
+            </div>
+
+            <div class="polje">
+                <label for="mail">E-mail</label>
+                <input type="email" id="mail" name="mail">
+            </div>
+
+            <div class="polje">
+                <label for="telefon">Telefon</label>
+                <input type="tel" id="telefon" name="telefon">
+            </div>
+
+            <div class="polje">
+                <label for="vloga">Vrsta računa *</label>
                 <select id="vloga" name="vloga" onchange="onVlogaChange(this.value)">
                     <option value="stranka">Stranka</option>
                     <option value="frizer">Frizer</option>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><button type="submit">Registriraj se</button></td>
-        </tr>
-    </table>
-</form>
+            </div>
 
-<p>Že imaš račun? <a href="/login">Prijavi se</a></p>
+            <div class="submit-wrap">
+                <button type="submit" class="gumb">Registriraj se</button>
+            </div>
+        </form>
+
+        <p class="auth-link">Že imaš račun? <a href="/login">Prijavi se</a></p>
+    </div>
+</div>
 
 <script>
     function onVlogaChange(vloga) {
@@ -62,7 +233,7 @@
             priimekInput.required = false;
         }
     }
-    // Set initial state
+    // Začetno stanje
     onVlogaChange(document.getElementById('vloga').value);
 </script>
 {% endblock %}

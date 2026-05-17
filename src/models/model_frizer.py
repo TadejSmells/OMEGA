@@ -2,11 +2,10 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-from models.models import Frizer, Salon, Storitev, Rezervacija, Stranka, SaloniInStoritve
+from models.models import Frizer, Salon, Storitev, Rezervacija, Stranka, SaloniInStoritve, KomentarFrizerja
 
 
 def get_frizer(frizer_id):
-    """Vrne podatke o enem frizerju po ID-ju."""
     session = db.get_session()
     try:
         frizer = session.query(Frizer).filter(Frizer.id_frizer == frizer_id).first()
@@ -23,7 +22,6 @@ def get_frizer(frizer_id):
 
 
 def get_salon_frizerja(frizer_id):
-    """Vrne salon, v katerem dela frizer."""
     session = db.get_session()
     try:
         rezultat = (
@@ -46,7 +44,6 @@ def get_salon_frizerja(frizer_id):
 
 
 def get_storitve_frizerja(frizer_id):
-    """Vrne seznam storitev, ki jih ponuja frizer (prek salona)."""
     session = db.get_session()
     try:
         frizer = session.query(Frizer).filter(Frizer.id_frizer == frizer_id).first()
@@ -73,7 +70,6 @@ def get_storitve_frizerja(frizer_id):
 
 
 def get_vsi_frizerji():
-    """Vrne seznam vseh frizerjev (za seznam/pregled)."""
     session = db.get_session()
     try:
         rows = (
@@ -97,7 +93,6 @@ def get_vsi_frizerji():
 
 
 def get_vsi_saloni():
-    """Vrne seznam vseh salonov — za dropdown pri dodajanju frizerja."""
     session = db.get_session()
     try:
         rows = session.query(Salon).order_by(Salon.ime).all()
@@ -107,20 +102,74 @@ def get_vsi_saloni():
 
 
 def dodaj_frizer(ime, kontakt, salon_id):
-    """
-    Doda novega frizerja v bazo.
-    Vrže ValueError če frizer s tem imenom že obstaja.
-    """
     db_session = db.get_session()
     try:
         obstoječ = db_session.query(Frizer).filter(Frizer.ime == ime).first()
         if obstoječ:
             raise ValueError(f"Frizer z imenom '{ime}' že obstaja.")
-
         db_session.add(Frizer(
             ime=ime,
             kontakt=kontakt or None,
             salon_id=salon_id or None
+        ))
+        db_session.commit()
+    except ValueError:
+        raise
+    except Exception:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()
+
+
+def get_komentarji_frizerja(frizer_id):
+    """Vrne vse komentarje za frizerja, najnovejši prvi."""
+    session = db.get_session()
+    try:
+        rows = (
+            session.query(KomentarFrizerja, Stranka)
+            .outerjoin(Stranka, KomentarFrizerja.id_stranke == Stranka.id_stranke)
+            .filter(KomentarFrizerja.id_frizerja == frizer_id)
+            .order_by(KomentarFrizerja.datum.desc())
+            .all()
+        )
+        return [
+            {
+                "id": k.id_komentar,
+                "ocena": k.ocena,
+                "komentar": k.komentar,
+                "datum": k.datum.strftime("%d. %m. %Y") if k.datum else "—",
+                "avtor": f"{s.ime} {s.priimek}" if s and s.ime else (s.priimek if s else "Anonimno")
+            }
+            for k, s in rows
+        ]
+    finally:
+        session.close()
+
+
+def dodaj_komentar_frizerja(frizer_id, stranka_id, ocena, komentar):
+    """
+    Doda komentar frizerju.
+    Vrže ValueError če ocena ni med 1 in 5.
+    """
+    try:
+        ocena = int(ocena)
+    except (TypeError, ValueError):
+        raise ValueError("Ocena mora biti celo število med 1 in 5.")
+
+    if not (1 <= ocena <= 5):
+        raise ValueError("Ocena mora biti med 1 in 5.")
+
+    if not komentar or not komentar.strip():
+        raise ValueError("Komentar ne sme biti prazen.")
+
+    db_session = db.get_session()
+    try:
+        db_session.add(KomentarFrizerja(
+            id_frizerja=frizer_id,
+            id_stranke=stranka_id,
+            ocena=ocena,
+            komentar=komentar.strip()
         ))
         db_session.commit()
     except ValueError:

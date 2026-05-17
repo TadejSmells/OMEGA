@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Moji priljubljeni saloni{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+    .page-header {
+        background: var(--beige); padding: 14px 32px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-header-title {
+        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
+        letter-spacing: 0.06em; color: var(--dark);
+    }
+    .vsebina { padding: 24px 32px; }
+    .cards-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+    }
+    .card {
+        background: var(--white); border: 1px solid var(--peach);
+        border-radius: 14px; padding: 20px 24px;
+        display: flex; flex-direction: column; gap: 8px;
+    }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-ime {
+        font-family: var(--font-head); font-size: 1rem;
+        color: var(--dark); margin: 0;
+    }
+    .fav-btn {
+        border: none; background: none; font-size: 22px;
+        cursor: pointer; color: var(--brown); line-height: 1;
+        padding: 0;
+    }
+    .fav-btn:hover { color: var(--rose); }
+    .oznaka {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+        color: var(--rose); text-transform: uppercase; margin-top: 4px;
+    }
+    .opis { font-size: 13px; color: #7A958F; }
+    .card-link {
+        display: inline-block; margin-top: 8px; font-size: 12px;
+        color: var(--brown); text-decoration: none; font-style: italic;
+    }
+    .card-link:hover { text-decoration: underline; }
+    .prazno {
+        text-align: center; padding: 80px 20px;
+        color: #aaa; font-style: italic; font-size: 14px;
+    }
+    .prazno a { color: var(--brown); text-decoration: none; }
+    .prazno a:hover { text-decoration: underline; }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">PRILJUBLJENI SALONI</div>
+    <a href="/saloni" style="color:var(--rose);font-size:13px;text-decoration:none;">← Vsi saloni</a>
+</div>
+
+<div class="vsebina">
+    {% if saloni %}
+    <div class="cards-grid">
+        {% for s in saloni %}
+        <div class="card">
+            <div class="card-top">
+                <h2 class="card-ime">{{ s[1] }}</h2>
+                <form action="/salon/{{ s[0] }}/favorite" method="POST">
+                    <button type="submit" class="fav-btn" title="Odstrani iz priljubljenih">★</button>
+                </form>
+            </div>
+            <div class="oznaka">Lokacija</div>
+            <div class="opis">{{ s[2] }}, {{ s[3] }}</div>
+            <div class="oznaka">Telefon</div>
+            <div class="opis">{{ s[4] or '—' }}</div>
+            <a href="/salon/{{ s[0] }}" class="card-link">Poglej salon →</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="prazno">
+        Nimaš še nobenih priljubljenih salonov.<br><br>
+        <a href="/saloni">Poišči salone →</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
