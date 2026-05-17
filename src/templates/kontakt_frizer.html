@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Kontaktiraj frizerja</h2>
+
+<form method="POST">
+
+    <label>Frizer:</label><br>
+    <select name="frizer_id" required>
+        {% for f in frizerji %}
+            <option value="{{ f.id_frizer }}">
+                {{ f.ime }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Sporočilo:</label><br>
+    <textarea name="vsebina" required></textarea>
+
+    <br><br>
+
+    <button type="submit">Pošlji</button>
+
+</form>
+
+{% endblock %}

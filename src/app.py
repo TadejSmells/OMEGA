@@ -283,9 +283,18 @@ def dodaj_frizer():
 def vsa_sporocila():
     return controllers.sporocila.vsa_sporocila()
 
-@f_app.route("/sporocilo/<int:id>")
+
+@f_app.route('/sporocila/kontakt', methods=['GET', 'POST'])
+def kontakt_frizer():
+    return controllers.sporocila.kontakt_frizer()
+
+@f_app.route('/sporocila')
+def inbox():
+    return controllers.sporocila.inbox()
+
+@f_app.route('/sporocilo/<int:id>')
 def sporocilo_detail(id):
-    return controllers.sporocila.podrobnosti_sporocila(id)
+    return controllers.sporocila.sporocilo_detail(id)
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
 #def "tvoja_pot"():
