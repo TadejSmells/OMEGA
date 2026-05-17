@@ -1,5 +1,5 @@
 from flask import render_template, session, redirect, flash
-from models import model_prikaz_priljubljenih_storitev
+from models import model_priljubljene_storitve
 
 
 def prikazi():
@@ -15,10 +15,10 @@ def prikazi():
         return redirect("/storitve")
 
     try:
-        podatki = model_prikaz_priljubljenih_storitev.get_priljubljene_storitve(
+        podatki = model_priljubljene_storitve.get_priljubljene_storitve(
             session["user_id"]
         )
-        priljubljeni_ids = model_prikaz_priljubljenih_storitev.get_priljubljene_ids(
+        priljubljeni_ids = model_priljubljene_storitve.get_priljubljene_ids(
             session["user_id"]
         )
     except Exception:
@@ -26,7 +26,7 @@ def prikazi():
         priljubljeni_ids = set()
 
     return render_template(
-        "prikaz_priljubljenih_storitev.html",
+        "priljubljene_storitve.html",
         podatki=podatki,
         priljubljeni_ids=priljubljeni_ids,
     )

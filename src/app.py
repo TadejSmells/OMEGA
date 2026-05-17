@@ -23,11 +23,22 @@ import controllers.blokade_controller
 import controllers.moje_rezervacije_controller
 import controllers.pirkaz_stranke
 import controllers.preklic_rezervacije_controller
+import controllers.sporocila
+import controllers.oznacevanje_priljubljenih_storitev
+import controllers.komentar_salona
+import controllers.priljubljeni_saloni
+import controllers.prosti_termini_controller
+import controllers.obvestila_frizer_controller
+import controllers.priljubljene_storitve
+
 
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
 f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
+f_app.jinja_env.globals['get_obvestila_frizer'] = (
+    controllers.obvestila_frizer_controller.obvestila_za_frizerja
+)
 
 # ── INDEX ─────────────────────────────────────────────────────────────────────
 @f_app.get('/')
@@ -48,7 +59,11 @@ def polni_db():
 #───────────────────────začetni routi, PUSTI PRI MIRU────────────────────────────
 
 
-# ─────────────────────────────────AUTH───────────────────────────────────────
+# ─────────────────────────────────SALON───────────────────────────────────────
+@f_app.route('/salon/<int:salon_id>/termini')
+def salon_termini_view(salon_id):
+    return controllers.prosti_termini_controller.prikazi_termine_za_salon(salon_id)
+
 @f_app.route('/salon/dodaj', methods=['GET', 'POST'])
 def salon_dodaj():
     return controllers.sv_salon.dodaj_osebe()
@@ -106,6 +121,34 @@ def salon_pregled():
 @f_app.route("/saloni_view")
 def saloni_view():
     return controllers.sv_salon.saloni_view()
+
+@f_app.route('/salon/<int:salon_id>/komentar', methods=['POST'])
+@login_required
+def salon_komentar(salon_id):
+    return controllers.komentar_salona.dodaj_komentar_salonu(salon_id)
+
+@f_app.route("/frizer/obvestilo/opusti/<int:id_sporocila>", methods=["POST"])
+@frizer_required
+def frizer_opusti_obvestilo(id_sporocila):
+    return controllers.obvestila_frizer_controller.opusti_obvestilo(id_sporocila)
+
+@f_app.route('/prosti_termini')
+def prosti_termini():
+    return controllers.sv_salon.prosti_termini()
+
+
+@f_app.route('/storitve/priljubljena/<int:id_storitve>', methods=['POST'])
+@login_required
+def priljubljena_storitev(id_storitve):
+    return controllers.oznacevanje_priljubljenih_storitev.toggle_priljubljeno(id_storitve)
+
+@f_app.route('/storitve/priljubljene')
+@login_required
+def moje_priljubljene_storitve():
+     return controllers.priljubljene_storitve.prikazi()
+
+
+
 
 # ── REZERVACIJE ───────────────────────────────────────────────────────────────
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
@@ -239,11 +282,27 @@ def seznam_frizerjev():
 def frizer_profil(frizer_id):
     return controllers.frizer_controller.frizer_profil(frizer_id)
 
+@f_app.route('/frizerji/dodaj', methods=['GET', 'POST'])
+@admin_required
+def dodaj_frizer():
+    return controllers.frizer_controller.dodaj_frizer()
+
+@f_app.route("/sporocila")
+def vsa_sporocila():
+    return controllers.sporocila.vsa_sporocila()
+
+@f_app.route("/sporocilo/<int:id>")
+def sporocilo_detail(id):
+    return controllers.sporocila.podrobnosti_sporocila(id)
+
 @f_app.route('/saloni/dodaj', methods=['GET', 'POST'])
 @admin_required
 def dodaj_salon():
     return controllers.salon_controller.dodaj_salon()
 
+@f_app.route('/salon/<int:salon_id>/favorite', methods=['POST'])
+def toggle_favorite(salon_id):
+    return controllers.priljubljeni_saloni.toggle_favorite(salon_id)
 
 # ── ROUTI ZA VAŠE FUNKCIJE, DODAJTE TUKAJ ────────────────────────────────────
 #@f_app.route('/"tvoja_pot"')
