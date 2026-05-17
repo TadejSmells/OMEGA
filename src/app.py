@@ -33,7 +33,7 @@ import controllers.storitve
 import controllers.sv_salon
 import controllers.sv_setup
 import controllers.uredi_rezervacijo
-
+import controllers.uredi_salon_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -138,6 +138,11 @@ def prosti_termini():
 @login_required
 def priljubljeni_saloni():
     return controllers.priljubljeni_saloni.prikazi()
+
+@f_app.route('/saloni/uredi/<int:salon_id>', methods=['GET', 'POST'])
+@admin_required
+def saloni_uredi(salon_id):
+    return controllers.uredi_salon_controller.uredi_salon(salon_id)
 
 # FRIZERJI 
 
