@@ -5,6 +5,7 @@ import db
 from models.models import Salon, Frizer, Stranka, Storitev, Urnik, Rezervacija, SaloniInStoritve
 
 # ── DB SETUP ──────────────────────────────────────────────────────────────────
+
 def setup_db():
     import psycopg2
     conn = psycopg2.connect(
@@ -43,6 +44,7 @@ def polni_db():
     cursor.close()
     conn.close()
     return True
+
 
 # ── GETTERS ───────────────────────────────────────────────────────────────────
 
@@ -91,6 +93,55 @@ def get_vse(tip):
         session.close()
 
 
+def get_saloni_s_storitvami():
+    """
+    Optimizirana poizvedba za seznam salonov — odpravlja N+1 problem.
+
+    Zakaj:
+        Brez te funkcije bi saloni_controller naredil 1 poizvedbo za salone
+        in nato 1 poizvedbo PER salon za storitve. Za 3 salone = 4 poizvedbe,
+        za 100 salonov = 101 poizvedb.
+        Ta funkcija naredi 2 poizvedbi skupaj ne glede na število salonov,
+        nato združi rezultate v Pythonu z defaultdict.
+
+    Vrne:
+        Seznam dict-ov: [{'salon': (id, ime, naslov, mesto, tel), 'storitve': [...]}, ...]
+    """
+    db_session = db.get_session()
+    try:
+        saloni = db_session.query(Salon).order_by(Salon.id).all()
+
+        storitve_rows = (
+            db_session.query(
+                SaloniInStoritve.salon_id,
+                Storitev.id_storitve,
+                Storitev.ime_storitve,
+                Storitev.cena,
+                Storitev.trajanje
+            )
+            .join(Storitev, SaloniInStoritve.storitev_id == Storitev.id_storitve)
+            .order_by(SaloniInStoritve.salon_id, Storitev.ime_storitve)
+            .all()
+        )
+
+        from collections import defaultdict
+        storitve_map = defaultdict(list)
+        for row in storitve_rows:
+            storitve_map[row.salon_id].append(
+                (row.id_storitve, row.ime_storitve, row.cena, row.trajanje)
+            )
+
+        return [
+            {
+                'salon': (s.id, s.ime, s.naslov, s.mesto, s.telefon),
+                'storitve': storitve_map[s.id]
+            }
+            for s in saloni
+        ]
+    finally:
+        db_session.close()
+
+
 def get_storitve_za_salon(salon_id):
     session = db.get_session()
     try:
@@ -104,6 +155,51 @@ def get_storitve_za_salon(salon_id):
         return [(r.id_storitve, r.ime_storitve, r.cena, r.trajanje) for r in rows]
     finally:
         session.close()
+
+
+def iskanje(query):
+    """
+    Išče salone, frizerje in storitve po delnem ujemanju brez upoštevanja velikosti črk.
+    Vrne dict z ključi: saloni, frizerji, storitve.
+    """
+    if not query or not query.strip():
+        return {'saloni': [], 'frizerji': [], 'storitve': []}
+
+    q = f"%{query.strip().lower()}%"
+    db_session = db.get_session()
+    try:
+        from sqlalchemy import func
+
+        saloni = (
+            db_session.query(Salon)
+            .filter(
+                func.lower(Salon.ime).like(q) |
+                func.lower(Salon.mesto).like(q) |
+                func.lower(Salon.naslov).like(q)
+            )
+            .order_by(Salon.ime).all()
+        )
+
+        frizerji = (
+            db_session.query(Frizer)
+            .filter(func.lower(Frizer.ime).like(q))
+            .order_by(Frizer.ime).all()
+        )
+
+        storitve = (
+            db_session.query(Storitev)
+            .filter(func.lower(Storitev.ime_storitve).like(q))
+            .order_by(Storitev.ime_storitve).all()
+        )
+
+        return {
+            'saloni':   [(s.id, s.ime, s.naslov, s.mesto) for s in saloni],
+            'frizerji': [(f.id_frizer, f.ime, f.kontakt) for f in frizerji],
+            'storitve': [(s.id_storitve, s.ime_storitve, s.cena) for s in storitve],
+        }
+    finally:
+        db_session.close()
+
 
 # ── INSERTS ───────────────────────────────────────────────────────────────────
 

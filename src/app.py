@@ -134,6 +134,11 @@ def dodaj_salon():
 def prosti_termini():
     return controllers.sv_salon.prosti_termini()
 
+@f_app.get('/priljubljeni_saloni')
+@login_required
+def priljubljeni_saloni():
+    return controllers.priljubljeni_saloni.prikazi()
+
 # FRIZERJI 
 
 @f_app.get('/frizerji')
@@ -312,6 +317,7 @@ def urnik():
 @f_app.route('/faq', methods=['GET', 'POST'])
 def faq():
     return controllers.faq.faq()
+
 
 # primer route
 # @f_app.route('/<vasa_pot>')
