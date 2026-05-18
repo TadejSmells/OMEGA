@@ -38,11 +38,11 @@ def frizer_panel():
                 rezervacije.append({
                     "id_rezervacije": r[0],
                     "stranka":        r[1] or "—",
-                    "storitev":       r[4] or "—",
+                    "storitev":       r[2] or "—",
                     "salon":          r[3] or "—",
-                    "datum":          str(r[5]) or "—",
-                    "ura":            str(r[6]) or "—",
-                    "status":         r[8] or "active",
+                    "datum":          str(r[4]) or "—",
+                    "ura":            str(r[5]) or "—",
+                    "status":         r[6] or "active",
                 })
         except:
             pass
@@ -66,12 +66,12 @@ def frizer_panel():
         "rezervacije_danes":  sum(1 for r in rezervacije if r["datum"] == danes_str),
         "prosti_termini":     "—",  # po potrebi povezi z urnik logiko
         "stranke_teden":      len(set(r["stranka"] for r in rezervacije if r["stranka"] != "—")),
-        "opravljene":         sum(1 for r in vse if r[8] == "active"),
+        "opravljene":         sum(1 for r in vse if r[6] == "active"),
     }
 
     zadnja_aktivnost = []
     for r in vse[:5]:
-        if r[8] == "cancelled":
+        if r[6] == "cancelled":
             tip = "Rezervacija preklicana"
             dot = "rose"
         else:

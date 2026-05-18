@@ -446,11 +446,11 @@
 
 <nav class="navbar">
     <a href="/">Domov</a>
-    <a href="/urnik" class="active">Urnik</a>
-    <a href="/vse_rezervacije">Rezervacije</a>
-    <a href="/cenik">Cenik</a>
-    <a href="/blokade">Blokade</a>
-    <a href="/sporocila">Sporočila</a>
+    <a href="/saloni" class="active">Saloni</a>
+    <a href="/frizerji">Frizerji</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/rezervacije">Termini</a>
+    <a href="/faq">Q &amp; A</a>
 </nav>
 
 <div class="frizer-page">
@@ -537,26 +537,26 @@
                     {% if rezervacije %}
                     {% for r in rezervacije %}
                     <tr>
-                        <td>{{ r.id_rezervacije }}</td>
-                        <td>{{ r.stranka or '—' }}</td>
-                        <td>{{ r.datum or '—' }} {{ r.ura | string | truncate(5, True, '') if r.ura else '' }}</td>
-                        <td>{{ r.storitev or '—' }}</td>
-                        <td>{{ r.salon or '—' }}</td>
+                        <td>{{ r['id_rezervacije'] }}</td>
+                        <td>{{ r['stranka'] or '—' }}</td>
+                        <td>{{ r['datum'] or '—' }} {{ r['ura'] | string | truncate(5, True, '') if r['ura'] else '' }}
+                        </td>
+                        <td>{{ r['storitev'] or '—' }}</td>
+                        <td>{{ r['salon'] or '—' }}</td>
                         <td>
-                            {% if r.status == 'cancelled' %}
+                            {% if r['status'] == 'cancelled' %}
                             <span class="badge badge-cancelled">Preklicana</span>
                             {% else %}
                             <span class="badge badge-active">Aktivna</span>
                             {% endif %}
                         </td>
                         <td>
-                            {% if r.status != 'cancelled' %}
-                            <form method="POST" action="/frizer/preklic/{{ r.id_rezervacije }}"
+                            {% if r['status'] != 'cancelled' %}
+                            <form method="POST" action="/frizer/preklic/{{ r['id_rezervacije'] }}"
                                 onsubmit="return confirm('Ali res želite preklicati to rezervacijo?');">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <button type="submit"
-                                    style="background: #c0392b; color: white; border: none;
-                                               padding: 3px 9px; cursor: pointer; border-radius: 4px; font-size: 11px;">
+                                <button type="submit" style="background: #c0392b; color: white; border: none;
+                   padding: 3px 9px; cursor: pointer; border-radius: 4px; font-size: 11px;">
                                     Prekliči
                                 </button>
                             </form>
