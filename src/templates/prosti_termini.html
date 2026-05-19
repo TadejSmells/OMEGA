@@ -1,32 +1,87 @@
 {% extends "base.html" %}
-
 {% block title %}Prosti termini{% endblock %}
 
 {% block content %}
+<div class="page-header">
+    <div class="page-header-title">PROSTI TERMINI</div>
 
-<h1>Pregled prostih terminov</h1>
+    <div class="header-right">
+        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
+        <a href="/login" class="user-avatar">&#128100;</a>
+    </div>
+</div>
 
-<table border="1" style="width:100%; border-collapse: collapse;">
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni">Saloni</a>
+    <a href="/cenik">Storitve</a>
 
-<tr>
-    <th>Frizer</th>
-    <th>Dan</th>
-    <th>Ura</th>
-</tr>
+    <div class="dropdown">
+        <a href="/rezervacije">Rezervacije</a>
+        <div class="dropdown-content">
+            <a href="/rezervacije">Nova rezervacija</a>
+            <a href="/vse_rezervacije">Vse rezervacije</a>
+            <a href="/zgodovina">Zgodovina</a>
+        </div>
+    </div>
 
-{% for u in urnik %}
-<tr>
-    <td>{{ u[0] }}</td>
-    <td>{{ u[1] }}</td>
-    <td>{{ u[2] }}</td>
-</tr>
+    <a href="/frizerji">Frizerji</a>
 
-{% else %}
-<tr>
-    <td colspan="3">Ni prostih terminov.</td>
-</tr>
-{% endfor %}
+    <div class="dropdown">
+        <a href="/prosti_termini" class="active">Termini</a>
+        <div class="dropdown-content">
+            <a href="/prosti_termini">Prosti termini</a>
+            <a href="/blokade">Blokirani termini</a>
+        </div>
+    </div>
+</nav>
 
-</table>
+<div class="admin-page">
+    <a href="/" class="back-btn">&#8617;</a>
 
+    <div class="table-box-center">
+        <h1>SEZNAM PROSTIH TERMINOV</h1>
+        <div class="form-line"></div>
+
+        <div class="table-scroll">
+            <table class="simple-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Frizer</th>
+                        <th>Datum</th>
+                        <th>Ura</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for u in urnik %}
+                        <tr>
+                            {% if u|length > 3 %}
+                                <td>{{ u[0] }}</td>
+                                <td>{{ u[1] }}</td>
+                                <td>{{ u[2] }}</td>
+                                <td>{{ u[3] }}</td>
+                            {% else %}
+                                <td>{{ loop.index }}</td>
+                                <td>{{ u[0] }}</td>
+                                <td>{{ u[1] }}</td>
+                                <td>{{ u[2] }}</td>
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">Ni prostih terminov.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="nav-footer">
+    <a href="/faq">FAQ</a>
+    <a href="/sporocila">Sporočila</a>
+</div>
 {% endblock %}
