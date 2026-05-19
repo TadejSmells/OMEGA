@@ -34,6 +34,7 @@ import controllers.sv_salon
 import controllers.sv_setup
 import controllers.uredi_rezervacijo
 import controllers.uredi_salon_controller
+import controllers.con_salon_detail
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -102,7 +103,7 @@ def salon_pregled():
 
 @f_app.get('/salon/<int:salon_id>')
 def salon_detail(salon_id):
-    return controllers.sv_salon.salon_detail(salon_id)
+    return controllers.con_salon_detail.salon_detail(salon_id)
 
 @f_app.get('/salon/<int:salon_id>/termini')
 def salon_termini_view(salon_id):

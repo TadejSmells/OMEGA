@@ -1,6 +1,42 @@
 from flask import render_template, request, redirect, abort, session
 from models import model_salon
- 
+from models import komentar_salona as ks_model  
+
+#ta bs v tej datoteki mora it kompletno vn, sam kaj ko je salon detail tle notr, komentarji so pa vezani na salon detail.......
+#todo: premakni v controller_salon_detail.py, da ta bs dela
+
+#salon_detail je premaknjena v con_salon_detail.py
+def salon_detail(salon_id):
+    try:
+        salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)
+    except Exception:
+        salon = None
+
+    if salon is None:
+        abort(404)
+
+    try:
+        storitve = model_salon.get_storitve_za_salon(salon_id)
+    except Exception:
+        storitve = []
+
+    try:
+        komentarji = ks_model.get_komentarji_salona(salon_id)  # ← dodaj
+    except Exception:
+        komentarji = []
+
+    povprecje = (
+        round(sum(k.ocena for k in komentarji) / len(komentarji), 1)
+        if komentarji else None
+    )
+
+    return render_template(
+        "salon.html",
+        salon=salon,
+        storitve=storitve,
+        komentarji=komentarji,   # ← zamenjaj ocene=[]
+        povprecje=povprecje,
+    )
  
  
 #tukaj se bodo funkcije odstranile
@@ -9,37 +45,6 @@ from models import model_salon
  
 def pregled():
     return redirect('/saloni')
-
-def salon_detail(salon_id):
-    try:
-        salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)
-    except Exception:
-        salon = None
- 
-    if salon is None:
-        abort(404)
- 
-    try:
-        storitve = model_salon.get_storitve_za_salon(salon_id)
-    except Exception:
-        storitve = []
- 
-    return render_template(
-        "salon.html",
-        salon=salon,
-        storitve=storitve,
-        ocene=[]
-    )
- 
-def storitve():
-    if request.method == 'POST':
-        model_salon.dodaj_storitev(
-            request.form.get('ime_storitve'),
-            request.form.get('cena'),
-            request.form.get('trajanje')
-        )
-        return redirect('/storitve')
-    return render_template("storitve.html", storitve=model_salon.get_vse('storitev'))
 
 
  
