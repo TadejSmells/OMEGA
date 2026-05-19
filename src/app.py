@@ -14,7 +14,7 @@ import controllers.blokade_controller
 import controllers.faq
 import controllers.frizer_controller
 import controllers.index
-import controllers.komentar_salona
+import controllers.con_komentar_salona
 import controllers.kontakt_stranka_controller
 import controllers.moje_rezervacije_controller
 import controllers.obvestila_frizer_controller
@@ -111,7 +111,7 @@ def salon_termini_view(salon_id):
 @f_app.post('/salon/<int:salon_id>/komentar')
 @login_required
 def salon_komentar(salon_id):
-    return controllers.komentar_salona.dodaj_komentar_salonu(salon_id)
+    return controllers.con_komentar_salona.dodaj_komentar_salonu(salon_id)
 
 @f_app.post('/salon/<int:salon_id>/favorite')
 def toggle_favorite(salon_id):
