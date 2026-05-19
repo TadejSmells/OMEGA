@@ -1,7 +1,11 @@
 from flask import render_template, request, redirect, abort, session
 from models import model_salon
-from models import komentar_salona as ks_model  # ← dodaj
+from models import komentar_salona as ks_model  
 
+#ta bs v tej datoteki mora it kompletno vn, sam kaj ko je salon detail tle notr, komentarji so pa vezani na salon detail.......
+#todo: premakni v controller_salon_detail.py, da ta bs dela
+
+#salon_detail je premaknjena v con_salon_detail.py
 def salon_detail(salon_id):
     try:
         salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)
