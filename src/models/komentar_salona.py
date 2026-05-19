@@ -44,3 +44,24 @@ def dodaj_komentar(salon_id, id_stranke, ocena, komentar):
         raise
     finally:
         session.close()
+
+def get_komentarji_salona(salon_id):
+    """Vrne seznam komentarjev za salon, z imenom stranke."""
+    session = db.get_session()
+    try:
+        rows = (
+            session.query(
+                KomentarSalona.ocena,
+                KomentarSalona.komentar,
+                KomentarSalona.datum,
+                Stranka.ime,
+                Stranka.priimek,
+            )
+            .join(Stranka, KomentarSalona.id_stranke == Stranka.id_stranke)
+            .filter(KomentarSalona.id_salona == salon_id)
+            .order_by(KomentarSalona.datum.desc())
+            .all()
+        )
+        return rows
+    finally:
+        session.close()

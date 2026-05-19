@@ -323,6 +323,69 @@
             max-width: 280px;
         }
     }
+
+    .komentar-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
+        max-width: 420px;
+    }
+
+    .komentar-form textarea {
+        border: 1px solid #D9B99F;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-family: inherit;
+        font-size: 13px;
+        resize: vertical;
+        color: #292421;
+        background: #FFFFFF;
+        outline: none;
+    }
+
+    .komentar-form textarea:focus {
+        border-color: #A75F37;
+    }
+
+    .gumb-komentar {
+        background: #A75F37;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 18px;
+        font-size: 13px;
+        cursor: pointer;
+        align-self: flex-start;
+    }
+
+    .gumb-komentar:hover {
+        background: #CA8E82;
+    }
+
+    .zvezdice-input {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+
+    .zvezdice-input input {
+        display: none;
+    }
+
+    .zvezdice-input label {
+        cursor: pointer;
+        font-size: 26px;
+        color: #D9B99F;
+        transition: color 0.15s;
+    }
+
+    .zvezdice-input input:checked~label,
+    .zvezdice-input label:hover,
+    .zvezdice-input label:hover~label {
+        color: #A75F37;
+    }
 </style>
 
 <div class="page-header">
@@ -334,26 +397,24 @@
 </div>
 
 {% if session.get('user_id') %}
-    {# ── NAVBAR ZA PRIJAVLJENE ── #}
-    <nav class="navbar">
-        <a href="/">Domov</a>
-        <a href="/saloni" class="active">Saloni</a>
-        <a href="/frizerji">Frizerji</a>
-        <a href="/storitve">Storitve</a>
-        <a href="/rezervacije">Termini</a>
-        <a href="/faq">O &amp; A</a>
-    </nav>
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni" class="active">Saloni</a>
+    <a href="/frizerji">Frizerji</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/rezervacije">Termini</a>
+    <a href="/faq">O &amp; A</a>
+</nav>
 {% else %}
-    {# ── NAVBAR ZA GOSTA ── #}
-    <nav class="navbar">
-        <a href="/">Domov</a>
-        <a href="/saloni" class="active">Saloni</a>
-        <a href="/frizerji">Frizerji</a>
-        <a href="/storitve">Storitve</a>
-        <a href="/salon/{{ salon[0] }}/termini">Prosti termini</a>
-        <a href="/faq">Q &amp; A</a>
-        <a href="/login">Prijava</a>
-    </nav>
+<nav class="navbar">
+    <a href="/">Domov</a>
+    <a href="/saloni" class="active">Saloni</a>
+    <a href="/frizerji">Frizerji</a>
+    <a href="/storitve">Storitve</a>
+    <a href="/salon/{{ salon[0] }}/termini">Prosti termini</a>
+    <a href="/faq">Q &amp; A</a>
+    <a href="/login">Prijava</a>
+</nav>
 {% endif %}
 
 <div class="salon-page">
@@ -362,6 +423,8 @@
     </div>
 
     <div class="vsebina">
+
+        <!-- LEFT COLUMN -->
         <div class="salon-levo">
             <div class="salon-slika"></div>
 
@@ -369,7 +432,7 @@
                 <h2>
                     {{ salon[1] }}
                     {% if session.get('role') == 'admin' %}
-                        <a href="/saloni/uredi/{{ salon[0] }}" class="edit-icon" title="Uredi salon">&#9998;</a>
+                    <a href="/saloni/uredi/{{ salon[0] }}" class="edit-icon" title="Uredi salon">&#9998;</a>
                     {% endif %}
                 </h2>
 
@@ -391,56 +454,64 @@
                     eu tempor nisl rhoncus. Morbi nec aliquam mi. Sed ut sem a arcu consequat euismod.
                 </div>
 
-                {# ── OBRAZEC ZA KOMENTAR — samo prijavljena stranka ── #}
                 {% if session.get('role') == 'stranka' %}
-                <div class="oznaka">
+                <div class="oznaka" style="margin-top:24px;">
                     <strong>Oddaj komentar</strong>
-                    <form method="POST" action="/salon/{{ salon[0] }}/komentar">
-                        <div>
-                            Ocena:
-                            {% for i in range(1, 6) %}
-                            <label>
-                                <input type="radio" name="ocena" value="{{ i }}" required>
-                                {{ i }}
-                            </label>
+                    <form method="POST" action="/salon/{{ salon[0] }}/komentar" class="komentar-form">
+                        <div class="zvezdice-input">
+                            {% for i in range(5, 0, -1) %}
+                            <input type="radio" id="oc{{ i }}" name="ocena" value="{{ i }}" required>
+                            <label for="oc{{ i }}" title="{{ i }} zvezdic">&#9733;</label>
                             {% endfor %}
                         </div>
-                        <div>
-                            <textarea name="komentar" placeholder="Tvoj komentar (neobvezno)…" rows="3"
-                                maxlength="2000"></textarea>
-                        </div>
-                        <button type="submit">Objavi</button>
+                        <textarea name="komentar" placeholder="Tvoj komentar (neobvezno)…" rows="3"
+                            maxlength="2000"></textarea>
+                        <button type="submit" class="gumb-komentar">Objavi</button>
                     </form>
                 </div>
                 {% endif %}
 
                 <a href="/salon/rezerviraj" class="gumb">Naroči se</a>
-            </div>
-        </div>
+            </div> <!-- /salon-info -->
+        </div> <!-- /salon-levo -->
 
+        <!-- RIGHT COLUMN -->
         <div class="salon-desno">
             <div class="ratings-header">
                 <h3>RATINGS</h3>
-                <span class="ratings-score">4.7 / 5</span>
+                <span class="ratings-score">
+                    {% if povprecje %}
+                    {{ povprecje }} / 5
+                    {% else %}
+                    Ni ocen
+                    {% endif %}
+                </span>
             </div>
 
-            {% for i in range(3) %}
+            {% if komentarji %}
+            {% for k in komentarji %}
             <div class="review-card">
                 <div class="review-avatar">&#128100;</div>
                 <div class="review-content">
-                    <div class="review-username">USERNAME1</div>
-                    <div class="review-date">22.4.2025</div>
-                    <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                    <div class="review-text">
-                        Mauris nisl mauris, ultrices eget mauris vitae,
-                        pellentesque porta nisl. Nam ut mollis risus.
+                    <div class="review-username">{{ k.ime }} {{ k.priimek }}</div>
+                    <div class="review-date">{{ k.datum.strftime('%d.%m.%Y') }}</div>
+                    <div class="review-stars">
+                        {% for _ in range(k.ocena) %}&#9733;{% endfor %}
+                        {% for _ in range(5 - k.ocena) %}&#9734;{% endfor %}
                     </div>
+                    {% if k.komentar %}
+                    <div class="review-text">{{ k.komentar }}</div>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
-        </div>
-    </div>
-</div>
+            {% else %}
+            <p style="color:#7A958F; font-size:14px;">Ta salon še nima komentarjev.</p>
+            {% endif %}
+        </div> <!-- /salon-desno -->
+
+    </div> <!-- /vsebina -->
+</div> <!-- /salon-page -->
 
 <div class="nav-footer">
     <a href="/faq">News</a>

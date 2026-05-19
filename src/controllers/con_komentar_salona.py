@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, abort, session, flash
 from models import komentar_salona
-
+from models import komentar_salona as ks_model
 
 def dodaj_komentar_salonu(salon_id):
     """POST handler — samo prijavljene stranke."""
