@@ -36,30 +36,8 @@
     </div>
 </div>
 
-<nav class="navbar">
-    <a href="/" class="active">Domov</a>
-    <a href="/saloni">Saloni</a>
-    <a href="/cenik">Storitve</a>
-
-    <div class="dropdown">
-        <a href="/rezervacije">Rezervacije</a>
-        <div class="dropdown-content">
-            <a href="/rezervacije">Nova rezervacija</a>
-            <a href="/vse_rezervacije">Vse rezervacije</a>
-            <a href="/zgodovina">Zgodovina</a>
-        </div>
-    </div>
-
-    <a href="/frizerji">Frizerji</a>
-
-    <div class="dropdown">
-        <a href="/prosti_termini">Termini</a>
-        <div class="dropdown-content">
-            <a href="/prosti_termini">Prosti termini</a>
-            <a href="/blokade">Blokirani termini</a>
-        </div>
-    </div>
-</nav>
+<!--    Povsod se zdej namest navbar da tole pa isto za footer    -->
+{% include 'partials/navbar.html' %}
 
 <div class="vsebina">
     <div class="vsebina-levo">
@@ -99,10 +77,7 @@
     <div class="vsebina-desno"></div>
 </div>
 
-<div class="nav-footer">
-    <a href="/faq">FAQ</a>
-    <a href="/sporocila">Sporočila</a>
-</div>
+{% include 'partials/footer.html' %}
 
 <script>
 function zapriPopup() {
