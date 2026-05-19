@@ -288,23 +288,6 @@
     }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">VSE REZERVACIJE</div>
-
-    <div class="header-right">
-        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije" class="active">Termini</a>
-    <a href="/faq">O &amp; A</a>
-</nav>
-
 <div class="rezervacije-page">
     <a href="/rezervacije" class="back-btn">&#8617;</a>
 
@@ -393,9 +376,4 @@
     </div>
 </div>
 
-<div class="nav-footer">
-    <a href="/faq">Novice</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
-</div>
 {% endblock %}

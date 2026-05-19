@@ -2,39 +2,6 @@
 {% block title %}Prosti termini{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div class="page-header-title">PROSTI TERMINI</div>
-
-    <div class="header-right">
-        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
-        <a href="/login" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni">Saloni</a>
-    <a href="/cenik">Storitve</a>
-
-    <div class="dropdown">
-        <a href="/rezervacije">Rezervacije</a>
-        <div class="dropdown-content">
-            <a href="/rezervacije">Nova rezervacija</a>
-            <a href="/vse_rezervacije">Vse rezervacije</a>
-            <a href="/zgodovina">Zgodovina</a>
-        </div>
-    </div>
-
-    <a href="/frizerji">Frizerji</a>
-
-    <div class="dropdown">
-        <a href="/prosti_termini" class="active">Termini</a>
-        <div class="dropdown-content">
-            <a href="/prosti_termini">Prosti termini</a>
-            <a href="/blokade">Blokirani termini</a>
-        </div>
-    </div>
-</nav>
 
 <div class="admin-page">
     <a href="/" class="back-btn">&#8617;</a>
@@ -80,8 +47,4 @@
     </div>
 </div>
 
-<div class="nav-footer">
-    <a href="/faq">FAQ</a>
-    <a href="/sporocila">Sporočila</a>
-</div>
 {% endblock %}

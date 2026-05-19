@@ -89,22 +89,6 @@
     .nav-footer a:hover { text-decoration: underline; }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">UREDI SALON</div>
-    <div class="header-right">
-        <span class="header-username">{{ session.get("username") or "Ime priimek" }}</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni" class="active">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije">Termini</a>
-    <a href="/faq">O &amp; A</a>
-</nav>
-
 <div class="vsebina">
     <div class="form-panel">
         <div class="form-panel-header">Urejanje: {{ salon.ime }}</div>
@@ -149,9 +133,4 @@
     </div>
 </div>
 
-<div class="nav-footer">
-    <a href="/faq">News</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
-</div>
 {% endblock %}

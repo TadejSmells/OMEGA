@@ -249,23 +249,6 @@
     }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">MOJE PRILJUBLJENE STORITVE</div>
-    <div class="header-right">
-        <span class="header-username">{{ session.get("username") or "Ime priimek" }}</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/storitve/priljubljene" class="active">&#10084; Priljubljene</a>
-    <a href="/rezervacije">Termini</a>
-    <a href="/faq">Q &amp; A</a>
-</nav>
-
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class="flash-area">
@@ -328,12 +311,6 @@
             </div>
         {% endif %}
     </div>
-</div>
-
-<div class="nav-footer">
-    <a href="/faq">News</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
 </div>
 
 <script>

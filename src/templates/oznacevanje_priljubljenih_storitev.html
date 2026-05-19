@@ -319,7 +319,7 @@
         }
     }
 </style>
-
+<!--
 <div class="page-header">
     <div class="page-header-title">
         {% if samo_priljubljene %}MOJE PRILJUBLJENE STORITVE{% else %}SEZNAM STORITEV{% endif %}
@@ -340,6 +340,8 @@
     <a href="/rezervacije">Termini</a>
     <a href="/faq">O &amp; A</a>
 </nav>
+
+-->
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -429,12 +431,6 @@
 
         <button class="arrow-btn" onclick="nextPage()">&#8594;</button>
     </div>
-</div>
-
-<div class="nav-footer">
-    <a href="/faq">News</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
 </div>
 
 <script>

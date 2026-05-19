@@ -436,23 +436,6 @@
     }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">Frizer Panel</div>
-    <div class="header-right">
-        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni" class="active">Saloni</a>
-    <a href="/frizerji">Frizerji</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije">Termini</a>
-    <a href="/faq">Q &amp; A</a>
-</nav>
-
 <div class="frizer-page">
 
     {% set obvestila = get_obvestila_frizer() %}

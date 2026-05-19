@@ -56,21 +56,6 @@
     .empty { text-align: center; color: #aaa; padding: 48px; font-size: 14px; }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">MOJE REZERVACIJE</div>
-    <div class="header-right">
-        <span class="header-username">{{ session.get('username', '') }}</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/moje_rezervacije" class="active">Moje rezervacije</a>
-    <a href="/faq">Q &amp; A</a>
-</nav>
-
 <div class="flash-wrap">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
