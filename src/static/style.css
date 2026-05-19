@@ -356,3 +356,187 @@ main {
     text-transform: uppercase;
     font-weight: 500;
 }
+.faq-page,
+.zgodovina-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: #F2E7DD;
+    position: relative;
+    padding: 28px 44px 34px;
+}
+
+.faq-content {
+    display: flex;
+    gap: 64px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding-top: 18px;
+}
+
+.faq-left {
+    flex: 1;
+    padding-right: 54px;
+    border-right: 2px solid #A75F37;
+}
+
+.faq-right {
+    flex: 1.15;
+}
+
+.faq-page h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.55rem;
+    color: #111111;
+    margin-bottom: 34px;
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+.vprasanje,
+.odgovor {
+    width: fit-content;
+    max-width: 430px;
+    background: #FFFFFF;
+    border: 1px solid #A75F37;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #111111;
+}
+
+.vprasanje {
+    margin-bottom: 8px;
+}
+
+.odgovor {
+    margin-left: 58px;
+    margin-bottom: 16px;
+}
+
+.faq-right p {
+    font-size: 14px;
+    color: #111111;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    max-width: 560px;
+}
+
+.polje {
+    margin-bottom: 14px;
+}
+
+.polje label {
+    display: block;
+    font-size: 14px;
+    color: #111111;
+    margin-bottom: 6px;
+}
+
+.polje select {
+    width: 260px;
+    border: 1px solid #A75F37;
+    border-radius: 10px;
+    background: #FFFFFF;
+    padding: 7px 10px;
+    font-size: 14px;
+    outline: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.polje textarea {
+    width: 560px;
+    max-width: 100%;
+    height: 150px;
+    border: 1px solid #A75F37;
+    border-radius: 8px;
+    background: #FFFFFF;
+    padding: 10px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+    resize: vertical;
+}
+
+.check-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    color: #CA8E82;
+    font-size: 14px;
+}
+
+.check-line input {
+    width: 22px;
+    height: 22px;
+}
+
+.gumb {
+    background: transparent;
+    border: none;
+    color: #CA8E82;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.opomba {
+    font-size: 12px;
+    color: #111111;
+    margin-top: 16px;
+}
+
+.table-box {
+    width: 760px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-top: 24px;
+}
+
+.table-box h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.65rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.line {
+    width: 100%;
+    height: 2px;
+    background: #A75F37;
+    margin-bottom: 24px;
+}
+
+.table-wrap {
+    max-height: 260px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #FFFFFF;
+    border: 1px solid #CA8E82;
+    font-size: 13px;
+}
+
+.table-wrap th,
+.table-wrap td {
+    border: 1px solid #D9B99F;
+    padding: 13px 16px;
+    text-align: center;
+}
+
+.table-wrap th {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.empty {
+    padding: 18px;
+    text-align: center;
+    color: #7A958F;
+    font-style: italic;
+}

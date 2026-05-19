@@ -2,292 +2,38 @@
 {% block title %}Pogosto postavljena vprašanja{% endblock %}
 
 {% block content %}
-<style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #F2E7DD;
-        color: #292421;
-    }
-
-    main {
-        min-height: calc(100vh - 140px);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .page-header {
-        background: #D9B99F;
-        padding: 12px 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .page-header-title {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 2rem;
-        font-weight: 700;
-        color: #292421;
-        letter-spacing: 0.02em;
-    }
-
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .header-username {
-        font-size: 13px;
-        color: #292421;
-    }
-
-    .user-avatar {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        font-size: 22px;
-        color: #D9B99F;
-    }
-
-    .navbar {
-        background: #A75F37;
-        display: flex;
-    }
-
-    .navbar a {
-        font-size: 13px;
-        color: #FFFFFF;
-        text-decoration: none;
-        padding: 10px 28px;
-        display: block;
-        font-weight: 600;
-    }
-
-    .navbar a.active {
-        background: rgba(0,0,0,0.2);
-    }
-
-    .navbar a:hover {
-        background: rgba(0,0,0,0.15);
-    }
-
-    .faq-page {
-        flex: 1;
-        min-height: calc(100vh - 310px);
-        background: #F2E7DD;
-        position: relative;
-        padding: 34px 54px 38px;
-    }
-
-    .back-btn {
-        position: absolute;
-        top: 18px;
-        right: 34px;
-        color: #CA8E82;
-        font-size: 28px;
-        text-decoration: none;
-    }
-
-    .faq-content {
-        display: flex;
-        gap: 64px;
-        max-width: 1250px;
-        margin: 0 auto;
-        padding-top: 18px;
-    }
-
-    .faq-left {
-        flex: 1;
-        padding-right: 54px;
-        border-right: 2px solid #A75F37;
-    }
-
-    .faq-right {
-        flex: 1.15;
-    }
-
-    h2 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.55rem;
-        color: #111111;
-        margin-bottom: 34px;
-        line-height: 1.05;
-        text-transform: uppercase;
-    }
-
-    .vprasanje {
-        width: fit-content;
-        max-width: 560px;
-        background: #FFFFFF;
-        border: 1px solid #A75F37;
-        border-radius: 10px;
-        padding: 10px 20px;
-        font-size: 14px;
-        margin-bottom: 8px;
-        color: #111111;
-    }
-
-    .odgovor {
-        width: fit-content;
-        max-width: 560px;
-        background: #FFFFFF;
-        border: 1px solid #A75F37;
-        border-radius: 10px;
-        padding: 10px 20px;
-        font-size: 14px;
-        color: #111111;
-        margin-left: 58px;
-        margin-bottom: 16px;
-    }
-
-    .faq-right p {
-        font-size: 14px;
-        color: #111111;
-        line-height: 1.5;
-        margin-bottom: 18px;
-        max-width: 560px;
-    }
-
-    .polje {
-        margin-bottom: 14px;
-    }
-
-    .polje label {
-        display: block;
-        font-size: 14px;
-        color: #111111;
-        margin-bottom: 6px;
-    }
-
-    .polje select {
-        width: 260px;
-        border: 1px solid #A75F37;
-        border-radius: 10px;
-        background: #FFFFFF;
-        padding: 7px 10px;
-        font-size: 14px;
-        outline: none;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .polje textarea {
-        width: 560px;
-        max-width: 100%;
-        height: 150px;
-        border: 1px solid #A75F37;
-        border-radius: 8px;
-        background: #FFFFFF;
-        padding: 10px;
-        font-size: 14px;
-        font-family: Arial, Helvetica, sans-serif;
-        outline: none;
-        resize: vertical;
-    }
-
-    .check-line {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 6px;
-        color: #CA8E82;
-        font-size: 14px;
-    }
-
-    .check-line input {
-        width: 22px;
-        height: 22px;
-        appearance: none;
-        border: 1px solid #D9B99F;
-        border-radius: 4px;
-        background: #F2E7DD;
-    }
-
-    .gumb {
-        background: transparent;
-        border: none;
-        color: #CA8E82;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .opomba {
-        font-size: 11px;
-        color: #111111;
-        margin-top: 16px;
-    }
-
-    .nav-footer {
-        background: #D9B99F;
-        padding: 7px 60px;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .nav-footer a {
-        font-size: 13px;
-        color: #292421;
-        text-decoration: none;
-        font-style: italic;
-    }
-
-    .nav-footer a:hover {
-        text-decoration: underline;
-    }
-
-    @media (max-width: 900px) {
-        .page-header {
-            padding: 12px 18px;
-        }
-
-        .page-header-title {
-            font-size: 1.4rem;
-        }
-
-        .navbar a {
-            padding: 10px 14px;
-            font-size: 14px;
-        }
-
-        .faq-page {
-            padding: 24px 18px;
-        }
-
-        .faq-content {
-            flex-direction: column;
-        }
-
-        .faq-left {
-            border-right: none;
-            border-bottom: 2px solid #A75F37;
-            padding-right: 0;
-            padding-bottom: 24px;
-        }
-    }
-</style>
-
 <div class="page-header">
     <div class="page-header-title">POGOSTO POSTAVLJENA VPRAŠANJA</div>
+
     <div class="header-right">
-        <span class="header-username">Ime priimek</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
+        <span class="header-username">{{ session.get('username', 'Uporabnik') }}</span>
+        <a href="/login" class="user-avatar">&#128100;</a>
     </div>
 </div>
 
 <nav class="navbar">
     <a href="/">Domov</a>
     <a href="/saloni">Saloni</a>
+    <a href="/cenik">Storitve</a>
+
+    <div class="dropdown">
+        <a href="/rezervacije">Rezervacije</a>
+        <div class="dropdown-content">
+            <a href="/rezervacije">Nova rezervacija</a>
+            <a href="/vse_rezervacije">Vse rezervacije</a>
+            <a href="/zgodovina">Zgodovina</a>
+        </div>
+    </div>
+
     <a href="/frizerji">Frizerji</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije">Termini</a>
-    <a href="/faq" class="active">Q &amp; A</a>
+
+    <div class="dropdown">
+        <a href="/prosti_termini">Termini</a>
+        <div class="dropdown-content">
+            <a href="/prosti_termini">Prosti termini</a>
+            <a href="/blokade">Blokirani termini</a>
+        </div>
+    </div>
 </nav>
 
 <div class="faq-page">
@@ -302,7 +48,7 @@
                 <div class="odgovor">{{ f.odgovor }}</div>
             {% else %}
                 <div class="vprasanje">Kako se lahko registriram?</div>
-                <div class="odgovor">Za registracijo kliknite na sliko profila.</div>
+                <div class="odgovor">Za registracijo kliknite na ikono uporabnika.</div>
 
                 <div class="vprasanje">Ali lahko prekličem rezervacijo?</div>
                 <div class="odgovor">Da, za preklic rezervacije pojdite na Termini.</div>
@@ -319,6 +65,7 @@
             <form method="POST" action="/faq">
                 <div class="polje">
                     <label>S čim imate težavo?</label>
+
                     <select name="tezava" required>
                         <option value="" disabled selected>- izberite -</option>
                         <option>Prijava</option>
@@ -349,8 +96,7 @@
 </div>
 
 <div class="nav-footer">
-    <a href="/faq">News</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
+    <a href="/faq">FAQ</a>
+    <a href="/sporocila">Sporočila</a>
 </div>
 {% endblock %}

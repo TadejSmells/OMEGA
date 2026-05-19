@@ -2,157 +2,38 @@
 {% block title %}Zgodovina rezervacij{% endblock %}
 
 {% block content %}
-<style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body { font-family: Arial, Helvetica, sans-serif; background: #F2E7DD; color: #292421; }
-    main { min-height: calc(100vh - 140px); display: flex; flex-direction: column; }
-
-    .page-header {
-        background: #D9B99F;
-        padding: 12px 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .page-header-title {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 2rem;
-        font-weight: 700;
-    }
-
-    .header-right { display: flex; align-items: center; gap: 20px; }
-    .header-username {
-        font-size: 13px;
-        background: rgba(255,255,255,0.7);
-        padding: 7px 18px;
-        border-radius: 20px;
-    }
-
-    .user-avatar {
-        width: 44px; height: 44px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.7);
-        display: flex; align-items: center; justify-content: center;
-        text-decoration: none;
-        font-size: 22px;
-        color: #D9B99F;
-    }
-
-    .navbar { background: #A75F37; display: flex; }
-    .navbar a {
-        font-size: 13px;
-        color: #FFFFFF;
-        text-decoration: none;
-        padding: 10px 28px;
-        display: block;
-        font-weight: 600;
-    }
-
-    .navbar a.active { background: rgba(0,0,0,0.2); }
-
-    .zgodovina-page {
-        flex: 1;
-        min-height: calc(100vh - 310px);
-        background: #F2E7DD;
-        padding: 36px 32px 40px;
-        position: relative;
-    }
-
-    .back-btn {
-        position: absolute;
-        top: 18px;
-        right: 34px;
-        color: #CA8E82;
-        font-size: 28px;
-        text-decoration: none;
-    }
-
-    .table-box {
-        width: 760px;
-        max-width: 100%;
-        margin: 0 auto;
-        padding-top: 24px;
-    }
-
-    h1 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.65rem;
-        text-align: center;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-    }
-
-    .line {
-        width: 100%;
-        height: 2px;
-        background: #A75F37;
-        margin-bottom: 24px;
-    }
-
-    .table-wrap {
-        max-height: 260px;
-        overflow-y: auto;
-        border-radius: 10px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background: #FFFFFF;
-        border: 1px solid #CA8E82;
-        font-size: 13px;
-    }
-
-    th, td {
-        border: 1px solid #D9B99F;
-        padding: 13px 16px;
-        text-align: center;
-    }
-
-    th {
-        text-transform: uppercase;
-        font-size: 12px;
-        font-weight: 500;
-    }
-
-    .empty {
-        padding: 18px;
-        text-align: center;
-        color: #7A958F;
-        font-style: italic;
-    }
-
-    .nav-footer {
-        background: #D9B99F;
-        padding: 7px 60px;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .nav-footer a {
-        font-size: 13px;
-        color: #292421;
-        text-decoration: none;
-        font-style: italic;
-    }
-</style>
-
 <div class="page-header">
     <div class="page-header-title">ZGODOVINA REZERVACIJ</div>
+
     <div class="header-right">
-        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
+        <span class="header-username">{{ session.get('username', 'Uporabnik') }}</span>
+        <a href="/login" class="user-avatar">&#128100;</a>
     </div>
 </div>
 
 <nav class="navbar">
     <a href="/">Domov</a>
     <a href="/saloni">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije" class="active">Termini</a>
-    <a href="/faq">O &amp; A</a>
+    <a href="/cenik">Storitve</a>
+
+    <div class="dropdown">
+        <a href="/rezervacije" class="active">Rezervacije</a>
+        <div class="dropdown-content">
+            <a href="/rezervacije">Nova rezervacija</a>
+            <a href="/vse_rezervacije">Vse rezervacije</a>
+            <a href="/zgodovina">Zgodovina</a>
+        </div>
+    </div>
+
+    <a href="/frizerji">Frizerji</a>
+
+    <div class="dropdown">
+        <a href="/prosti_termini">Termini</a>
+        <div class="dropdown-content">
+            <a href="/prosti_termini">Prosti termini</a>
+            <a href="/blokade">Blokirani termini</a>
+        </div>
+    </div>
 </nav>
 
 <div class="zgodovina-page">
@@ -195,8 +76,7 @@
 </div>
 
 <div class="nav-footer">
-    <a href="/faq">Novice</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
+    <a href="/faq">FAQ</a>
+    <a href="/sporocila">Sporočila</a>
 </div>
 {% endblock %}
