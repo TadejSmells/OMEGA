@@ -396,27 +396,6 @@
     </div>
 </div>
 
-{% if session.get('user_id') %}
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni" class="active">Saloni</a>
-    <a href="/frizerji">Frizerji</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/rezervacije">Termini</a>
-    <a href="/faq">O &amp; A</a>
-</nav>
-{% else %}
-<nav class="navbar">
-    <a href="/">Domov</a>
-    <a href="/saloni" class="active">Saloni</a>
-    <a href="/frizerji">Frizerji</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/salon/{{ salon[0] }}/termini">Prosti termini</a>
-    <a href="/faq">Q &amp; A</a>
-    <a href="/login">Prijava</a>
-</nav>
-{% endif %}
-
 <div class="salon-page">
     <div class="back-wrap">
         <a href="/saloni" class="back-btn">&#8617;</a>
@@ -513,9 +492,4 @@
     </div> <!-- /vsebina -->
 </div> <!-- /salon-page -->
 
-<div class="nav-footer">
-    <a href="/faq">News</a>
-    <a href="/rezervacije">Vaši termini</a>
-    <a href="/saloni">Informacije</a>
-</div>
 {% endblock %}

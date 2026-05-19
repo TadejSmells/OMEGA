@@ -1,0 +1,27 @@
+<div class="topbar">
+    <div class="topbar-logo">
+        {% if request.path == '/' %}
+            HAIRSCULTURES
+        {% elif request.path == '/saloni' %}
+            SEZNAM SALONOV
+        {% elif request.path == '/cenik' %}
+            SEZNAM STORITEV
+        {% elif request.path.startswith('/rezervacije') or request.path == '/vse_rezervacije' or request.path == '/zgodovina' %}
+            REZERVACIJE
+        {% elif request.path == '/frizerji' %}
+            FRIZERJI
+        {% elif request.path == '/prosti_termini' or request.path == '/blokade' %}
+            PROSTI TERMINI
+        {% else %}
+            HAIRSCULTURES
+        {% endif %}
+    </div>
+
+    <div class="topbar-right">
+        <div class="topbar-user">
+            {{ session.get('username', 'Uporabnik') }}
+        </div>
+
+        <a href="/login" class="user-avatar">&#128100;</a>
+    </div>
+</div>

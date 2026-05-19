@@ -35,6 +35,8 @@
             {% endif %}
         </p>
     </nav>
+    <!--    Povsod se zdej namest navbar da tole pa isto za footer    -->
+    
 
     <hr>
 
@@ -70,6 +72,9 @@
         {% endif %}
     {% endwith %}
 
+    {% include 'partials/topbar.html' %}
+    {% include 'partials/navbar.html' %}
+
     <main>
         {% block content %}{% endblock %}
     </main>
@@ -81,6 +86,8 @@
         <a href="/setup" style="font-size: 12px; margin: 0 6px; padding: 3px 10px; background: #e0e0e0; border-radius: 4px; text-decoration: none; color: #333;">🗄️ Nastavi tabele</a>
         <a href="/polni_db" style="font-size: 12px; margin: 0 6px; padding: 3px 10px; background: #e0e0e0; border-radius: 4px; text-decoration: none; color: #333;">📦 Osveži podatke</a>
     </div>
+
+    {% include 'partials/footer.html' %}
 
     <footer>
         <p>&copy; 2024 Upravljanje Salona | [<a href="/">nazaj na začetek</a>]</p>
