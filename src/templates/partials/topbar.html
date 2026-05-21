@@ -26,6 +26,10 @@
             {{ session.get('username', 'Uporabnik') }}
         </div>
 
-        <a href="/login" class="user-avatar">&#128100;</a>
+        {% if session.get('user_id') %}
+            <a href="/profil" class="user-avatar">&#128100;</a>
+        {% else %}
+            <a href="/login" class="user-avatar">&#128100;</a>
+        {% endif %}
     </div>
 </div>
