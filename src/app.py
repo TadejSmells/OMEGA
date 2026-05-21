@@ -279,7 +279,7 @@ def rezervacije_stranke():
 @f_app.get('/frizer')
 @frizer_required
 def frizer():
-    return controllers.preklic_rezervacije_controller.frizer_panel()
+    return controllers.sv_setup.frizer()
 
 @f_app.post('/frizer/preklic/<int:id_rezervacije>')
 @frizer_required
