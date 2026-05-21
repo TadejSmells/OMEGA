@@ -29,31 +29,38 @@
             <h2>Napišite svoje vprašanje</h2>
             <p>Niste našli pravega odgovora? Napišite in oddajte svoje vprašanje in vam bomo odgovorili.</p>
 
+            {% with msgs = get_flashed_messages(with_categories=true) %}
+                {% for cat, msg in msgs %}
+                    <div class="flash flash-{{ cat }}">{{ msg }}</div>
+                {% endfor %}
+            {% endwith %}
+
             <form method="POST" action="/faq">
-                <div class="polje">
-                    <label>S čim imate težavo?</label>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                    <select name="tezava" required>
-                        <option value="" disabled selected>- izberite -</option>
-                        <option>Prijava</option>
-                        <option>Registracija</option>
-                        <option>Rezervacija terminov</option>
-                        <option>Pregled terminov</option>
-                        <option>Prekinitev termina</option>
-                        <option>Registracija kot frizer</option>
-                        <option>Registracija kot salon</option>
-                        <option>Pregled strank</option>
-                    </select>
+                <div class="form-row" style="font-size:15px;">
+                    <label style="font-size:15px;">Ime</label>
+                    <input type="text" name="ime" placeholder="Vaše ime..." required maxlength="100" style="font-size:15px; height:30px;">
                 </div>
 
-                <div class="polje">
-                    <label>Opišite težavo</label>
-                    <textarea name="opis" placeholder="opis..." required></textarea>
+                <div class="form-row" style="font-size:15px;">
+                    <label style="font-size:15px;">E-pošta</label>
+                    <input type="email" name="email" placeholder="vas@email.si" required maxlength="120" style="font-size:15px; height:30px;">
                 </div>
 
-                <div class="check-line">
-                    <input type="checkbox" required>
-                    <button type="submit" class="gumb">Oddaj</button>
+                <div class="form-row" style="font-size:15px;">
+                    <label style="font-size:15px;">Naslov</label>
+                    <input type="text" name="tezava" placeholder="Naslov vprašanja..." required maxlength="200" style="font-size:15px; height:30px;">
+                </div>
+
+                <div class="polje" style="font-size:15px;">
+                    <label style="font-size:15px;">Opis</label>
+                    <textarea name="opis" placeholder="Opišite težavo..." required
+                        style="border:none; border-radius:10px; background:#fff; padding:6px 10px; font-size:15px; outline:none; resize:vertical;"></textarea>
+                </div>
+
+                <div style="text-align:right; margin-top:10px;">
+                    <button type="submit" class="mini-btn">Oddaj</button>
                 </div>
 
                 <div class="opomba">*Hvala za oddajo vprašanja! Kmalu vam bomo odgovorili!</div>
@@ -61,6 +68,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock %}
