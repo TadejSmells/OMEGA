@@ -12,18 +12,6 @@
 <body>
     <nav>
         <p>
-            {% if session.get('role') == 'admin' %}
-                | <a href="/admin">⚙️ Admin panel</a>
-                | <a href="/stranke">Seznam strank</a>
-                | <a href="/vse_rezervacije">Vse rezervacije</a>
-                | <a href="/kontakti_strank">Kontakti strank</a>
-            {% endif %}
-
-            {% if session.get('role') in ('frizer', 'admin') %}
-                | <a href="/frizer">Frizer panel</a>
-                | <a href="/urnik">Urnik</a>
-            {% endif %}
-
             {% if session.get('user_id') %}
                 | <a href="/rezervacije">Nova rezervacija</a>
                 | <a href="/profil">👤 {{ session.get('username') }}</a>
