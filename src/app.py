@@ -35,6 +35,7 @@ import controllers.sv_setup
 import controllers.uredi_rezervacijo
 import controllers.uredi_salon_controller
 import controllers.con_salon_detail
+import controllers.uredi_storitev_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -193,6 +194,11 @@ def priljubljena_storitev(id_storitve):
 def moje_priljubljene_storitve():
     return controllers.priljubljene_storitve.prikazi()
 
+
+@f_app.route('/storitve/uredi/<int:storitev_id>', methods=['GET', 'POST'])
+@admin_required
+def uredi_storitev(storitev_id):
+    return controllers.uredi_storitev_controller.uredi_storitev(storitev_id)
 # REZERVACIJE
 
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
