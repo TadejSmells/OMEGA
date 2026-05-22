@@ -306,18 +306,19 @@ main {
 }
 
 .form-row label {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
 }
 
 .form-row input,
 .form-row select {
-    height: 24px;
+    height: 36px;
     border: none;
     border-radius: 20px;
     background: #FFFFFF;
-    padding: 0 10px;
-    font-size: 12px;
+    padding: 0 12px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
     outline: none;
 }
 
@@ -326,8 +327,9 @@ main {
     background: #FFFFFF;
     color: #A75F37;
     border-radius: 18px;
-    padding: 5px 12px;
-    font-size: 12px;
+    padding: 10px 32px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
 }
 
@@ -554,4 +556,19 @@ main {
 .msg-content {
     color: #292421;
     font-size: 12px;
+}
+
+.uredi-btn {
+    display: block;
+    margin-top: auto;
+    padding: 8px 0 0;
+    font-size: 12px;
+    color: #A75F37;
+    text-decoration: none;
+    font-weight: bold;
+    border-top: 1px solid #F2D6CE;
+}
+
+.uredi-btn:hover {
+    text-decoration: underline;
 }
