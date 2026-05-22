@@ -11,7 +11,7 @@
         {% elif request.path == '/frizerji' %}
             FRIZERJI
         {% elif request.path == '/prosti_termini' or request.path == '/blokade' %}
-            PROSTI TERMINI
+            TERMINI
         {% elif request.path == '/faq' %}
             POGOSTO POSTAVLJENA VPRAŠANJA
         {% elif request.path == '/admin' %}
@@ -22,6 +22,37 @@
     </div>
 
     <div class="topbar-right">
+        {% if request.path == '/' %}
+            <div class="notification-wrap">
+                <button type="button" class="notification-btn" onclick="toggleNotifications()">
+                    🔔
+
+                    {% if preklicane_rezervacije %}
+                        <span class="notification-badge">{{ preklicane_rezervacije|length }}</span>
+                    {% endif %}
+                </button>
+
+                <div class="notification-box" id="notificationBox">
+                    <div class="notification-title">Obvestila</div>
+
+                    {% if preklicane_rezervacije %}
+                        {% for r in preklicane_rezervacije %}
+                            <div class="notification-item">
+                                <strong>Rezervacija je bila preklicana</strong><br>
+                                Frizer: {{ r[1] or '—' }}<br>
+                                Salon: {{ r[2] or '—' }}<br>
+                                Storitev: {{ r[3] or '—' }}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="notification-empty">
+                            Ni novih obvestil.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
         <div class="topbar-user">
             {{ session.get('username', 'Uporabnik') }}
         </div>
