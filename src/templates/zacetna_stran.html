@@ -2,28 +2,6 @@
 {% block title %}Hairscultures{% endblock %}
 
 {% block content %}
-
-{% if preklicana_rezervacija %}
-<div class="popup-overlay" id="popup-preklic" data-rezervacija-id="{{ preklicana_rezervacija[0] }}">
-    <div class="popup-box">
-        <h2>Obvestilo</h2>
-
-        <p>Vaša rezervacija je bila preklicana.</p>
-
-        <p class="popup-info">
-            Frizer: {{ preklicana_rezervacija[1] or '—' }}<br>
-            Salon: {{ preklicana_rezervacija[2] or '—' }}<br>
-            Storitev: {{ preklicana_rezervacija[3] or '—' }}
-        </p>
-
-        <div class="popup-buttons">
-            <button onclick="zapriPopup()">V redu</button>
-            <a href="/rezervacije">Moje rezervacije</a>
-        </div>
-    </div>
-</div>
-{% endif %}
-
 <div class="vsebina">
     <div class="vsebina-levo">
         <h2>O NAS</h2>
@@ -54,6 +32,7 @@
             {% else %}
                 <li><a href="/saloni">Pregled salonov!</a></li>
             {% endif %}
+
             <li><a href="/cenik">Izberite storitev, ki jo želite!</a></li>
             <li><a href="/faq">Q &amp; A</a></li>
         </ul>
@@ -62,29 +41,22 @@
     <div class="vsebina-desno"></div>
 </div>
 
-
-
 <script>
-function zapriPopup() {
-    const popup = document.getElementById('popup-preklic');
+function toggleNotifications() {
+    const box = document.getElementById('notificationBox');
 
-    if (popup) {
-        const id = popup.dataset.rezervacijaId;
-        localStorage.setItem('preklic_rezervacije_seen_' + id, '1');
-        popup.style.display = 'none';
+    if (box) {
+        box.classList.toggle('show');
     }
 }
 
-(function skrijCeJeZeVideno() {
-    const popup = document.getElementById('popup-preklic');
+document.addEventListener('click', function(e) {
+    const box = document.getElementById('notificationBox');
+    const btn = document.querySelector('.notification-btn');
 
-    if (popup) {
-        const id = popup.dataset.rezervacijaId;
-
-        if (localStorage.getItem('preklic_rezervacije_seen_' + id) === '1') {
-            popup.style.display = 'none';
-        }
+    if (box && btn && !box.contains(e.target) && !btn.contains(e.target)) {
+        box.classList.remove('show');
     }
-})();
+});
 </script>
 {% endblock %}

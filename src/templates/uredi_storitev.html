@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}Uredi storitev{% endblock %}
+
+{% block content %}
+
+<style>
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --beige: #D9B99F;
+        --light: #F2E7DD;
+        --peach: #F2D6CE;
+        --brown: #A75F37;
+        --rose: #CA8E82;
+        --dark: #292421;
+        --white: #FFFFFF;
+    }
+
+    body {
+        background: var(--light);
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--dark);
+    }
+
+    .vsebina {
+        max-width: 500px;
+        margin: 40px auto;
+    }
+
+    .form-panel {
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--peach);
+    }
+
+    .form-header {
+        background: var(--beige);
+        padding: 16px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .form-body {
+        padding: 24px;
+    }
+
+    .polje {
+        margin-bottom: 20px;
+    }
+
+    .polje label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .polje input,
+    .polje textarea {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid var(--beige);
+        background: transparent;
+        padding: 8px 0;
+        outline: none;
+    }
+
+    .gumbi {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .shrani-btn {
+        flex: 1;
+        border: none;
+        background: var(--brown);
+        color: white;
+        padding: 12px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+
+    .preklici-btn {
+        flex: 1;
+        text-align: center;
+        text-decoration: none;
+        background: var(--light);
+        border: 1px solid var(--peach);
+        padding: 12px;
+        border-radius: 30px;
+        color: var(--dark);
+    }
+
+</style>
+
+<div class="vsebina">
+
+    <div class="form-panel">
+
+        <div class="form-header">
+            Uredi storitev
+        </div>
+
+        <div class="form-body">
+
+            <form method="POST">
+
+                <div class="polje">
+                    <label>Naziv storitve</label>
+
+                    <input
+                        type="text"
+                        name="naziv"
+                        required
+                        value="{{ storitev.naziv or '' }}"
+                    >
+                </div>
+
+                <div class="polje">
+                    <label>Cena (€)</label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="cena"
+                        value="{{ storitev.cena or '' }}"
+                    >
+                </div>
+
+                <div class="polje">
+                    <label>Trajanje</label>
+
+                    <input
+                        type="time"
+                        name="trajanje"
+                        value="{{ storitev.trajanje or '' }}"
+                    >
+                </div>
+
+                <div class="polje">
+                    <label>Opis</label>
+
+                    <textarea
+                        name="opis"
+                        rows="4"
+                    >{{ storitev.opis or '' }}</textarea>
+                </div>
+
+                <div class="gumbi">
+
+                    <button type="submit" class="shrani-btn">
+                        Shrani
+                    </button>
+
+                    <a href="/storitve" class="preklici-btn">
+                        Prekliči
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

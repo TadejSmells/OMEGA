@@ -48,6 +48,7 @@ class Storitev(Base):
     ime_storitve = Column(String(100))
     cena         = Column(Numeric(10, 2))
     trajanje     = Column(Time)
+    opis         = Column(Text)
 
 
 class SaloniInStoritve(Base):

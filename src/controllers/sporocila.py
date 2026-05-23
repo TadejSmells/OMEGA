@@ -4,6 +4,7 @@ import db
 from models.models import Frizer
 import models.model_sprocil as model_sprocil
 import models.model_frizer as model_frizer
+import models.model_sprocil as Sporocilo
 
 
 def vsa_sporocila():
