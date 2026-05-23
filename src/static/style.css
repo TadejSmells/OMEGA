@@ -306,18 +306,19 @@ main {
 }
 
 .form-row label {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
 }
 
 .form-row input,
 .form-row select {
-    height: 24px;
+    height: 36px;
     border: none;
     border-radius: 20px;
     background: #FFFFFF;
-    padding: 0 10px;
-    font-size: 12px;
+    padding: 0 12px;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
     outline: none;
 }
 
@@ -326,8 +327,9 @@ main {
     background: #FFFFFF;
     color: #A75F37;
     border-radius: 18px;
-    padding: 5px 12px;
-    font-size: 12px;
+    padding: 10px 32px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
 }
 
@@ -539,4 +541,112 @@ main {
     text-align: center;
     color: #7A958F;
     font-style: italic;
+}
+
+.btn-cancel {
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 3px 9px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.msg-content {
+    color: #292421;
+    font-size: 12px;
+}
+
+.uredi-btn {
+    display: block;
+    margin-top: auto;
+    padding: 8px 0 0;
+    font-size: 12px;
+    color: #A75F37;
+    text-decoration: none;
+    font-weight: bold;
+    border-top: 1px solid #F2D6CE;
+}
+
+.uredi-btn:hover {
+    text-decoration: underline;
+}
+.notification-wrap {
+    position: relative;
+}
+
+.notification-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 50%;
+    background: #A75F37;
+    color: #FFFFFF;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.notification-box {
+    display: none;
+    position: absolute;
+    top: 48px;
+    right: 0;
+    width: 310px;
+    max-height: 320px;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border: 1px solid #D9B99F;
+    border-radius: 12px;
+    z-index: 2000;
+    padding: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+.notification-box.show {
+    display: block;
+}
+
+.notification-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #292421;
+}
+
+.notification-item {
+    font-size: 13px;
+    line-height: 1.45;
+    padding: 10px 0;
+    border-bottom: 1px solid #F2D6CE;
+    color: #292421;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-empty {
+    font-size: 13px;
+    color: #7A7A7A;
+    font-style: italic;
+    padding: 8px 0;
 }
