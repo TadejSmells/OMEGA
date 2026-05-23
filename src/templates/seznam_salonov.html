@@ -250,6 +250,25 @@
         display: none;
     }
 
+    .card.je-priljubljen {
+        border-color: #A75F37;
+        box-shadow: 0 0 0 2px #A75F37;
+    }
+
+    .priljubljen-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: #A75F37;
+        color: #FFFFFF;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
     .favorite-btn {
         position: absolute;
         top: 15px;
@@ -429,13 +448,22 @@
                     {% set s = item.salon %}
                     {% set storitve = item.storitve %}
 
-                    <div class="card" data-id="{{ s[0] }}" data-name="{{ s[1]|lower }}">
-                        <button type="button"
-                                class="favorite-btn"
-                                onclick="toggleFavorite('{{ s[0] }}', this)"
-                                title="Dodaj med priljubljene">
-                            ☆
-                        </button>
+                    <div class="card {% if item.priljubljen %}je-priljubljen{% endif %}"
+                         data-id="{{ s[0] }}" data-name="{{ s[1]|lower }}">
+
+                        {% if item.priljubljen %}
+                            <span class="priljubljen-badge">★ Priljubljen</span>
+                        {% endif %}
+
+                        <form method="POST" action="/salon/{{ s[0] }}/favorite"
+                              style="position:absolute; top:15px; right:15px; margin:0;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit"
+                                    class="favorite-btn {% if item.priljubljen %}active{% endif %}"
+                                    title="{% if item.priljubljen %}Odstrani iz priljubljenih{% else %}Dodaj med priljubljene{% endif %}">
+                                {% if item.priljubljen %}★{% else %}☆{% endif %}
+                            </button>
+                        </form>
 
                         <div class="card-img"></div>
 
@@ -499,43 +527,6 @@
         });
     }
 
-    function getFavorites() {
-        return JSON.parse(localStorage.getItem('favoriteSaloni') || '[]');
-    }
-
-    function saveFavorites(ids) {
-        localStorage.setItem('favoriteSaloni', JSON.stringify(ids));
-    }
-
-    function toggleFavorite(id, button) {
-        let favorites = getFavorites();
-
-        if (favorites.includes(id)) {
-            favorites = favorites.filter(x => x !== id);
-            button.classList.remove('active');
-            button.textContent = '☆';
-        } else {
-            favorites.push(id);
-            button.classList.add('active');
-            button.textContent = '★';
-        }
-
-        saveFavorites(favorites);
-    }
-
-    function loadFavorites() {
-        const favorites = getFavorites();
-
-        document.querySelectorAll('.card[data-id]').forEach(card => {
-            const btn = card.querySelector('.favorite-btn');
-
-            if (favorites.includes(card.dataset.id)) {
-                btn.classList.add('active');
-                btn.textContent = '★';
-            }
-        });
-    }
-
     document.addEventListener('click', function(e) {
         const panel = document.getElementById('filterPanel');
         const btn = document.querySelector('.filter-btn');
@@ -544,7 +535,5 @@
             panel.classList.remove('open');
         }
     });
-
-    loadFavorites();
 </script>
 {% endblock %}
