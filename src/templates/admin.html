@@ -2,136 +2,513 @@
 {% block title %}Admin Panel{% endblock %}
 
 {% block content %}
+<style>
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
+
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .page-header {
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .page-header-title {
+        font-family: Georgia, serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-username {
+        font-size: 13px;
+        background: rgba(255, 255, 255, 0.7);
+        padding: 7px 18px;
+        border-radius: 20px;
+    }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 28px;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    .admin-page {
+        flex: 1;
+        background: #F2E7DD;
+        padding: 28px 32px 36px;
+    }
+
+    .section-title {
+        font-family: Georgia, serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 4px;
+    }
+
+    .line {
+        height: 2px;
+        background: #A75F37;
+        margin-bottom: 16px;
+    }
+
+    /* STATS */
+    .stat-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-box {
+        background: #fff;
+        border-radius: 4px;
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .stat-box-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #A75F37;
+    }
+
+    .stat-box-value {
+        font-family: Georgia, serif;
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .stat-box-sub {
+        font-size: 11px;
+        color: #CA8E82;
+    }
+
+    /* GRID */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .dashboard-grid-bottom {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+    }
+
+    .panel {
+        background: #F2E7DD;
+        padding: 20px 26px 18px;
+    }
+
+    /* TABLE */
+    .res-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+    .res-table thead tr {
+        border-bottom: 2px solid #A75F37;
+    }
+
+    .res-table th {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #A75F37;
+        font-weight: 700;
+        padding: 0 8px 8px;
+        text-align: left;
+    }
+
+    .res-table td {
+        padding: 7px 8px;
+        border-bottom: 1px solid #D9B99F;
+        font-size: 12px;
+    }
+
+    .res-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .badge-confirmed {
+        background: #fff;
+        color: #A75F37;
+    }
+
+    .badge-pending {
+        background: #D9B99F;
+        color: #292421;
+    }
+
+    .badge-new {
+        background: #A75F37;
+        color: #fff;
+    }
+
+    .view-all {
+        display: block;
+        text-align: right;
+        font-size: 11px;
+        color: #CA8E82;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    .view-all:hover {
+        text-decoration: underline;
+    }
+
+    /* ACTIONS */
+    .actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .action-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 12px;
+        color: #292421;
+        background: #fff;
+    }
+
+    .action-link:hover {
+        background: #D9B99F;
+    }
+
+    /* WEEK */
+    .week-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-top: 4px;
+    }
+
+    .week-day {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .week-day-label {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #A75F37;
+        font-weight: 700;
+    }
+
+    .week-day-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        background: #fff;
+    }
+
+    .week-day-num.today {
+        background: #A75F37;
+        color: #fff;
+    }
+
+    .week-count {
+        font-size: 10px;
+        color: #CA8E82;
+        font-weight: 700;
+    }
+
+    /* FEED */
+    .feed-item {
+        display: flex;
+        gap: 10px;
+        padding: 7px 0;
+        border-bottom: 1px solid #D9B99F;
+        align-items: flex-start;
+        font-size: 12px;
+    }
+
+    .feed-item:last-child {
+        border-bottom: none;
+    }
+
+    .feed-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #D9B99F;
+        margin-top: 4px;
+        flex-shrink: 0;
+    }
+
+    .feed-dot.brown {
+        background: #A75F37;
+    }
+
+    .feed-dot.rose {
+        background: #CA8E82;
+    }
+
+    .feed-time {
+        font-size: 10px;
+        color: #CA8E82;
+        margin-top: 2px;
+    }
+
+    /* MGMT */
+    .mgmt-link {
+        font-size: 12px;
+        color: #CA8E82;
+        text-decoration: none;
+        padding: 5px 0;
+        border-bottom: 1px solid #D9B99F;
+        display: block;
+    }
+
+    .mgmt-link:last-child {
+        border-bottom: none;
+    }
+
+    .mgmt-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+
+        .stat-row,
+        .dashboard-grid-bottom {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .admin-page {
+            background: #D9B99F;
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-header-title">Admin Panel</div>
+
+    <div class="header-right">
+        <span class="header-username">{{ session.get('username', 'Ime priimek') }}</span>
+        <a href="/profil" class="user-avatar">&#128100;</a>
+    </div>
+</div>
 
 <div class="admin-page">
 
-    <p class="podnaslov">Pregled</p>
+    <div class="section-title">Pregled</div>
     <div class="line"></div>
 
-    <div style="display:flex; gap:20px; margin-bottom:28px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Rezervacije ta teden</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.rezervacije_teden if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">{{ stats.rezervacije_danes if stats else '0' }} rezervacij je danes</div>
+    <div class="stat-row">
+        <div class="stat-box">
+            <span class="stat-box-label">Rezervacije ta teden</span>
+            <span class="stat-box-value">{{ stats.rezervacije_teden if stats else '—' }}</span>
+            <span class="stat-box-sub">{{ stats.rezervacije_danes if stats else '0' }} novih danes</span>
         </div>
-        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Predviden promet ta teden</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.promet_teden if stats else '—' }} €</div>
-            <div style="font-size:12px; color:#A75F37;">Cena se lahko spremeni glede na odpovedane termine</div>
+        <div class="stat-box">
+            <span class="stat-box-label">Aktivne stranke</span>
+            <span class="stat-box-value">{{ stats.aktivne_stranke if stats else '—' }}</span>
+            <span class="stat-box-sub">skupaj registriranih</span>
         </div>
-        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Prosti termini danes</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.prosti_termini if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">med vsemi frizerji</div>
+        <div class="stat-box">
+            <span class="stat-box-label">Promet ta teden</span>
+            <span class="stat-box-value">{{ stats.promet_teden if stats else '—' }} €</span>
+            <span class="stat-box-sub">ocena na podlagi storitev</span>
         </div>
-        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Registrirane stranke</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.aktivne_stranke if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">skupaj registriranih</div>
+        <div class="stat-box">
+            <span class="stat-box-label">Prosti termini danes</span>
+            <span class="stat-box-value">{{ stats.prosti_termini if stats else '—' }}</span>
+            <span class="stat-box-sub">med vsemi frizerji</span>
         </div>
     </div>
 
-    <div style="display:flex; gap:28px; flex-wrap:wrap; margin-bottom:28px;">
+    <div class="dashboard-grid">
 
         <!-- Rezervacije ta teden -->
-        <div class="table-box" style="flex:2; min-width:320px;">
-            <h1>Rezervacije ta teden</h1>
+        <div class="panel">
+            <div class="section-title">Rezervacije ta teden</div>
             <div class="line"></div>
-            <div class="table-scroll">
-                <table class="simple-table">
-                    <thead>
-                        <tr>
-                            <th>Stranka</th>
-                            <th>Datum &amp; Ura</th>
-                            <th>Frizer/ka</th>
-                            <th>Storitev</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if rezervacije_teden %}
-                        {% for r in rezervacije_teden %}
-                        <tr>
-                            <td>{{ r['stranka_ime'] }}</td>
-                            <td>{{ r['datum'] }} {{ r['ura'] }}</td>
-                            <td>{{ r['frizer_ime'] }}</td>
-                            <td>{{ r['storitev_ime'] }}</td>
-                            <td>
-                                {% if r['status'] == 'active' %}Aktivna
-                                {% elif r['status'] == 'cancelled' %}Preklicana
-                                {% else %}{{ r['status'] }}
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        {% else %}
-                        <tr>
-                            <td colspan="5" class="empty">Ni rezervacij ta teden.</td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
-            <div style="text-align:right; margin-top:10px;">
-                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije →</a>
-            </div>
+            <table class="res-table">
+                <thead>
+                    <tr>
+                        <th>Stranka</th>
+                        <th>Datum &amp; Ura</th>
+                        <th>Frizer/ka</th>
+                        <th>Storitev</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if rezervacije_teden %}
+                    {% for r in rezervacije_teden %}
+                    <tr>
+                        <td>{{ r['stranka_ime'] }}</td>
+                        <td>{{ r['datum'] }} {{ r['ura'] }}</td>
+                        <td>{{ r['frizer_ime'] }}</td>
+                        <td>{{ r['storitev_ime'] }}</td>
+                        <td>
+                            {% if r['status'] == 'active' %}
+                            <span class="badge badge-confirmed">Aktivna</span>
+                            {% elif r['status'] == 'cancelled' %}
+                            <span class="badge badge-pending">Preklicana</span>
+                            {% else %}
+                            <span class="badge badge-new">{{ r['status'] }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="color:#CA8E82; font-style:italic; text-align:center; padding:16px 0;">
+                            Ni rezervacij ta teden.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            <a href="/vse_rezervacije" class="view-all">Vse rezervacije →</a>
         </div>
 
-        <!-- Hitra dejanja -->
-        <div class="table-box" style="flex:1; min-width:200px;">
-            <h1>Hitra dejanja</h1>
+
+        <div class="panel">
+            <div class="section-title">Hitra dejanja</div>
             <div class="line"></div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-                <a href="/rezervacije" class="mini-btn">+ Nova rezervacija</a>
-                <a href="/frizerji/dodaj" class="mini-btn">+ Dodaj frizerja</a>
-                <a href="/saloni/dodaj" class="mini-btn">+ Dodaj salon</a>
-                <a href="/storitve/dodaj" class="mini-btn">+ Dodaj storitev</a>
-                <a href="/stranke_uredi" class="mini-btn">Urejanje strank</a>
-                <a href="/cenik" class="mini-btn">Cenik</a>
-                <a href="/urnik" class="mini-btn">Urnik</a>
-                <a href="/setup" class="mini-btn">Baza podatkov</a>
-                <a href="/polni_db" class="mini-btn">Naloži testne podatke</a>
+            <div class="actions-list">
+                <a href="/rezervacije" class="action-link">+ Nova rezervacija</a>
+                <a href="/frizerji/dodaj" class="action-link">+ Dodaj frizerja</a>
+                <a href="/saloni/dodaj" class="action-link">+ Dodaj salon</a>
+                <a href="/storitve/dodaj" class="action-link">+ Dodaj storitev</a>
+                <a href="/stranke_uredi" class="action-link">Urejanje strank</a>
+                <a href="/cenik" class="action-link">Cenik</a>
+                <a href="/urnik" class="action-link">Urnik</a>
+                <a href="/setup" class="action-link">Baza podatkov</a>
+                <a href="/polni_db" class="action-link">Naloži testne podatke</a>
             </div>
         </div>
 
     </div>
 
-    <div style="display:flex; gap:28px; flex-wrap:wrap;">
+    <div class="dashboard-grid-bottom">
 
         <!-- Zadnja aktivnost -->
-        <div class="table-box" style="flex:1; min-width:280px;">
-            <h1>Zadnja aktivnost</h1>
+        <div class="panel">
+            <div class="section-title">Zadnja aktivnost</div>
             <div class="line"></div>
             {% if zadnja_aktivnost %}
             {% for z in zadnja_aktivnost %}
-            <div style="display:flex; gap:10px; margin-bottom:12px; font-size:13px;">
+            <div class="feed-item">
+                <div class="feed-dot {{ z['dot'] }}"></div>
                 <div>
                     <div>{{ z['tip'] }} — <strong>{{ z['ime'] }}</strong></div>
-                    <div style="font-size:11px; color:#A75F37;">{{ z['datum'] }}, {{ z['ura'] }}</div>
+                    <div class="feed-time">{{ z['datum'] }}, {{ z['ura'] }}</div>
                 </div>
             </div>
             {% endfor %}
             {% else %}
-            <div class="empty">Ni nedavne aktivnosti.</div>
+            <div style="color:#CA8E82; font-style:italic; padding:16px 0;">Ni nedavne aktivnosti.</div>
             {% endif %}
         </div>
 
-        <!-- Upravljanje -->
-        <div class="table-box" style="flex:1; min-width:200px;">
-            <h1>Upravljanje</h1>
+        <div class="panel">
+            <div class="section-title">Upravljanje</div>
             <div class="line"></div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-                <a href="/stranke_uredi" class="mini-btn">Seznam strank</a>
-                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije</a>
-                <a href="/urnik" class="mini-btn">Urnik</a>
-                <a href="/cenik" class="mini-btn">Cenik / Storitve</a>
-                <a href="/frizerji" class="mini-btn">Seznam frizerjev</a>
-                <a href="/faq" class="mini-btn">FAQ</a>
-            </div>
+            <a href="/stranke_uredi" class="mgmt-link">Seznam strank</a>
+            <a href="/vse_rezervacije" class="mgmt-link">Vse rezervacije</a>
+            <a href="/urnik" class="mgmt-link">Urnik</a>
+            <a href="/cenik" class="mgmt-link">Cenik / Storitve</a>
+            <a href="/frizerji" class="mgmt-link">Seznam frizerjev</a>
+            <a href="/faq" class="mgmt-link">FAQ</a>
         </div>
 
     </div>
-
 </div>
 
 {% endblock %}

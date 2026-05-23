@@ -35,8 +35,7 @@ CREATE TABLE IF NOT EXISTS public.storitev (
     id_storitve  serial PRIMARY KEY,
     ime_storitve character varying(100),
     cena         double precision,
-    trajanje     time without time zone,
-    opis         text
+    trajanje     time without time zone
 );
 
 -- salon ima storitve

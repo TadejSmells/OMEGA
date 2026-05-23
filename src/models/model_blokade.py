@@ -16,8 +16,8 @@ def get_blokade():
                 BlokiranTermin.id_frizerja == Frizer.id_frizer
             )
             .order_by(
-                BlokiranTermin.datum.asc(),
-                BlokiranTermin.ura_od.asc()
+                BlokiranTermin.datum.desc(),
+                BlokiranTermin.ura_od.desc()
             )
             .all()
         )

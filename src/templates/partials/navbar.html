@@ -21,23 +21,4 @@
         </div>
     </div>
     <a href="/faq" class="{{ 'active' if request.path == '/faq' }}">Q & A</a>
-
-    {% if session.get('role') == 'admin' %}
-    <div class="dropdown">
-        <a href="/admin" class="{{ 'active' if request.path.startswith('/admin') }}">Admin panel</a>
-        <div class="dropdown-content">
-            <!--  Karkol za admin tukaj  -->
-        </div>
-    </div>
-    {% endif %}
-
-    {% if session.get('role') == 'frizer' %}
-    <div class="dropdown">
-        <a href="/frizer" class="{{ 'active' if request.path.startswith('/frizer') }}">Frizer panel</a>
-        <div class="dropdown-content">
-            <!--  Karkol za frizer tukaj  -->
-        </div>
-    </div>
-    {% endif %}
-
 </nav>

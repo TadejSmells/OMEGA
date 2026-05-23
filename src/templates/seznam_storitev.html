@@ -233,10 +233,6 @@
 
                             <div class="oznaka">Opis storitve:</div>
                             <div class="opis">—</div>
-
-                            {% if session.get("role") == "admin" %}
-                            <a href="/storitve/uredi/{{ st[0] }}" class="uredi-btn">✏ Uredi</a>
-                            {% endif %}
                         </div>
                     </div>
                 {% else %}

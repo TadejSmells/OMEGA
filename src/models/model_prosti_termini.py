@@ -9,16 +9,15 @@ from models.models import Frizer, Urnik, Rezervacija, BlokiranTermin
 DNEVI_SL = ['PON', 'TOR', 'SRE', 'ČET', 'PET', 'SOB', 'NED']
 
 
-def get_prosti_termini_po_dnevih(salon_id, dni_naprej=14, samo_frizer_id=None):
+def get_prosti_termini_po_dnevih(salon_id, dni_naprej=14):
     """
     Vrne seznam dictov za naslednjih `dni_naprej` dni:
-      {'datum': date, 'dan_ime': str, 'proste_ure': [(ura_str, frizer_ime, frizer_id), ...]}
+      {'datum': date, 'dan_ime': str, 'proste_ure': [(ura_str, frizer_ime), ...]}
     Slot je 'prost', če:
       - obstaja v urniku frizerja, ki pripada temu salonu
       - ni zaseden z aktivno rezervacijo
       - ne pade v noben blokiran interval
       - ni v preteklosti (samo za današnji dan)
-    Opcionalno: samo_frizer_id omeji prikaz na enega frizerja.
     """
     s = db.get_session()
     try:
@@ -27,16 +26,14 @@ def get_prosti_termini_po_dnevih(salon_id, dni_naprej=14, samo_frizer_id=None):
         zdaj  = datetime.now().time()
 
         # 1) Vsi termini iz urnika frizerjev tega salona v oknu
-        q = (
+        slots = (
             s.query(Urnik.id_frizerja, Urnik.dan, Urnik.ura, Frizer.ime)
             .join(Frizer, Urnik.id_frizerja == Frizer.id_frizer)
             .filter(Frizer.salon_id == salon_id)
             .filter(Urnik.dan >= danes)
             .filter(Urnik.dan <= konec)
+            .all()
         )
-        if samo_frizer_id is not None:
-            q = q.filter(Urnik.id_frizerja == samo_frizer_id)
-        slots = q.all()
 
         if not slots:
             zasedeni = set()
@@ -73,7 +70,7 @@ def get_prosti_termini_po_dnevih(salon_id, dni_naprej=14, samo_frizer_id=None):
                     return True
             return False
 
-        # 4) Filtriraj in grupiraj po datumih — tuple zdaj vsebuje tudi frizer_id
+        # 4) Filtriraj in grupiraj po datumih
         po_dnevih = {}
         for fid, d, ura, ime in slots:
             if d == danes and ura < zdaj:
@@ -82,7 +79,7 @@ def get_prosti_termini_po_dnevih(salon_id, dni_naprej=14, samo_frizer_id=None):
                 continue
             if je_blokiran(fid, d, ura):
                 continue
-            po_dnevih.setdefault(d, []).append((ura, ime, fid))
+            po_dnevih.setdefault(d, []).append((ura, ime))
 
         # 5) Zaporedni dnevi (tudi prazni)
         rezultat = []
@@ -92,7 +89,7 @@ def get_prosti_termini_po_dnevih(salon_id, dni_naprej=14, samo_frizer_id=None):
             rezultat.append({
                 'datum':      d,
                 'dan_ime':    DNEVI_SL[d.weekday()],
-                'proste_ure': [(u.strftime('%H:%M'), ime, fid) for u, ime, fid in proste],
+                'proste_ure': [(u.strftime('%H:%M'), ime) for u, ime in proste],
             })
         return rezultat
     finally:

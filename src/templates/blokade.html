@@ -7,16 +7,16 @@
     <a href="/" class="back-btn">&#8617;</a>
 
     <div class="small-form-box">
-        <h1>Nova blokada</h1>
+        <h1>NOVA BLOKADA</h1>
         <div class="form-line"></div>
 
         <form method="POST">
-            <input type="hidden" name="tip" value="dopust">
-
             <div class="form-row">
                 <label>Frizer:</label>
+
                 <select name="frizer_id" required>
                     <option value="">--izberi frizerja--</option>
+
                     {% for f in frizerji %}
                         <option value="{{ f[0] }}">
                             {% if f|length > 2 %}
@@ -30,23 +30,29 @@
             </div>
 
             <div class="form-row">
-                <label>Od datuma:</label>
-                <input type="date" name="datum_od" required>
+                <label>Datum:</label>
+                <input type="date" name="datum" required>
             </div>
 
             <div class="form-row">
-                <label>Do datuma:</label>
-                <input type="date" name="datum_do" required>
+                <label>Od:</label>
+                <input type="time" name="ura_od" required>
+            </div>
+
+            <div class="form-row">
+                <label>Do:</label>
+                <input type="time" name="ura_do" required>
             </div>
 
             <div class="form-row">
                 <label>Razlog:</label>
-                <input type="text" name="razlog" placeholder="npr. Dopust">
+                <input type="text" name="razlog" placeholder="Razlog blokade">
+
                 <button type="submit" class="mini-btn">Blokiraj</button>
             </div>
         </form>
 
-        <h1 style="margin-top: 24px;">Seznam blokad</h1>
+        <h1>SEZNAM BLOKAD</h1>
         <div class="form-line"></div>
 
         <div class="table-scroll">
@@ -61,6 +67,7 @@
                         <th>Razlog</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for b, f in blokade %}
                         <tr>

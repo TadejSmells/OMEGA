@@ -2,255 +2,49 @@
 {% block title %}Prosti termini{% endblock %}
 
 {% block content %}
-<style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .back-wrap { padding: 14px 32px 0; }
-    .back-btn  { font-size: 28px; color: #CA8E82; text-decoration: none; }
+<div class="admin-page">
+    <a href="/" class="back-btn">&#8617;</a>
 
-    /* ── SALON PICKER ─────────────────────────────────── */
-    .picker-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 48px 32px;
-        gap: 14px;
-    }
-    .picker-wrap h2 {
-        font-family: Georgia, serif;
-        font-size: 1.5rem;
-        color: #292421;
-        margin-bottom: 6px;
-    }
-    .picker-wrap p {
-        font-size: 14px;
-        color: #7A958F;
-        margin-bottom: 10px;
-    }
-    .salon-select {
-        width: 100%;
-        max-width: 400px;
-        height: 40px;
-        border: none;
-        border-radius: 20px;
-        background: #FFFFFF;
-        padding: 0 18px;
-        font-size: 14px;
-        color: #292421;
-        outline: none;
-        appearance: none;
-        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23A75F37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 16px center;
-        cursor: pointer;
-    }
-    .picker-gumb {
-        background: #A75F37;
-        color: #FFFFFF;
-        border: none;
-        border-radius: 30px;
-        padding: 10px 40px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 4px;
-    }
-    .picker-gumb:hover { background: #CA8E82; }
+    <div class="table-box-center">
+        <h1>SEZNAM PROSTIH TERMINOV</h1>
+        <div class="form-line"></div>
 
-    /* ── TERMINI ──────────────────────────────────────── */
-    .termini-page { padding: 20px 32px 48px; }
+        <div class="table-scroll">
+            <table class="simple-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Frizer</th>
+                        <th>Datum</th>
+                        <th>Ura</th>
+                    </tr>
+                </thead>
 
-    .termini-glava { margin-bottom: 20px; }
-    .termini-glava h2 {
-        font-family: Georgia, serif;
-        font-size: 1.6rem;
-        margin-bottom: 4px;
-    }
-    .termini-glava .podnaslov {
-        font-size: 13px;
-        color: #7A958F;
-        margin-bottom: 10px;
-    }
-    .zamenjaj-salon {
-        font-size: 12px;
-        color: #A75F37;
-        text-decoration: none;
-        font-weight: 600;
-    }
-    .zamenjaj-salon:hover { text-decoration: underline; }
-
-    /* ── KOLEDAR ─────────────────────────────────────── */
-    .koledar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-        max-width: 1200px;
-    }
-
-    .dan-kartica {
-        background: #FFFFFF;
-        border: 1px solid #F2D6CE;
-        border-radius: 10px;
-        padding: 10px 8px;
-        min-height: 100px;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-    .dan-kartica.prazen {
-        background: #F2E7DD;
-    }
-    .dan-kartica.najhitrejsi {
-        background: #C8E6C9;
-        border-color: #4CAF50;
-        box-shadow: 0 0 0 2px #4CAF50;
-    }
-
-    .dan-glava {
-        font-weight: 700;
-        font-size: 11px;
-        text-transform: uppercase;
-        color: #A75F37;
-        letter-spacing: 0.05em;
-    }
-    .dan-kartica.najhitrejsi .dan-glava { color: #2E7D32; }
-    .dan-kartica.prazen .dan-glava { color: #B8A89A; }
-
-    .dan-stevilka {
-        font-family: Georgia, serif;
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-    .dan-kartica.prazen .dan-stevilka { color: #B8A89A; }
-
-    /* posamezen termin */
-    .ure-seznam {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    .termin-row {
-        display: flex;
-        align-items: baseline;
-        gap: 5px;
-        background: #F2E7DD;
-        border-radius: 6px;
-        padding: 4px 7px;
-        font-size: 12px;
-        line-height: 1.3;
-    }
-    .dan-kartica.najhitrejsi .termin-row {
-        background: rgba(255,255,255,0.6);
-    }
-    .termin-ura {
-        font-weight: 700;
-        color: #292421;
-        white-space: nowrap;
-        min-width: 36px;
-    }
-    .termin-frizer {
-        color: #7A958F;
-        font-size: 11px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .ni-prostih {
-        font-size: 11px;
-        color: #B8A89A;
-        font-style: italic;
-        margin-top: 4px;
-    }
-
-    .legend {
-        margin-top: 20px;
-        font-size: 12px;
-        color: #7A958F;
-    }
-    .legend .swatch {
-        display: inline-block;
-        width: 12px; height: 12px;
-        border-radius: 3px;
-        background: #C8E6C9;
-        border: 1px solid #4CAF50;
-        vertical-align: middle;
-        margin: 0 4px 0 12px;
-    }
-
-    @media (max-width: 900px) {
-        .koledar { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 500px) {
-        .termini-page { padding: 16px 14px 40px; }
-        .back-wrap { padding: 12px 14px 0; }
-    }
-</style>
-
-<div class="back-wrap">
-    {% if salon %}
-        <a href="/prosti_termini" class="back-btn">&#8617;</a>
-    {% else %}
-        <a href="/" class="back-btn">&#8617;</a>
-    {% endif %}
-</div>
-
-{% if not salon %}
-    {# ── SALON PICKER ── #}
-    <div class="picker-wrap">
-        <h2>Prosti termini</h2>
-        <p>Izberi salon in poglej razpoložljive termine za naslednjih 14 dni.</p>
-        <form method="GET" action="/prosti_termini" style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;">
-            <select name="salon_id" class="salon-select" required>
-                <option value="" disabled selected>— izberi salon —</option>
-                {% for s in saloni %}
-                    <option value="{{ s[0] }}">{{ s[1] }}{% if s[3] %} · {{ s[3] }}{% endif %}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" class="picker-gumb">Pokaži termine →</button>
-        </form>
-    </div>
-
-{% else %}
-    {# ── TERMINI PRIKAZ ── #}
-    <div class="termini-page">
-        <div class="termini-glava">
-            <h2>{{ salon[1] }} — prosti termini</h2>
-            <div class="podnaslov">Naslednjih 14 dni. Najhitrejši prost dan je označen zeleno.</div>
-            <a href="/prosti_termini" class="zamenjaj-salon">↩ zamenjaj salon</a>
-        </div>
-
-        <div class="koledar">
-            {% for d in dnevi %}
-                <div class="dan-kartica
-                    {% if najhitrejsi_index is not none and loop.index0 == najhitrejsi_index %}najhitrejsi{% endif %}
-                    {% if not d.proste_ure %}prazen{% endif %}">
-
-                    <div class="dan-glava">{{ d.dan_ime }}</div>
-                    <div class="dan-stevilka">{{ d.datum.strftime('%d. %m.') }}</div>
-
-                    {% if d.proste_ure %}
-                        <div class="ure-seznam">
-                            {% for ura, frizer_ime, frizer_id in d.proste_ure %}
-                                <div class="termin-row">
-                                    <span class="termin-ura">{{ ura }}</span>
-                                    <span class="termin-frizer">{{ frizer_ime }}</span>
-                                </div>
-                            {% endfor %}
-                        </div>
+                <tbody>
+                    {% for u in urnik %}
+                        <tr>
+                            {% if u|length > 3 %}
+                                <td>{{ u[0] }}</td>
+                                <td>{{ u[1] }}</td>
+                                <td>{{ u[2] }}</td>
+                                <td>{{ u[3] }}</td>
+                            {% else %}
+                                <td>{{ loop.index }}</td>
+                                <td>{{ u[0] }}</td>
+                                <td>{{ u[1] }}</td>
+                                <td>{{ u[2] }}</td>
+                            {% endif %}
+                        </tr>
                     {% else %}
-                        <div class="ni-prostih">ni prostih</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="legend">
-            Legenda:
-            <span class="swatch"></span> najhitrejši prost dan
+                        <tr>
+                            <td colspan="4">Ni prostih terminov.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-{% endif %}
+</div>
 
 {% endblock %}

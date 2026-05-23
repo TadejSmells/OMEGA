@@ -10,8 +10,35 @@
 </head>
 
 <body>
-    {% include 'partials/topbar.html' %}
-    {% include 'partials/navbar.html' %}
+    <nav>
+        <p>
+            {% if session.get('role') == 'admin' %}
+                | <a href="/admin">⚙️ Admin panel</a>
+                | <a href="/stranke">Seznam strank</a>
+                | <a href="/vse_rezervacije">Vse rezervacije</a>
+                | <a href="/kontakti_strank">Kontakti strank</a>
+            {% endif %}
+
+            {% if session.get('role') in ('frizer', 'admin') %}
+                | <a href="/frizer">Frizer panel</a>
+                | <a href="/urnik">Urnik</a>
+            {% endif %}
+
+            {% if session.get('user_id') %}
+                | <a href="/rezervacije">Nova rezervacija</a>
+                | <a href="/profil">👤 {{ session.get('username') }}</a>
+                | <a href="/logout">Odjava</a>
+                | <a href="/moje">Moje rezervacije</a>
+            {% else %}
+                | <a href="/login">Prijava</a>
+                | <a href="/register">Registracija</a>
+            {% endif %}
+        </p>
+    </nav>
+    <!--    Povsod se zdej namest navbar da tole pa isto za footer    -->
+    
+
+    <hr>
 
     {% if session.get("user_id") %}
     <div style="padding: 4px 10px 4px 10px;">
@@ -44,6 +71,9 @@
             </div>
         {% endif %}
     {% endwith %}
+
+    {% include 'partials/topbar.html' %}
+    {% include 'partials/navbar.html' %}
 
     <main>
         {% block content %}{% endblock %}
