@@ -22,32 +22,63 @@
     </div>
 
     <div class="topbar-right">
-        {% if request.path == '/' %}
+        {% if session.get('user_id') %}
+            {% set opomniki = session.get('opomnik_rezervacije', []) %}
+            {% set opomnik_tip = session.get('opomnik_tip', '') %}
+
+            {% if session.get('role') == 'frizer' %}
+                {% set frizer_obvestila = get_obvestila_frizer() %}
+            {% else %}
+                {% set frizer_obvestila = [] %}
+            {% endif %}
+
+            {% set skupaj = (opomniki | length) + (preklicane_rezervacije | length) + (frizer_obvestila | length) %}
+
             <div class="notification-wrap">
                 <button type="button" class="notification-btn" onclick="toggleNotifications()">
                     🔔
-
-                    {% if preklicane_rezervacije %}
-                        <span class="notification-badge">{{ preklicane_rezervacije|length }}</span>
+                    {% if skupaj > 0 %}
+                        <span class="notification-badge">{{ skupaj }}</span>
                     {% endif %}
                 </button>
 
                 <div class="notification-box" id="notificationBox">
                     <div class="notification-title">Obvestila</div>
 
-                    {% if preklicane_rezervacije %}
-                        {% for r in preklicane_rezervacije %}
-                            <div class="notification-item">
-                                <strong>Rezervacija je bila preklicana</strong><br>
-                                Frizer: {{ r[1] or '—' }}<br>
-                                Salon: {{ r[2] or '—' }}<br>
-                                Storitev: {{ r[3] or '—' }}
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="notification-empty">
-                            Ni novih obvestil.
-                        </div>
+                    {% for rez in opomniki %}
+    <div class="notification-item">
+        <strong>📅 Termin danes ob {{ rez.ura }}</strong><br>
+        Storitev: {{ rez.storitev or '—' }}<br>
+        {% if opomnik_tip == 'frizer' %}
+            Stranka: {{ rez.stranka or '—' }}<br>
+        {% else %}
+            Frizer: {{ rez.frizer or '—' }}<br>
+        {% endif %}
+        Salon: {{ rez.salon or '—' }}
+    </div>
+{% endfor %}
+{% if opomniki %}
+    <form method="POST" action="/opomnik/opusti" style="margin:4px 0 8px 0;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="mini-btn">× Opusti vse opomnike</button>
+    </form>
+{% endif %}
+
+{% for r in preklicane_rezervacije %}
+    <div class="notification-item">
+        <strong>❌ Rezervacija je bila preklicana</strong><br>
+        Frizer: {{ r[1] or '—' }}<br>
+        Salon: {{ r[2] or '—' }}<br>
+        Storitev: {{ r[3] or '—' }}
+        <form method="POST" action="/preklicana/opusti/{{ r[0] }}" style="margin-top:6px;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="mini-btn">× Opusti</button>
+        </form>
+    </div>
+{% endfor %}
+
+                    {% if skupaj == 0 %}
+                        <div class="notification-empty">Ni novih obvestil.</div>
                     {% endif %}
                 </div>
             </div>
@@ -64,3 +95,17 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+function toggleNotifications() {
+    const box = document.getElementById('notificationBox');
+    if (box) box.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+    const box = document.getElementById('notificationBox');
+    const btn = document.querySelector('.notification-btn');
+    if (box && btn && !box.contains(e.target) && !btn.contains(e.target)) {
+        box.classList.remove('show');
+    }
+});
+</script>

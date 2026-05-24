@@ -43,7 +43,42 @@ f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
 f_app.jinja_env.globals['get_obvestila_frizer'] = (
     controllers.obvestila_frizer_controller.obvestila_za_frizerja
 )
+from flask import Flask, redirect, request, session
+from flask import session as _session
+from models import model_rezervacije_stranke as _mrs
 
+@f_app.context_processor
+def inject_global_notifications():
+    preklicane = []
+    if _session.get('user_id') and _session.get('role') == 'stranka':
+        try:
+            vse = _mrs.get_preklicane_rezervacije_uporabnika(_session['user_id'])
+            videne = _session.get('videne_preklicane', [])
+            # r[0] = id_rezervacije (confirmed from model_obvestilo_preklic.py)
+            preklicane = [r for r in vse if r[0] not in videne]
+        except Exception:
+            preklicane = []
+    return dict(preklicane_rezervacije=preklicane)
+
+@f_app.post('/opomnik/opusti')
+@login_required
+def opusti_opomnik():
+    from flask import session
+    session.pop('opomnik_rezervacije', None)
+    session.pop('opomnik_tip', None)
+    from flask import request as _req
+    return redirect(_req.referrer or '/')
+
+# PREKLICANE REZERVACIJE DISMISS (session-based tracking)
+@f_app.post('/preklicana/opusti/<int:id_rez>')
+@login_required
+def opusti_preklicano(id_rez):
+    from flask import session, request as _req
+    videne = session.get('videne_preklicane', [])
+    if id_rez not in videne:
+        videne.append(id_rez)
+    session['videne_preklicane'] = videne
+    return redirect(_req.referrer or '/')
 # INDEX & SETUP — PUSTI PRI MIRU
 
 @f_app.get('/')

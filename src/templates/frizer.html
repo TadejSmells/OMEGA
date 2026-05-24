@@ -31,23 +31,7 @@
         </div>
     </div>
 
-    {% set obvestila = get_obvestila_frizer() %}
-    {% if obvestila %}
-    {% for o in obvestila %}
-    <div style="background:#fff; border-radius:10px; padding:14px 20px; margin-bottom:12px; display:flex; align-items:flex-start; gap:12px;">
-        <div style="font-size:20px;">🔔</div>
-        <div style="flex:1;">
-            <div style="font-size:13px; font-weight:700;">{{ o.naslov }}</div>
-            <div style="font-size:13px; margin-top:4px;">{{ o.vsebina }}</div>
-            <div style="font-size:11px; color:#A75F37; margin-top:4px;">{{ o.datum.strftime('%d.%m.%Y %H:%M') if o.datum else '' }}</div>
-        </div>
-        <form method="POST" action="/frizer/obvestilo/opusti/{{ o.id }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="mini-btn">× Opusti</button>
-        </form>
-    </div>
-    {% endfor %}
-    {% endif %}
+
 
     <div style="display:flex; gap:28px; flex-wrap:wrap; margin-bottom:28px;">
 
