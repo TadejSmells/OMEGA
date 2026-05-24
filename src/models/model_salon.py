@@ -93,19 +93,17 @@ def get_vse(tip):
         session.close()
 
 
-def get_saloni_s_storitvami():
+def get_saloni_s_storitvami(priljubljeni_ids=None):
     """
     Optimizirana poizvedba za seznam salonov — odpravlja N+1 problem.
 
-    Zakaj:
-        Brez te funkcije bi saloni_controller naredil 1 poizvedbo za salone
-        in nato 1 poizvedbo PER salon za storitve. Za 3 salone = 4 poizvedbe,
-        za 100 salonov = 101 poizvedb.
-        Ta funkcija naredi 2 poizvedbi skupaj ne glede na število salonov,
-        nato združi rezultate v Pythonu z defaultdict.
+    Args:
+        priljubljeni_ids: set of salon IDs the logged-in user has favourited.
+                          Favourited salons are sorted to the front of the list.
 
     Vrne:
-        Seznam dict-ov: [{'salon': (id, ime, naslov, mesto, tel), 'storitve': [...]}, ...]
+        Seznam dict-ov: [{'salon': (id, ime, naslov, mesto, tel),
+                          'storitve': [...], 'priljubljen': bool}, ...]
     """
     db_session = db.get_session()
     try:
@@ -131,13 +129,21 @@ def get_saloni_s_storitvami():
                 (row.id_storitve, row.ime_storitve, row.cena, row.trajanje)
             )
 
-        return [
+        fav_ids = priljubljeni_ids or set()
+
+        rezultat = [
             {
-                'salon': (s.id, s.ime, s.naslov, s.mesto, s.telefon),
-                'storitve': storitve_map[s.id]
+                'salon':       (s.id, s.ime, s.naslov, s.mesto, s.telefon),
+                'storitve':    storitve_map[s.id],
+                'priljubljen': s.id in fav_ids,
             }
             for s in saloni
         ]
+
+        # Favourited salons float to the top; within each group order is preserved
+        rezultat.sort(key=lambda x: 0 if x['priljubljen'] else 1)
+
+        return rezultat
     finally:
         db_session.close()
 

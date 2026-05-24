@@ -99,6 +99,32 @@
         font-family: Arial, Helvetica, sans-serif;
     }
 
+    .password-wrap {
+        position: relative;
+    }
+
+    .password-wrap input {
+        padding-right: 42px;
+    }
+
+    .toggle-geslo {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        color: #CA8E82;
+        font-size: 15px;
+    }
+
+    .toggle-geslo:hover {
+        color: #A75F37;
+    }
+
     .submit-wrap {
         width: 100%;
         text-align: center;
@@ -163,7 +189,12 @@
 
             <div class="polje">
                 <label for="password">Geslo</label>
-                <input type="password" id="password" name="password" required>
+                <div class="password-wrap">
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" class="toggle-geslo" onclick="toggleGeslo()" aria-label="Pokaži/skrij geslo" title="Pokaži/skrij geslo">
+                        👁
+                    </button>
+                </div>
             </div>
 
             <div class="submit-wrap">
@@ -174,4 +205,20 @@
         <p class="auth-link">Nimaš računa? <a href="/register">Registriraj se</a></p>
     </div>
 </div>
+
+<script>
+    function toggleGeslo() {
+        const input = document.getElementById('password');
+        const btn   = document.querySelector('.toggle-geslo');
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = '🙈';
+            btn.title = 'Skrij geslo';
+        } else {
+            input.type = 'password';
+            btn.textContent = '👁';
+            btn.title = 'Pokaži geslo';
+        }
+    }
+</script>
 {% endblock %}
