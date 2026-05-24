@@ -84,7 +84,7 @@ def get_vse(tip):
             return [(r.id_storitve, r.ime_storitve, r.cena, r.trajanje) for r in rows]
         elif tip == 'urnik':
             rows = (
-                session.query(Frizer.ime, Urnik.dan, Urnik.ura)
+                session.query(Urnik.id_frizerja, Frizer.ime, Urnik.dan, Urnik.ura)
                 .join(Frizer, Urnik.id_frizerja == Frizer.id_frizer)
                 .order_by(Urnik.dan, Urnik.ura)
                 .all()
@@ -276,5 +276,56 @@ def dodaj_urnik(frizer_id, dan, ura):
     except Exception:
         db_session.rollback()
         raise
+    finally:
+        db_session.close()
+
+
+def izbrisi_urnik(frizer_id, dan, ura):
+    """Izbriše termin iz urnika (po frizer_id + dan + ura — sestavljeni ključ)."""
+    from datetime import date as _date, time as _time
+    if isinstance(dan, str):
+        dan = _date.fromisoformat(dan)
+    if isinstance(ura, str):
+        ura = _time.fromisoformat(ura if len(ura) > 5 else ura + ":00")
+
+    db_session = db.get_session()
+    try:
+        row = db_session.query(Urnik).filter(
+            Urnik.id_frizerja == int(frizer_id),
+            Urnik.dan == dan,
+            Urnik.ura == ura,
+        ).first()
+        if row:
+            db_session.delete(row)
+            db_session.commit()
+    except Exception:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()
+
+
+def get_frizerji_po_salonih():
+    """
+    Vrne sezname frizerjev, grupirane po salonu (lokaciji).
+    [{'salon': (id, ime, mesto), 'frizerji': [(id_frizer, ime, kontakt), ...]}, ...]
+    """
+    db_session = db.get_session()
+    try:
+        saloni = db_session.query(Salon).order_by(Salon.mesto, Salon.ime).all()
+        frizerji = db_session.query(Frizer).order_by(Frizer.ime).all()
+
+        from collections import defaultdict
+        po_salonu = defaultdict(list)
+        for f in frizerji:
+            po_salonu[f.salon_id].append((f.id_frizer, f.ime, f.kontakt))
+
+        return [
+            {
+                'salon': (s.id, s.ime, s.mesto),
+                'frizerji': po_salonu.get(s.id, []),
+            }
+            for s in saloni
+        ]
     finally:
         db_session.close()

@@ -9,11 +9,19 @@ def pregled():
 
 def urnik():
     if request.method == 'POST':
-        model_salon.dodaj_urnik(
-            request.form.get('frizer_id'),
-            request.form.get('dan'),
-            request.form.get('ura')
-        )
+        akcija = request.form.get('akcija', 'dodaj')
+        if akcija == 'izbrisi':
+            model_salon.izbrisi_urnik(
+                request.form.get('frizer_id'),
+                request.form.get('dan'),
+                request.form.get('ura')
+            )
+        else:
+            model_salon.dodaj_urnik(
+                request.form.get('frizer_id'),
+                request.form.get('dan'),
+                request.form.get('ura')
+            )
         return redirect('/urnik')
     return render_template(
         "urnik.html",

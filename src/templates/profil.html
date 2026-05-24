@@ -252,6 +252,32 @@
                         {% endif %}
                     </td>
                 </tr>
+                {% if podatki %}
+                    {% if podatki.ime is defined or podatki.priimek is defined %}
+                    <tr>
+                        <td><strong>Ime in priimek:</strong></td>
+                        <td>{{ podatki.ime or '' }} {{ podatki.priimek or '' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if podatki.mail is defined %}
+                    <tr>
+                        <td><strong>E-pošta:</strong></td>
+                        <td>{{ podatki.mail or '—' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if podatki.telefon is defined %}
+                    <tr>
+                        <td><strong>Telefon:</strong></td>
+                        <td>{{ podatki.telefon or '—' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if podatki.kontakt is defined %}
+                    <tr>
+                        <td><strong>Kontakt:</strong></td>
+                        <td>{{ podatki.kontakt or '—' }}</td>
+                    </tr>
+                    {% endif %}
+                {% endif %}
             </table>
 
             {% if session.get('role') == 'admin' %}

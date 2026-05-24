@@ -214,4 +214,29 @@ def logout():
 def profil():
     if "user_id" not in session:
         return redirect('/login')
-    return render_template("profil.html")
+
+    podatki = {}
+    user_id = session.get('user_id')
+    role = session.get('role')
+
+    # Hardcoded admin (user_id == 0) has no DB row
+    if user_id and role in ('stranka', 'frizer'):
+        s = db.get_session()
+        try:
+            if role == 'stranka':
+                st = s.query(Stranka).filter(Stranka.user_id == user_id).first()
+                if st:
+                    podatki = {
+                        'ime': st.ime, 'priimek': st.priimek,
+                        'mail': st.mail, 'telefon': st.telefon,
+                    }
+            elif role == 'frizer':
+                fr = s.query(Frizer).filter(Frizer.user_id == user_id).first()
+                if fr:
+                    podatki = {'ime': fr.ime, 'kontakt': fr.kontakt}
+        except Exception:
+            podatki = {}
+        finally:
+            s.close()
+
+    return render_template("profil.html", podatki=podatki)

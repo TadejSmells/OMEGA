@@ -25,6 +25,13 @@ def seznam_frizerjev():
     return render_template("seznam_frizerjev.html", frizerji=frizerji)
 
 
+def frizerji_na_lokaciji():
+    """Frizerji grupirani po salonu (lokaciji)."""
+    from models import model_salon
+    skupine = model_salon.get_frizerji_po_salonih()
+    return render_template("frizerji_lokacije.html", skupine=skupine)
+
+
 def dodaj_frizer():
     if session.get("role") != "admin":
         return "Nimaš dostopa.", 403

@@ -1,64 +1,76 @@
 {% extends "base.html" %}
-
-{% block title %}Urnik{% endblock %}
+{% block title %}Urejanje prostih terminov{% endblock %}
 
 {% block content %}
+<div class="zgodovina-page">
+    <a href="/admin" class="back-btn">&#8617;</a>
 
-<h1>Urejanje prostih terminov</h1>
+    <div class="table-box">
+        <h1>Urejanje prostih terminov</h1>
+        <div class="line"></div>
 
-<h2>Dodaj termin</h2>
+        <form method="POST" class="urnik-dodaj">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="akcija" value="dodaj">
+            <select name="frizer_id" required>
+                <option value="">— frizer —</option>
+                {% for f in frizerji %}
+                <option value="{{ f[0] }}">{{ f[2] }}</option>
+                {% endfor %}
+            </select>
+            <input type="date" name="dan" required>
+            <input type="time" name="ura" required>
+            <button type="submit" class="oddaj-btn">+ Dodaj termin</button>
+        </form>
 
-<form method="POST">
+        <div class="table-wrap" style="margin-top:18px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Frizer</th>
+                        <th>Dan</th>
+                        <th>Ura</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in urnik %}
+                    <tr>
+                        <td>{{ u[1] }}</td>
+                        <td>{{ u[2].strftime('%d. %m. %Y') if u[2] else '—' }}</td>
+                        <td>{{ u[3].strftime('%H:%M') if u[3] else '—' }}</td>
+                        <td>
+                            <form method="POST" style="margin:0;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="akcija" value="izbrisi">
+                                <input type="hidden" name="frizer_id" value="{{ u[0] }}">
+                                <input type="hidden" name="dan" value="{{ u[2].isoformat() if u[2] else '' }}">
+                                <input type="hidden" name="ura" value="{{ u[3].strftime('%H:%M') if u[3] else '' }}">
+                                <button type="submit" class="btn-cancel">Izbriši</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="empty">Ni prostih terminov.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-    Frizer:
-    <select name="frizer_id">
-        {% for f in frizerji %}
-        <option value="{{ f[0] }}">{{ f[1] }}</option>
-        {% endfor %}
-    </select>
-
-    <br><br>
-
-    Dan:
-    <input type="date" name="dan">
-
-    <br><br>
-
-    Ura:
-    <input type="time" name="ura">
-
-    <br><br>
-
-    <input type="submit" value="Dodaj termin">
-
-</form>
-
-<hr>
-
-<h2>Prosti termini</h2>
-
-<table border="1" style="width:100%; border-collapse: collapse;">
-
-<tr>
-    <th>ID</th>
-    <th>Frizer</th>
-    <th>Dan</th>
-    <th>Ura</th>
-</tr>
-
-{% for u in urnik %}
-<tr>
-    <td>{{ u[0] }}</td>
-    <td>{{ u[1] }}</td>
-    <td>{{ u[2] }}</td>
-    <td>{{ u[3] }}</td>
-</tr>
-{% else %}
-<tr>
-    <td colspan="4">Ni prostih terminov.</td>
-</tr>
-{% endfor %}
-
-</table>
-
+<style>
+    .urnik-dodaj {
+        display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+        justify-content: center; margin-bottom: 8px;
+    }
+    .urnik-dodaj select, .urnik-dodaj input {
+        padding: 8px; border: 1px solid #D9B99F; border-radius: 6px; font-size: 13px;
+    }
+    .oddaj-btn {
+        background: #A75F37; color: #fff; border: none; border-radius: 6px;
+        padding: 9px 16px; cursor: pointer; font-size: 13px;
+    }
+    .oddaj-btn:hover { background: #8a4e2d; }
+</style>
 {% endblock %}

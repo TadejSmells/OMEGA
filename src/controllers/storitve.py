@@ -18,6 +18,9 @@ def pridobi_storitve():
         except Exception:
             priljubljeni_ids = set()
 
+    # Priljubljene storitve naj bodo na začetku seznama (stabilno: ostalo ostane v istem vrstnem redu)
+    podatki = sorted(podatki, key=lambda row: 0 if row[0] in priljubljeni_ids else 1)
+
     return render_template(
         "seznam_storitev.html",
         podatki=podatki,

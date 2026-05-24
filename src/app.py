@@ -31,6 +31,7 @@ import controllers.salon_controller
 import controllers.saloni_controller
 import controllers.sporocila
 import controllers.storitve
+import controllers.storitev_detail_controller
 import controllers.sv_salon
 import controllers.sv_setup
 import controllers.uredi_rezervacijo
@@ -178,6 +179,10 @@ def saloni_uredi(salon_id):
 def seznam_frizerjev():
     return controllers.frizer_controller.seznam_frizerjev()
 
+@f_app.get('/frizerji/lokacije')
+def frizerji_na_lokaciji():
+    return controllers.frizer_controller.frizerji_na_lokaciji()
+
 @f_app.get('/frizer/<int:frizer_id>')
 def frizer_profil(frizer_id):
     return controllers.frizer_controller.frizer_profil(frizer_id)
@@ -225,6 +230,15 @@ def moje_priljubljene_storitve():
 @admin_required
 def uredi_storitev(storitev_id):
     return controllers.uredi_storitev_controller.uredi_storitev(storitev_id)
+
+@f_app.get('/storitev/<int:storitev_id>')
+def storitev_detail(storitev_id):
+    return controllers.storitev_detail_controller.storitev_detail(storitev_id)
+
+@f_app.post('/storitev/<int:storitev_id>/komentar')
+@login_required
+def storitev_komentar(storitev_id):
+    return controllers.storitev_detail_controller.dodaj_komentar_storitvi(storitev_id)
 # REZERVACIJE
 
 @f_app.route('/rezervacije', methods=['GET', 'POST'])
@@ -353,7 +367,7 @@ def admin():
 # OSTALO
 
 @f_app.route('/urnik', methods=['GET', 'POST'])
-@login_required
+@admin_required
 def urnik():
     return controllers.sv_salon.urnik()
 

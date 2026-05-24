@@ -1,7 +1,13 @@
 <nav class="navbar">
     <a href="/" class="{{ 'active' if request.path == '/' }}">Domov</a>
     <a href="/saloni" class="{{ 'active' if request.path == '/saloni' }}">Saloni</a>
-    <a href="/frizerji" class="{{ 'active' if request.path == '/frizerji' }}">Frizerji</a>
+    <div class="dropdown">
+        <a href="/frizerji" class="{{ 'active' if request.path.startswith('/frizerji') or request.path.startswith('/frizer/') }}">Frizerji</a>
+        <div class="dropdown-content">
+            <a href="/frizerji">Vsi frizerji</a>
+            <a href="/frizerji/lokacije">Po lokacijah</a>
+        </div>
+    </div>
     <a href="/cenik" class="{{ 'active' if request.path == '/cenik' }}">Storitve</a>
 
     <div class="dropdown">
