@@ -301,6 +301,11 @@ def stranka():
 def kontakti_strank():
     return controllers.kontakt_stranka_controller.kontakti_mojih_strank()
 
+@f_app.get('/kontakti_strank/<int:id_stranke>')
+@login_required
+def kontakt_posamezne_stranke(id_stranke):
+    return controllers.kontakt_stranka_controller.kontakt_posamezne_stranke(id_stranke)
+
 @f_app.get('/rezervacije_stranke')
 @login_required
 def rezervacije_stranke():

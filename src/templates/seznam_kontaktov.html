@@ -1,34 +1,42 @@
 {% extends "base.html" %}
+{% block title %}Kontakti strank{% endblock %}
+
 {% block content %}
+<div class="zgodovina-page">
+    <a href="/frizer" class="back-btn">&#8617;</a>
 
-<h2>Kontakti mojih strank</h2>
+    <div class="table-box">
+        <h1>Kontakti mojih strank</h1>
+        <div class="line"></div>
 
-{% if stranke %}
-
-<table border="1" cellpadding="6">
-
-    <tr>
-        <th>Ime</th>
-        <th>Priimek</th>
-        <th>Email</th>
-        <th>Telefon</th>
-    </tr>
-
-    {% for s in stranke %}
-    <tr>
-        <td>{{ s.ime }}</td>
-        <td>{{ s.priimek }}</td>
-        <td>{{ s.mail }}</td>
-        <td>{{ s.telefon }}</td>
-    </tr>
-    {% endfor %}
-
-</table>
-
-{% else %}
-
-<p>Nobena stranka nima rezervacije pri vas.</p>
-
-{% endif %}
-
+        {% if stranke %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ime</th>
+                        <th>Priimek</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in stranke %}
+                    <tr>
+                        <td>{{ s.ime or '—' }}</td>
+                        <td>{{ s.priimek or '—' }}</td>
+                        <td>{{ s.mail or '—' }}</td>
+                        <td>{{ s.telefon or '—' }}</td>
+                        <td><a href="/kontakti_strank/{{ s.id_stranke }}" class="mini-link">Podrobnosti →</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty">Nobena stranka nima rezervacije pri vas.</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

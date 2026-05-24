@@ -64,13 +64,15 @@ def get_vse(tip):
                     (Stranka.ime + ' ' + Stranka.priimek).label('stranka'),
                     Frizer.ime.label('frizer'),
                     Salon.ime.label('salon'),
-                    Storitev.ime_storitve.label('storitev')
+                    Storitev.ime_storitve.label('storitev'),
+                    Rezervacija.datum,
+                    Rezervacija.ura
                 )
                 .outerjoin(Stranka, Rezervacija.id_stranke == Stranka.id_stranke)
                 .outerjoin(Frizer, Rezervacija.id_frizerja == Frizer.id_frizer)
                 .outerjoin(Salon, Rezervacija.id_salona == Salon.id)
                 .outerjoin(Storitev, Rezervacija.id_storitve == Storitev.id_storitve)
-                .order_by(Rezervacija.id_rezervacije)
+                .order_by(Rezervacija.datum.desc(), Rezervacija.ura.desc())
                 .all()
             )
             return rows

@@ -15,6 +15,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Datum</th>
+                        <th>Ura</th>
                         <th>Stranka</th>
                         <th>Frizer</th>
                         <th>Salon</th>
@@ -26,6 +28,8 @@
                     {% for r in rezervacije %}
                         <tr>
                             <td>{{ r[0] }}</td>
+                            <td>{{ r[5].strftime('%d. %m. %Y') if r[5] else '—' }}</td>
+                            <td>{{ r[6].strftime('%H:%M') if r[6] else '—' }}</td>
                             <td>{{ r[1] or '—' }}</td>
                             <td>{{ r[2] or '—' }}</td>
                             <td>{{ r[3] or '—' }}</td>
@@ -33,7 +37,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="5" class="empty">Ni zgodovine rezervacij.</td>
+                            <td colspan="7" class="empty">Ni zgodovine rezervacij.</td>
                         </tr>
                     {% endfor %}
                 </tbody>
