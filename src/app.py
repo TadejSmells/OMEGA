@@ -150,6 +150,11 @@ def salon_termini_view(salon_id):
 def salon_komentar(salon_id):
     return controllers.con_komentar_salona.dodaj_komentar_salonu(salon_id)
 
+@f_app.post('/frizer/<int:frizer_id>/komentar')
+@login_required
+def frizer_komentar(frizer_id):
+    return controllers.komentar_frizer.dodaj(frizer_id)
+
 @f_app.post('/salon/<int:salon_id>/favorite')
 def toggle_favorite(salon_id):
     return controllers.priljubljeni_saloni.toggle_favorite(salon_id)
