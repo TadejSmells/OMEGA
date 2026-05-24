@@ -143,6 +143,29 @@
     .dan-kartica.najhitrejsi .termin-row {
         background: rgba(255,255,255,0.6);
     }
+    .termin-form { padding: 0; background: none; }
+    .termin-gumb {
+        display: flex;
+        align-items: baseline;
+        gap: 5px;
+        width: 100%;
+        background: #F2E7DD;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        padding: 4px 7px;
+        font-size: 12px;
+        line-height: 1.3;
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .termin-gumb:hover {
+        background: #E6D2C2;
+        border-color: #CA8E82;
+    }
+    .dan-kartica.najhitrejsi .termin-gumb {
+        background: rgba(255,255,255,0.6);
+    }
     .termin-ura {
         font-weight: 700;
         color: #292421;
@@ -233,10 +256,25 @@
                     {% if d.proste_ure %}
                         <div class="ure-seznam">
                             {% for ura, frizer_ime, frizer_id in d.proste_ure %}
+                                {% if session.get('user_id') and session.get('role') == 'stranka' %}
+                                <form method="POST" action="/rezervacije" class="termin-row termin-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="frizer_id" value="{{ frizer_id }}">
+                                    <input type="hidden" name="salon_id" value="{{ salon[0] }}">
+                                    <input type="hidden" name="datum" value="{{ d.datum.isoformat() }}">
+                                    <input type="hidden" name="ura" value="{{ ura }}">
+                                    <input type="hidden" name="next" value="/salon/{{ salon[0] }}/termini">
+                                    <button type="submit" class="termin-gumb" title="Rezerviraj ta termin">
+                                        <span class="termin-ura">{{ ura }}</span>
+                                        <span class="termin-frizer">{{ frizer_ime }}</span>
+                                    </button>
+                                </form>
+                                {% else %}
                                 <div class="termin-row">
                                     <span class="termin-ura">{{ ura }}</span>
                                     <span class="termin-frizer">{{ frizer_ime }}</span>
                                 </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     {% else %}

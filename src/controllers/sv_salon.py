@@ -1,64 +1,12 @@
-from flask import render_template, request, redirect, abort, session
+from flask import render_template, request, redirect
 from models import model_salon
-from models import komentar_salona as ks_model  
 
-#ta bs v tej datoteki mora it kompletno vn, sam kaj ko je salon detail tle notr, komentarji so pa vezani na salon detail.......
-#todo: premakni v controller_salon_detail.py, da ta bs dela
 
-#salon_detail je premaknjena v con_salon_detail.py
-def salon_detail(salon_id):
-    try:
-        salon = next((s for s in model_salon.get_vse('salon') if s[0] == salon_id), None)
-    except Exception:
-        salon = None
-
-    if salon is None:
-        abort(404)
-
-    try:
-        storitve = model_salon.get_storitve_za_salon(salon_id)
-    except Exception:
-        storitve = []
-
-    try:
-        komentarji = ks_model.get_komentarji_salona(salon_id)  # ← dodaj
-    except Exception:
-        komentarji = []
-
-    povprecje = (
-        round(sum(k.ocena for k in komentarji) / len(komentarji), 1)
-        if komentarji else None
-    )
-
-    return render_template(
-        "salon.html",
-        salon=salon,
-        storitve=storitve,
-        komentarji=komentarji,   # ← zamenjaj ocene=[]
-        povprecje=povprecje,
-    )
- 
- 
-#tukaj se bodo funkcije odstranile
-#za vsak user sotry se naredi posebi datotekoo v mapi controllers, kjer se definira funkcijo.
- 
- 
 def pregled():
+    """Preusmeri na glavni seznam salonov."""
     return redirect('/saloni')
 
 
- 
- 
-#premakne v datoteko salon_info.py
-def saloni_view_info():
-    return render_template(
-        "saloni_view.html",
-        saloni=model_salon.get_vse('salon')
-    )
- 
-def saloni_view():
-    return saloni_view_info()
- 
 def urnik():
     if request.method == 'POST':
         model_salon.dodaj_urnik(
@@ -67,36 +15,30 @@ def urnik():
             request.form.get('ura')
         )
         return redirect('/urnik')
-    return render_template("urnik.html",
-                           urnik=model_salon.get_vse('urnik'),
-                           frizerji=model_salon.get_vse('frizer'))
- 
+    return render_template(
+        "urnik.html",
+        urnik=model_salon.get_vse('urnik'),
+        frizerji=model_salon.get_vse('frizer')
+    )
+
+
 def zgodovina():
     rezervacije = model_salon.get_vse('rezervacija')
     return render_template("zgodovina.html", rezervacije=rezervacije)
 
 
-def frizer():
-    if "user_id" not in session:
-        return redirect("/login")
-
-    if session["role"] != "frizer":
-        return "Nimaš dostopa"
-
-    return "Frizer panel"
-
 def prosti_termini():
     salon_id = request.args.get('salon_id', type=int)
-
-    saloni = model_salon.get_vse('salon')  # [(id, ime, naslov, mesto, tel), ...]
+    saloni = model_salon.get_vse('salon')
 
     if not salon_id:
-        return render_template("prosti_termini.html", saloni=saloni, salon=None, dnevi=[], najhitrejsi_index=None)
+        return render_template("prosti_termini.html", saloni=saloni,
+                               salon=None, dnevi=[], najhitrejsi_index=None)
 
-    # poišči izbrani salon
     salon = next((s for s in saloni if s[0] == salon_id), None)
     if salon is None:
-        return render_template("prosti_termini.html", saloni=saloni, salon=None, dnevi=[], najhitrejsi_index=None)
+        return render_template("prosti_termini.html", saloni=saloni,
+                               salon=None, dnevi=[], najhitrejsi_index=None)
 
     from models import model_prosti_termini
     dnevi = model_prosti_termini.get_prosti_termini_po_dnevih(salon_id)

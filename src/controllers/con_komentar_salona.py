@@ -25,11 +25,7 @@ def dodaj_komentar_salonu(salon_id):
         flash("Komentar je bil shranjen. Hvala!", "success")
     except ValueError as e:
         flash(str(e), "error")
-    except Exception as e:
-        #debug ker ni vpisoval v bazo
-        import traceback
-        print(f"  ocena={request.form.get('ocena')!r}", flush=True)
-        print(f"  komentar={request.form.get('komentar')!r}", flush=True)
-        print(traceback.format_exc(), flush=True)
+    except Exception:
+        flash("Napaka pri shranjevanju komentarja. Poskusi znova.", "error")
 
     return redirect(f"/salon/{salon_id}")

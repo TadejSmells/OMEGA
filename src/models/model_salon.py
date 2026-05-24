@@ -251,3 +251,28 @@ def dodaj_salon(ime, naslov, mesto, telefon):
         raise
     finally:
         db_session.close()
+
+def dodaj_urnik(frizer_id, dan, ura):
+    """Doda nov termin v urnik frizerja. frizer_id, dan in ura so obvezni."""
+    if not frizer_id or not dan or not ura:
+        raise ValueError("Frizer, dan in ura so obvezni.")
+
+    from datetime import date as _date, time as _time
+    if isinstance(dan, str):
+        dan = _date.fromisoformat(dan)
+    if isinstance(ura, str):
+        ura = _time.fromisoformat(ura if len(ura) > 5 else ura + ":00")
+
+    db_session = db.get_session()
+    try:
+        db_session.add(Urnik(
+            id_frizerja=int(frizer_id),
+            dan=dan,
+            ura=ura,
+        ))
+        db_session.commit()
+    except Exception:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()

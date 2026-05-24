@@ -20,27 +20,6 @@ def frizer_profil(frizer_id):
     )
 
 
-def dodaj_komentar(frizer_id):
-    """Logged-in users only — doda komentar frizerju."""
-    if "user_id" not in session:
-        return redirect("/login")
-
-    stranka_id = session.get("stranka_id")  # may be None for admin/frizer accounts
-
-    ocena    = request.form.get("ocena")
-    komentar = request.form.get("komentar", "").strip()
-
-    try:
-        model_frizer.dodaj_komentar_frizerja(frizer_id, stranka_id, ocena, komentar)
-        flash("Komentar je bil uspešno dodan.", "success")
-    except ValueError as e:
-        flash(str(e), "error")
-    except Exception:
-        flash("Napaka pri dodajanju komentarja. Poskusi znova.", "error")
-
-    return redirect(f"/frizer/{frizer_id}")
-
-
 def seznam_frizerjev():
     frizerji = model_frizer.get_vsi_frizerji()
     return render_template("seznam_frizerjev.html", frizerji=frizerji)

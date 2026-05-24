@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS public.storitev (
     opis         text
 );
 
+ALTER TABLE public.storitev ADD COLUMN IF NOT EXISTS opis text;
+
 -- salon ima storitve
 CREATE TABLE IF NOT EXISTS public.saloni_in_storitve (
     salon_id    integer NOT NULL REFERENCES public.salon (id),

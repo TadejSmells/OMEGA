@@ -32,10 +32,41 @@ def get_vse_rezervacije():
         session.close()
 
 
+def je_termin_zaseden(frizer_id, datum, ura):
+    """Vrne True, če ima frizer na ta datum/uro že aktivno rezervacijo."""
+    from datetime import date as _date, time as _time
+    if isinstance(datum, str):
+        datum = _date.fromisoformat(datum)
+    if isinstance(ura, str):
+        ura = _time.fromisoformat(ura if len(ura) > 5 else ura + ":00")
+
+    session = db.get_session()
+    try:
+        obstaja = (
+            session.query(Rezervacija)
+            .filter(
+                Rezervacija.id_frizerja == int(frizer_id),
+                Rezervacija.datum == datum,
+                Rezervacija.ura == ura,
+                Rezervacija.status != 'cancelled',
+            )
+            .first()
+        )
+        return obstaja is not None
+    finally:
+        session.close()
+
+
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum, ura):
     """
     Doda novo rezervacijo z statusom 'aktiven'. datum in ura sta obvezna.
     """
+    from datetime import date as _date, time as _time
+    if isinstance(datum, str):
+        datum = _date.fromisoformat(datum)
+    if isinstance(ura, str):
+        ura = _time.fromisoformat(ura if len(ura) > 5 else ura + ":00")
+
     session = db.get_session()
     try:
         session.add(Rezervacija(

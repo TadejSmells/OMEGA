@@ -15,6 +15,7 @@ import controllers.faq
 import controllers.frizer_controller
 import controllers.index
 import controllers.con_komentar_salona
+import controllers.komentar_frizer
 import controllers.kontakt_stranka_controller
 import controllers.moje_rezervacije_controller
 import controllers.obvestila_frizer_controller
@@ -22,7 +23,7 @@ import controllers.oznacevanje_priljubljenih_storitev
 import controllers.pirkaz_stranke
 import controllers.preklic_rezervacije_controller
 import controllers.priljubljene_storitve
-import controllers.priljubljeni_saloni
+import controllers.priljubljeni_saloni_controller
 import controllers.prosti_termini_controller
 import controllers.rezervacije
 import controllers.rezervacije_stranke_controller
@@ -121,18 +122,6 @@ def profil():
 def saloni():
     return controllers.saloni_controller.saloni()
 
-@f_app.get('/vsi_saloni')
-def vsi_saloni():
-    return controllers.sv_salon.saloni()
-
-@f_app.get('/seznam_salonov')
-def seznam_salonov_alias():
-    return controllers.sv_salon.saloni()
-
-@f_app.get('/saloni_view')
-def saloni_view():
-    return controllers.sv_salon.saloni_view()
-
 @f_app.get('/salon')
 def salon_pregled():
     return controllers.sv_salon.pregled()
@@ -157,15 +146,12 @@ def frizer_komentar(frizer_id):
 
 @f_app.post('/salon/<int:salon_id>/favorite')
 def toggle_favorite(salon_id):
-    return controllers.priljubljeni_saloni.toggle_favorite(salon_id)
-
-@f_app.route('/salon/dodaj', methods=['GET', 'POST'])
-def salon_dodaj():
-    return controllers.sv_salon.dodaj_osebe()
+    return controllers.priljubljeni_saloni_controller.toggle_favorite(salon_id)
 
 @f_app.route('/salon/rezerviraj', methods=['GET', 'POST'])
+@login_required
 def salon_rezerviraj():
-    return controllers.sv_salon.nova_rezervacija()
+    return controllers.rezervacije.nova_rezervacija()
 
 @f_app.route('/saloni/dodaj', methods=['GET', 'POST'])
 @admin_required
@@ -179,7 +165,7 @@ def prosti_termini():
 @f_app.get('/priljubljeni_saloni')
 @login_required
 def priljubljeni_saloni():
-    return controllers.priljubljeni_saloni.prikazi()
+    return controllers.priljubljeni_saloni_controller.prikazi()
 
 @f_app.route('/saloni/uredi/<int:salon_id>', methods=['GET', 'POST'])
 @admin_required

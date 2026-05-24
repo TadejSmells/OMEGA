@@ -1,5 +1,6 @@
 from flask import render_template, session, redirect, request, flash
 from models import model_cenikstoritev
+from models import model_priljubljene_storitve
 
 
 def pridobi_storitve():

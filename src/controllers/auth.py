@@ -45,6 +45,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password']
+        password_confirm = request.form.get('password_confirm', '')
         vloga    = request.form.get('vloga', 'stranka')
         ime      = request.form.get('ime', '').strip()
         priimek  = request.form.get('priimek', '').strip()
@@ -58,6 +59,10 @@ def register():
 
         if len(password) < MIN_PASSWORD_LENGTH:
             flash(f"Geslo mora imeti vsaj {MIN_PASSWORD_LENGTH} znakov.", "error")
+            return render_template('register.html')
+
+        if password != password_confirm:
+            flash("Gesli se ne ujemata.", "error")
             return render_template('register.html')
 
         if vloga == 'stranka' and not priimek:
