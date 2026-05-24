@@ -41,22 +41,5 @@
     <div class="vsebina-desno"></div>
 </div>
 
-<script>
-function toggleNotifications() {
-    const box = document.getElementById('notificationBox');
 
-    if (box) {
-        box.classList.toggle('show');
-    }
-}
-
-document.addEventListener('click', function(e) {
-    const box = document.getElementById('notificationBox');
-    const btn = document.querySelector('.notification-btn');
-
-    if (box && btn && !box.contains(e.target) && !btn.contains(e.target)) {
-        box.classList.remove('show');
-    }
-});
-</script>
 {% endblock %}
