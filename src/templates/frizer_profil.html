@@ -481,7 +481,7 @@
                 {% if session.get('user_id') %}
                 <div class="komentar-form">
                     <h4>Dodaj komentar</h4>
-                    <form method="POST" action="/frizer/{{ frizer['id'] }}/komentar">
+                    <form method="POST" action="/frizer/{{ frizer['id_frizer'] }}/komentar">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="form-vrstica">
                             <label>Ocena</label>
