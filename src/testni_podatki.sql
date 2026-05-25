@@ -98,10 +98,19 @@ VALUES
     ('Moško oblikovanje brade in las',     30.00, '00:45:00', 'Kombiniran paket za moške.')
 ON CONFLICT DO NOTHING;
 
--- Vsak salon ponuja vse storitve (vsi frizerji lahko izvajajo te storitve)
+-- Vsak salon ponuja SVOJ nabor storitev (ne vec vseh) — vezava salon <-> storitev.
+-- Storitev ID-ji 1..20 ustrezajo vrstnemu redu vstavljanja zgoraj.
 INSERT INTO saloni_in_storitve (salon_id, storitev_id)
-SELECT s.id, st.id_storitve
-FROM salon s CROSS JOIN storitev st
+VALUES
+    -- Salon 1 — Salon Lepote (Ljubljana): celovit zenski / barvni program
+    (1, 1), (1, 2), (1, 3), (1, 5), (1, 6), (1, 10), (1, 11), (1, 12),
+    (1, 13), (1, 14), (1, 15), (1, 16), (1, 17), (1, 18), (1, 19),
+    -- Salon 2 — Frizerski Studio (Maribor): splosni salon z moskim programom
+    (2, 2), (2, 3), (2, 5), (2, 7), (2, 8), (2, 9), (2, 10), (2, 11),
+    (2, 16), (2, 19), (2, 20),
+    -- Salon 3 — Salon Elegance (Celje): premium + mosko urejanje
+    (3, 3), (3, 4), (3, 6), (3, 7), (3, 9), (3, 10), (3, 12), (3, 13),
+    (3, 14), (3, 17), (3, 20)
 ON CONFLICT DO NOTHING;
 
 -- ── FAQ ───────────────────────────────────────────────────────────────────────
@@ -184,11 +193,23 @@ FROM users u
 WHERE u.username = 'stranka123'
 ON CONFLICT DO NOTHING;
 
--- insertv v tabelo frizer
+-- insertv v tabelo frizer — Testni Frizer je del salona Salon Lepote
 INSERT INTO frizer (salon_id, ime, kontakt, user_id)
-SELECT 1, 'Testni Frizer', '040-000-002', u.id
+SELECT (SELECT id FROM salon WHERE ime = 'Salon Lepote'),
+       'Testni Frizer', '040-000-002', u.id
 FROM users u
 WHERE u.username = 'frizer123'
+ON CONFLICT DO NOTHING;
+
+-- Urnik za Testni Frizer (vstavljen posebej, ker je frizer dodan za glavnim
+-- urnikom zgoraj) — sicer se ne bi pojavil med prostimi termini Salona Lepote.
+INSERT INTO urnik (id_frizerja, dan, ura)
+SELECT f.id_frizer, CURRENT_DATE + d, u::time
+FROM frizer f
+CROSS JOIN generate_series(0, 13) AS d
+CROSS JOIN unnest(ARRAY['09:00','10:00','11:00','14:00','15:00']) AS u
+WHERE f.ime = 'Testni Frizer'
+  AND EXTRACT(DOW FROM CURRENT_DATE + d) NOT IN (0, 6)
 ON CONFLICT DO NOTHING;
 
 -- Najljubši saloni
