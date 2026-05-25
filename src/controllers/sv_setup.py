@@ -4,6 +4,7 @@ import models.model_salon as model_salon
 import models.model_rezervacije as model_rezervacije
 import models.model_preklic_rezervacije as model_preklic_rezervacije
 from controllers import preklic_rezervacije_controller
+from models import model_faq
 import db
 from models.models import Uporabnik
 from datetime import date, timedelta, datetime, time
@@ -66,7 +67,7 @@ def admin():
     danes = date.today()
     zacetek_tedna = danes - timedelta(days=danes.weekday())
     konec_tedna = zacetek_tedna + timedelta(days=6)
-
+    sporocila = model_faq.pridobi_sporocila()
     rezervacije_teden = []
     for r in vse:
         try:
@@ -114,6 +115,7 @@ def admin():
         stats=stats,
         rezervacije_teden=rezervacije_teden,
         zadnja_aktivnost=zadnja_aktivnost,
+        sporocila=sporocila,
     )
 
 
