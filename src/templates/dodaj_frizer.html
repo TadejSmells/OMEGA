@@ -2,67 +2,6 @@
 {% block title %}Dodaj frizerja{% endblock %}
 
 {% block content %}
-<style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: Georgia, "Times New Roman", serif;
-        --font-body: Arial, Helvetica, sans-serif;
-    }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
-
-    .page-header {
-        background: var(--brown); padding: 14px 32px;
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .page-header-title {
-        font-family: var(--font-head); font-size: 1.8rem; font-weight: 700;
-        color: white; letter-spacing: 0.02em;
-    }
-
-    .vsebina { padding: 40px 32px; max-width: 480px; margin: 0 auto; }
-
-    .form-panel {
-        background: var(--white); border: 1px solid var(--peach);
-        border-radius: 14px; overflow: hidden;
-    }
-    .form-panel-header {
-        background: var(--beige); padding: 14px 20px;
-        font-family: var(--font-head); font-size: 1rem;
-        color: var(--dark);
-    }
-    .form-panel-body { padding: 24px; }
-
-    .polje { margin-bottom: 20px; }
-    .polje label {
-        font-size: 11px; color: var(--dark); display: block;
-        margin-bottom: 4px; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.04em;
-    }
-    .polje input, .polje select {
-        width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
-        background: transparent; padding: 6px 0; font-size: 13px;
-        outline: none; font-family: var(--font-body); color: var(--dark);
-        transition: border-color 0.2s;
-    }
-    .polje input:focus, .polje select:focus { border-bottom-color: var(--brown); }
-
-    .form-actions { display: flex; gap: 10px; margin-top: 8px; }
-    .submit-btn {
-        flex: 1; background: var(--brown); border: none; border-radius: 30px;
-        padding: 12px; font-size: 13px; font-family: var(--font-body);
-        color: white; cursor: pointer; transition: background 0.2s;
-    }
-    .submit-btn:hover { background: var(--rose); }
-    .cancel-btn {
-        flex: 1; background: var(--light); border: 1px solid var(--peach);
-        border-radius: 30px; padding: 12px; font-size: 13px;
-        font-family: var(--font-body); color: var(--dark);
-        text-decoration: none; text-align: center; transition: background 0.2s;
-    }
-    .cancel-btn:hover { background: var(--peach); }
-</style>
 
 <div class="page-header">
     <div class="page-header-title">DODAJ FRIZERJA</div>

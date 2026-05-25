@@ -1,13 +1,40 @@
+/* ═══════════════════════════════════════════════════════════════
+   OMEGA — Global Stylesheet
+   Variables, resets, shared components, page-specific classes
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS VARIABLES ──────────────────────────────────────────── */
+:root {
+    --beige:     #D9B99F;
+    --light:     #F2E7DD;
+    --peach:     #F2D6CE;
+    --brown:     #A75F37;
+    --rose:      #CA8E82;
+    --dark:      #292421;
+    --white:     #FFFFFF;
+    --green-bg:  #d4edda;
+    --green-txt: #155724;
+    --green-brd: #c3e6cb;
+    --red-bg:    #f8d7da;
+    --red-txt:   #721c24;
+    --red-brd:   #f5c6cb;
+    --font-head: Georgia, "Times New Roman", serif;
+    --font-body: Arial, Helvetica, sans-serif;
+}
+
+/* ── RESET ──────────────────────────────────────────────────── */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* ── BASE ───────────────────────────────────────────────────── */
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #F2E7DD;
-    color: #292421;
+    font-family: var(--font-body);
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
 }
 
 main {
@@ -16,9 +43,10 @@ main {
     flex-direction: column;
 }
 
+/* ── TOPBAR / PAGE-HEADER ───────────────────────────────────── */
 .topbar,
 .page-header {
-    background: #D9B99F;
+    background: var(--beige);
     padding: 12px 32px;
     display: flex;
     align-items: center;
@@ -27,10 +55,10 @@ main {
 
 .topbar-logo,
 .page-header-title {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--font-head);
     font-size: 2rem;
     font-weight: 700;
-    color: #292421;
+    color: var(--dark);
 }
 
 .topbar-right,
@@ -43,7 +71,7 @@ main {
 .topbar-user,
 .header-username {
     font-size: 13px;
-    color: #292421;
+    color: var(--dark);
     background: rgba(255,255,255,0.7);
     padding: 7px 18px;
     border-radius: 20px;
@@ -59,11 +87,12 @@ main {
     justify-content: center;
     text-decoration: none;
     font-size: 22px;
-    color: #D9B99F;
+    color: var(--beige);
 }
 
+/* ── NAVBAR ─────────────────────────────────────────────────── */
 .navbar {
-    background: #A75F37;
+    background: var(--brown);
     display: flex;
     align-items: center;
     height: 38px;
@@ -72,7 +101,7 @@ main {
 .navbar > a,
 .dropdown > a {
     font-size: 13px;
-    color: #FFFFFF;
+    color: var(--white);
     text-decoration: none;
     padding: 11px 24px;
     display: block;
@@ -80,15 +109,11 @@ main {
     height: 38px;
 }
 
-.navbar a.active {
-    background: rgba(0,0,0,0.2);
-}
-
+.navbar a.active       { background: rgba(0,0,0,0.2); }
 .navbar a:hover,
-.dropdown:hover > a {
-    background: rgba(0,0,0,0.15);
-}
+.dropdown:hover > a    { background: rgba(0,0,0,0.15); }
 
+/* ── DROPDOWN ───────────────────────────────────────────────── */
 .dropdown {
     position: relative;
     height: 38px;
@@ -100,35 +125,167 @@ main {
     top: 38px;
     left: 0;
     min-width: 190px;
-    background: #FFFFFF;
-    border: 1px solid #D9B99F;
+    background: var(--white);
+    border: 1px solid var(--beige);
     z-index: 1000;
 }
 
 .dropdown-content a {
-    color: #292421;
+    color: var(--dark);
     padding: 10px 14px;
     display: block;
     text-decoration: none;
     font-size: 13px;
-    background: #FFFFFF;
+    background: var(--white);
     font-weight: 600;
 }
 
-.dropdown-content a:hover {
-    background: #F2E7DD;
+.dropdown-content a:hover { background: var(--light); }
+.dropdown:hover .dropdown-content { display: block; }
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+.nav-footer {
+    background: var(--beige);
+    padding: 7px 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 300px;
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+.nav-footer a {
+    font-size: 13px;
+    color: var(--dark);
+    text-decoration: none;
+    font-style: italic;
 }
 
+.nav-footer a:hover { text-decoration: underline; }
+
+/* ── BACK BUTTON ────────────────────────────────────────────── */
+.back-btn {
+    color: var(--rose);
+    font-size: 28px;
+    text-decoration: none;
+}
+
+/* Positioned variant (used in most pages) */
+.admin-page .back-btn,
+.frizer-page .back-btn,
+.faq-page .back-btn,
+.povijest-page .back-btn,
+.povijest-page .back-btn,
+.stranke-page .back-btn,
+.rezervacije-page .back-btn,
+.uredi-page .back-btn {
+    position: absolute;
+    top: 18px;
+    right: 34px;
+}
+
+/* ── FLASH MESSAGES ─────────────────────────────────────────── */
+.flash,
+.flash-msg {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.flash-success,
+.flash-msg.success { background: var(--green-bg); color: var(--green-txt); border: 1px solid var(--green-brd); }
+.flash-error,
+.flash-msg.error   { background: var(--red-bg);   color: var(--red-txt);   border: 1px solid var(--red-brd); }
+
+.flash-area,
+.flash-wrap { padding: 12px 32px 0; }
+
+/* ── POPUP / MODAL ──────────────────────────────────────────── */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.popup-box {
+    width: 380px;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--beige);
+    padding: 28px;
+    text-align: center;
+}
+
+.popup-box h2 { font-family: var(--font-head); margin-bottom: 12px; }
+
+.popup-info {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 14px 0;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.popup-buttons button,
+.popup-buttons a {
+    border: none;
+    background: var(--brown);
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ── MODAL BACKDROP ─────────────────────────────────────────── */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-backdrop.open { display: flex; }
+
+.modal-vsebina {
+    width: 420px;
+    max-width: 95vw;
+    background: var(--white);
+    border: 1px solid var(--beige);
+    border-radius: 14px;
+    padding: 32px 36px;
+}
+
+.modal-vsebina h3 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ── SHARED LAYOUT HELPERS ──────────────────────────────────── */
 .vsebina {
     padding: 34px 60px 28px;
     display: flex;
     gap: 48px;
     align-items: flex-start;
-    background: #F2E7DD;
+    background: var(--light);
     min-height: calc(100vh - 250px);
 }
 
@@ -138,7 +295,7 @@ main {
 }
 
 .vsebina-levo h2 {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--font-head);
     font-size: 1.25rem;
     margin-bottom: 20px;
 }
@@ -149,35 +306,16 @@ main {
     margin-bottom: 14px;
 }
 
-.podnaslov {
-    color: #A75F37;
-    font-style: italic;
-    font-weight: 600;
-    margin-top: 24px;
-    margin-bottom: 10px;
-    font-size: 13px;
-}
-
-.vsebina-levo ul {
-    list-style: none;
-}
-
+.vsebina-levo ul { list-style: none; }
 .vsebina-levo ul li {
     font-size: 14px;
-    color: #A75F37;
+    color: var(--brown);
     font-style: italic;
     font-weight: 600;
     margin-bottom: 8px;
 }
-
-.vsebina-levo ul li::before {
-    content: "· ";
-}
-
-.vsebina-levo ul li a {
-    color: #A75F37;
-    text-decoration: none;
-}
+.vsebina-levo ul li::before { content: "· "; }
+.vsebina-levo ul li a { color: var(--brown); text-decoration: none; }
 
 .vsebina-desno {
     width: 420px;
@@ -195,353 +333,47 @@ main {
     display: block;
 }
 
-.nav-footer {
-    background: #D9B99F;
-    padding: 7px 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 300px;
-}
-
-.nav-footer a {
-    font-size: 13px;
-    color: #292421;
-    text-decoration: none;
-    font-style: italic;
-}
-
-.popup-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.popup-box {
-    width: 380px;
-    background: #FFFFFF;
-    border-radius: 14px;
-    border: 1px solid #D9B99F;
-    padding: 28px;
-    text-align: center;
-}
-
-.popup-box h2 {
-    font-family: Georgia, "Times New Roman", serif;
-    margin-bottom: 12px;
-}
-
-.popup-info {
-    background: #F2E7DD;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 14px 0;
-}
-
-.popup-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-.popup-buttons button,
-.popup-buttons a {
-    border: none;
-    background: #A75F37;
-    color: white;
-    text-decoration: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-}
-.admin-page {
-    flex: 1;
-    min-height: calc(100vh - 310px);
-    background: #F2E7DD;
-    position: relative;
-    padding: 28px 32px 34px;
-}
-
-.back-btn {
-    position: absolute;
-    top: 18px;
-    right: 34px;
-    color: #CA8E82;
-    font-size: 28px;
-    text-decoration: none;
-}
-
-.small-form-box {
-    width: 430px;
-    max-width: 100%;
-    margin: 0 auto;
-}
-
-.table-box-center {
-    width: 600px;
-    max-width: 100%;
-    margin: 28px auto 0;
-}
-
-.small-form-box h1,
-.table-box-center h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.45rem;
-    text-align: center;
-    text-transform: uppercase;
-    margin: 8px 0;
+/* ── LINE / DIVIDERS ────────────────────────────────────────── */
+.line {
+    width: 100%;
+    height: 2px;
+    background: var(--brown);
+    margin-bottom: 24px;
 }
 
 .form-line {
     height: 2px;
-    background: #A75F37;
+    background: var(--brown);
     margin: 0 auto 12px;
     width: 100%;
 }
 
-.form-row {
-    display: grid;
-    grid-template-columns: 90px 1fr auto;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 8px;
-}
+.divider { height: 1px; background: var(--peach); margin: 8px 0 24px; }
 
-.form-row label {
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.form-row input,
-.form-row select {
-    height: 36px;
-    border: none;
-    border-radius: 20px;
-    background: #FFFFFF;
-    padding: 0 12px;
-    font-size: 15px;
-    font-family: Arial, Helvetica, sans-serif;
-    outline: none;
-}
-
-.mini-btn {
-    border: 1px solid #CA8E82;
-    background: #FFFFFF;
-    color: #A75F37;
-    border-radius: 18px;
-    padding: 10px 32px;
-    font-size: 15px;
+/* ── TYPOGRAPHY HELPERS ─────────────────────────────────────── */
+.podnaslov {
+    color: var(--brown);
+    font-style: italic;
     font-weight: 600;
-    cursor: pointer;
-}
-
-.table-scroll {
-    max-height: 185px;
-    overflow-y: auto;
-    border-radius: 10px;
-}
-
-.simple-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #FFFFFF;
-    border: 1px solid #CA8E82;
-    font-size: 12px;
-}
-
-.simple-table th,
-.simple-table td {
-    border: 1px solid #D9B99F;
-    padding: 11px 14px;
-    text-align: center;
-}
-
-.simple-table th {
-    text-transform: uppercase;
-    font-weight: 500;
-}
-.faq-page,
-.zgodovina-page {
-    flex: 1;
-    min-height: calc(100vh - 310px);
-    background: #F2E7DD;
-    position: relative;
-    padding: 28px 44px 34px;
-}
-
-.faq-content {
-    display: flex;
-    gap: 64px;
-    max-width: 1250px;
-    margin: 0 auto;
-    padding-top: 18px;
-}
-
-.faq-left {
-    flex: 1;
-    padding-right: 54px;
-    border-right: 2px solid #A75F37;
-}
-
-.faq-right {
-    flex: 1.15;
-}
-
-.faq-page h2 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.55rem;
-    color: #111111;
-    margin-bottom: 34px;
-    line-height: 1.05;
-    text-transform: uppercase;
-}
-
-.vprasanje,
-.odgovor {
-    width: fit-content;
-    max-width: 430px;
-    background: #FFFFFF;
-    border: 1px solid #A75F37;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 14px;
-    color: #111111;
-}
-
-.vprasanje {
-    margin-bottom: 8px;
-}
-
-.odgovor {
-    margin-left: 58px;
-    margin-bottom: 16px;
-}
-
-.faq-right p {
-    font-size: 14px;
-    color: #111111;
-    line-height: 1.5;
-    margin-bottom: 18px;
-    max-width: 560px;
-}
-
-.polje {
-    margin-bottom: 14px;
-}
-
-.polje label {
-    display: block;
-    font-size: 14px;
-    color: #111111;
-    margin-bottom: 6px;
-}
-
-.polje select {
-    width: 260px;
-    border: 1px solid #A75F37;
-    border-radius: 10px;
-    background: #FFFFFF;
-    padding: 7px 10px;
-    font-size: 14px;
-    outline: none;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.polje textarea {
-    width: 560px;
-    max-width: 100%;
-    height: 150px;
-    border: 1px solid #A75F37;
-    border-radius: 8px;
-    background: #FFFFFF;
-    padding: 10px;
-    font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
-    outline: none;
-    resize: vertical;
-}
-
-.check-line {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 6px;
-    color: #CA8E82;
-    font-size: 14px;
-}
-
-.check-line input {
-    width: 22px;
-    height: 22px;
-}
-
-.gumb {
-    background: transparent;
-    border: none;
-    color: #CA8E82;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.opomba {
-    font-size: 12px;
-    color: #111111;
-    margin-top: 16px;
-}
-
-.table-box {
-    width: 760px;
-    max-width: 100%;
-    margin: 0 auto;
-    padding-top: 24px;
-}
-
-.table-box h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.65rem;
-    text-align: center;
-    text-transform: uppercase;
+    margin-top: 24px;
     margin-bottom: 10px;
-}
-
-.line {
-    width: 100%;
-    height: 2px;
-    background: #A75F37;
-    margin-bottom: 24px;
-}
-
-.table-wrap {
-    max-height: 260px;
-    overflow-y: auto;
-    border-radius: 10px;
-}
-
-.table-wrap table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #FFFFFF;
-    border: 1px solid #CA8E82;
     font-size: 13px;
 }
 
-.table-wrap th,
-.table-wrap td {
-    border: 1px solid #D9B99F;
-    padding: 13px 16px;
-    text-align: center;
+.oznaka {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-top: 8px;
 }
 
-.table-wrap th {
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: 500;
+.opis {
+    font-size: 13px;
+    color: #7A958F;
+    line-height: 1.5;
+    margin-top: 3px;
 }
 
 .empty {
@@ -551,9 +383,112 @@ main {
     font-style: italic;
 }
 
+.hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+.opomba {
+    font-size: 12px;
+    color: #111111;
+    margin-top: 16px;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.gumb {
+    background: transparent;
+    border: none;
+    color: var(--rose);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Filled variant used inside .submit-wrap and auth forms */
+.submit-wrap .gumb,
+.auth-panel .gumb {
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    padding: 9px 42px;
+    border-radius: 30px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.submit-wrap .gumb:hover,
+.auth-panel .gumb:hover { background: var(--rose); }
+
+.gumbi {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.gumbi .gumb {
+    padding: 9px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid var(--rose);
+}
+
+.gumbi .gumb[type="submit"] {
+    background: var(--brown);
+    color: var(--white);
+    border-color: var(--brown);
+}
+
+.mini-btn {
+    border: 1px solid var(--rose);
+    background: var(--white);
+    color: var(--brown);
+    border-radius: 18px;
+    padding: 10px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.mini-btn:hover { background: var(--light); }
+
+.mini-link { color: var(--brown); text-decoration: none; font-size: 12px; }
+.mini-link:hover { text-decoration: underline; }
+
+.submit-btn {
+    flex: 1;
+    background: var(--brown);
+    border: none;
+    border-radius: 30px;
+    padding: 12px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    color: var(--white);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-btn:hover { background: var(--rose); }
+
+.cancel-btn {
+    flex: 1;
+    background: var(--light);
+    border: 1px solid var(--peach);
+    border-radius: 30px;
+    padding: 12px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    color: var(--dark);
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.cancel-btn:hover { background: var(--peach); }
+
 .btn-cancel {
     background: #c0392b;
-    color: white;
+    color: var(--white);
     border: none;
     padding: 3px 9px;
     cursor: pointer;
@@ -561,28 +496,346 @@ main {
     font-size: 11px;
 }
 
-.msg-content {
-    color: #292421;
-    font-size: 12px;
+.oddaj-btn {
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    border-radius: 28px;
+    padding: 10px 32px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
+
+.oddaj-btn:hover { background: var(--rose); }
+
+.profil-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--brown);
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px 0;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profil-link:hover { background: #8a4d2c; }
+.profil-link:last-child { background: transparent; border: 1px solid var(--rose); color: var(--rose); }
+.profil-link:last-child:hover { background: var(--light); }
 
 .uredi-btn {
     display: block;
     margin-top: auto;
     padding: 8px 0 0;
     font-size: 12px;
-    color: #A75F37;
+    color: var(--brown);
     text-decoration: none;
     font-weight: bold;
-    border-top: 1px solid #F2D6CE;
+    border-top: 1px solid var(--peach);
 }
 
-.uredi-btn:hover {
-    text-decoration: underline;
+.uredi-btn:hover { text-decoration: underline; }
+
+/* ── FORM ELEMENTS ──────────────────────────────────────────── */
+.polje { margin-bottom: 14px; }
+
+.polje label {
+    display: block;
+    font-size: 14px;
+    color: #111111;
+    margin-bottom: 6px;
 }
-.notification-wrap {
-    position: relative;
+
+.polje label small {
+    color: var(--brown);
+    font-size: 10px;
+    font-weight: normal;
 }
+
+.polje input[type="text"],
+.polje input[type="email"],
+.polje input[type="password"],
+.polje input[type="tel"],
+.polje input[type="number"],
+.polje input[type="date"],
+.polje input[type="time"] {
+    width: 100%;
+    height: 38px;
+    border: 1px solid var(--beige);
+    border-radius: 20px;
+    background: var(--white);
+    padding: 0 14px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    outline: none;
+    color: var(--dark);
+}
+
+.polje input:focus { border-color: var(--brown); }
+
+/* Form panel (used in dodaj_*, uredi_* pages) */
+.form-panel {
+    background: var(--white);
+    border: 1px solid var(--peach);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.form-panel-header {
+    background: var(--beige);
+    padding: 14px 20px;
+    font-family: var(--font-head);
+    font-size: 1rem;
+    color: var(--dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-panel-header a {
+    font-size: 12px;
+    color: var(--brown);
+    text-decoration: none;
+    font-style: italic;
+}
+
+.form-panel-header a:hover { text-decoration: underline; }
+
+.form-panel-body { padding: 24px; }
+
+/* Underline-style inputs inside form-panel */
+.form-panel .polje label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.form-panel .polje input,
+.form-panel .polje select {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--beige);
+    border-radius: 0;
+    background: transparent;
+    padding: 6px 0;
+    font-size: 13px;
+    height: auto;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-panel .polje input:focus,
+.form-panel .polje select:focus { border-bottom-color: var(--brown); }
+
+.form-actions { display: flex; gap: 10px; margin-top: 8px; }
+
+/* Grid form rows */
+.form-row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.form-row label { font-size: 15px; font-weight: 700; }
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    height: 36px;
+    border: none;
+    border-radius: 20px;
+    background: var(--white);
+    padding: 0 12px;
+    font-size: 15px;
+    font-family: var(--font-body);
+    outline: none;
+    color: var(--dark);
+}
+
+.polje select {
+    width: 260px;
+    border: 1px solid var(--brown);
+    border-radius: 10px;
+    background: var(--white);
+    padding: 7px 10px;
+    font-size: 14px;
+    outline: none;
+    font-family: var(--font-body);
+}
+
+.polje textarea {
+    width: 560px;
+    max-width: 100%;
+    height: 150px;
+    border: 1px solid var(--brown);
+    border-radius: 8px;
+    background: var(--white);
+    padding: 10px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    outline: none;
+    resize: vertical;
+}
+
+.form-vrstica { margin-bottom: 14px; }
+
+.form-vrstica label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--brown);
+    margin-bottom: 4px;
+}
+
+.form-vrstica select,
+.form-vrstica textarea {
+    width: 100%;
+    border: 1px solid var(--peach);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    color: var(--dark);
+    background: #FDFAF7;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-vrstica select:focus,
+.form-vrstica textarea:focus { border-color: var(--brown); }
+.form-vrstica textarea { resize: vertical; min-height: 80px; }
+
+/* Password toggle */
+.password-wrap { position: relative; }
+.password-wrap input { padding-right: 42px; }
+
+.toggle-geslo {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    color: var(--rose);
+    font-size: 15px;
+}
+
+.toggle-geslo:hover { color: var(--brown); }
+
+/* Password match feedback */
+.geslo-napaka { display: none; color: var(--red-txt); font-size: 11px; margin-top: 4px; }
+.geslo-ujema  { display: none; color: var(--green-txt); font-size: 11px; margin-top: 4px; }
+
+.check-line,
+.check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    color: var(--rose);
+    font-size: 14px;
+}
+
+.check-line input { width: 22px; height: 22px; }
+
+.zapomni {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--dark);
+    cursor: pointer;
+}
+
+.submit-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+}
+
+/* ── TABLE COMPONENTS ───────────────────────────────────────── */
+.table-box {
+    width: 760px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-top: 24px;
+}
+
+.table-box h1 {
+    font-family: var(--font-head);
+    font-size: 1.65rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.table-box-center {
+    width: 600px;
+    max-width: 100%;
+    margin: 28px auto 0;
+}
+
+.table-box-center h1 {
+    font-family: var(--font-head);
+    font-size: 1.45rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 8px 0;
+}
+
+.table-scroll {
+    max-height: 185px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.table-wrap {
+    max-height: 260px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.table-wrap table,
+.simple-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border: 1px solid var(--rose);
+    font-size: 13px;
+}
+
+.table-wrap th,
+.table-wrap td,
+.simple-table th,
+.simple-table td {
+    border: 1px solid var(--beige);
+    padding: 11px 14px;
+    text-align: center;
+}
+
+.table-wrap th,
+.simple-table th {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ── NOTIFICATION ───────────────────────────────────────────── */
+.notification-wrap { position: relative; }
 
 .notification-btn {
     width: 40px;
@@ -603,8 +856,8 @@ main {
     height: 18px;
     padding: 0 5px;
     border-radius: 50%;
-    background: #A75F37;
-    color: #FFFFFF;
+    background: var(--brown);
+    color: var(--white);
     font-size: 11px;
     display: flex;
     align-items: center;
@@ -620,58 +873,69 @@ main {
     width: 310px;
     max-height: 320px;
     overflow-y: auto;
-    background: #FFFFFF;
-    border: 1px solid #D9B99F;
+    background: var(--white);
+    border: 1px solid var(--beige);
     border-radius: 12px;
     z-index: 2000;
     padding: 14px;
     box-shadow: 0 4px 18px rgba(0,0,0,0.12);
 }
 
-.notification-box.show {
-    display: block;
-}
+.notification-box.show { display: block; }
 
 .notification-title {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--font-head);
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 10px;
-    color: #292421;
+    color: var(--dark);
 }
 
 .notification-item {
     font-size: 13px;
     line-height: 1.45;
     padding: 10px 0;
-    border-bottom: 1px solid #F2D6CE;
-    color: #292421;
+    border-bottom: 1px solid var(--peach);
+    color: var(--dark);
 }
 
-.notification-item:last-child {
-    border-bottom: none;
-}
+.notification-item:last-child { border-bottom: none; }
 
 .notification-empty {
     font-size: 13px;
     color: #7A7A7A;
     font-style: italic;
     padding: 8px 0;
-}¸
+}
 
-
+/* ── PROFIL ─────────────────────────────────────────────────── */
 .profil-ikona {
     font-size: 54px;
-    color: #D9B99F;
+    color: var(--beige);
     display: block;
     text-align: center;
 }
 
-/* ── LOGGED IN ── */
+/* Login/register pages — circular avatar */
+.auth-page .profil-ikona,
+.register-page .profil-ikona {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--beige);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+    margin-bottom: 28px;
+    font-style: normal;
+}
+
 .profil-page {
     flex: 1;
     min-height: calc(100vh - 310px);
-    background: #F2E7DD;
+    background: var(--light);
     position: relative;
     display: flex;
     justify-content: center;
@@ -682,22 +946,21 @@ main {
 .logged-box {
     width: 480px;
     max-width: 100%;
-    background: #FFFFFF;
-    border: 1px solid #D9B99F;
+    background: var(--white);
+    border: 1px solid var(--beige);
     border-radius: 14px;
     padding: 32px 36px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 14px;
-    /* odstrani margin-top */
 }
 
 .logged-box h2 {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--font-head);
     font-size: 1.4rem;
     text-transform: uppercase;
-    color: #292421;
+    color: var(--dark);
 }
 
 .profil-table {
@@ -708,45 +971,22 @@ main {
 
 .profil-table td {
     padding: 9px 12px;
-    border-bottom: 1px solid #F2D6CE;
+    border-bottom: 1px solid var(--peach);
     vertical-align: top;
 }
 
 .profil-table td:first-child {
     white-space: nowrap;
-    color: #A75F37;
+    color: var(--brown);
     width: 160px;
 }
 
-.profil-link {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: #A75F37;
-    color: #FFFFFF;
-    text-decoration: none;
-    padding: 10px 0;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.profil-link:hover { background: #8a4d2c; }
-
-.profil-link:last-child {
-    background: transparent;
-    border: 1px solid #CA8E82;
-    color: #CA8E82;
-}
-
-.profil-link:last-child:hover { background: #F2E7DD; }
-
-/* ── NOT LOGGED IN ── */
+/* Not-logged-in panel */
 .profil-panel {
     width: 820px;
     max-width: 100%;
-    background: #FFFFFF;
-    border: 1px solid #D9B99F;
+    background: var(--white);
+    border: 1px solid var(--beige);
     border-radius: 14px;
     padding: 32px 40px;
     display: flex;
@@ -756,123 +996,875 @@ main {
     margin-top: 18px;
 }
 
-.obrazci {
-    display: flex;
-    gap: 48px;
-    width: 100%;
-}
-
+.obrazci { display: flex; gap: 48px; width: 100%; }
 .prijava, .registracija { flex: 1; }
 
 .prijava h2, .registracija h2 {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--font-head);
     font-size: 1.15rem;
     text-transform: uppercase;
     margin-bottom: 16px;
-    color: #A75F37;
+    color: var(--brown);
 }
 
 .prijava {
     padding-right: 48px;
-    border-right: 2px solid #A75F37;
+    border-right: 2px solid var(--brown);
 }
 
-/* input stil (select/textarea sta že definirana) */
-.polje input[type="text"],
-.polje input[type="email"],
-.polje input[type="password"],
-.polje input[type="tel"] {
-    width: 100%;
-    height: 38px;
-    border: 1px solid #D9B99F;
-    border-radius: 20px;
-    background: #FFFFFF;
-    padding: 0 14px;
-    font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
-    outline: none;
-}
-
-.polje input:focus { border-color: #A75F37; }
-
-.zapomni {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: #292421;
-    cursor: pointer;
-}
-
-.submit-wrap {
-    width: 100%;
+/* ── AUTH PAGES ─────────────────────────────────────────────── */
+.auth-page {
+    flex: 1;
+    min-height: calc(100vh - 170px);
+    background: var(--light);
     display: flex;
     justify-content: center;
-}
-
-/* gumb je že definiran kot transparenten —
-   submit-wrap ga overridea v zapolnjenega */
-.submit-wrap .gumb {
-    background: #A75F37;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 48px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.submit-wrap .gumb:hover { background: #8a4d2c; }
-
-/* ── EDIT MODAL ── */
-.modal-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.3);
-    z-index: 9999;
     align-items: center;
-    justify-content: center;
+    position: relative;
+    padding: 28px 32px;
 }
 
-.modal-backdrop.open { display: flex; }
-
-.modal-vsebina {
+.auth-panel {
     width: 420px;
-    max-width: 95vw;
-    background: #FFFFFF;
-    border: 1px solid #D9B99F;
-    border-radius: 14px;
-    padding: 32px 36px;
+    background: var(--light);
+    padding: 38px 52px 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.modal-vsebina h3 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.2rem;
+.auth-panel h2 {
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    color: #111111;
+    margin-bottom: 24px;
+    text-align: center;
     text-transform: uppercase;
-    color: #292421;
-    margin-bottom: 20px;
+}
+
+.auth-panel .polje input {
+    height: 32px;
+    border: none;
+    border-radius: 20px;
+    background: var(--white);
+    padding: 4px 14px;
+    font-size: 12px;
+}
+
+.auth-link {
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--dark);
     text-align: center;
 }
 
-.gumbi {
+.auth-link a { color: var(--brown); text-decoration: none; font-style: italic; }
+.auth-link a:hover { text-decoration: underline; }
+
+/* ── ADMIN / FRIZER PAGE ────────────────────────────────────── */
+.admin-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: var(--light);
+    position: relative;
+    padding: 28px 32px 34px;
+}
+
+.small-form-box {
+    width: 430px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.small-form-box h1 {
+    font-family: var(--font-head);
+    font-size: 1.45rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 8px 0;
+}
+
+/* ── FAQ PAGE ───────────────────────────────────────────────── */
+.faq-page,
+.zgodovina-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: var(--light);
+    position: relative;
+    padding: 28px 44px 34px;
+}
+
+.faq-content {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 6px;
+    gap: 64px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding-top: 18px;
 }
 
-/* .gumb je že definiran — samo override za gumbi kontekst */
-.gumbi .gumb {
-    padding: 9px 24px;
-    border-radius: 20px;
+.faq-left {
+    flex: 1;
+    padding-right: 54px;
+    border-right: 2px solid var(--brown);
+}
+
+.faq-right { flex: 1.15; }
+
+.faq-page h2 {
+    font-family: var(--font-head);
+    font-size: 1.55rem;
+    color: #111111;
+    margin-bottom: 34px;
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+.vprasanje,
+.odgovor {
+    width: fit-content;
+    max-width: 430px;
+    background: var(--white);
+    border: 1px solid var(--brown);
+    border-radius: 10px;
+    padding: 10px 20px;
     font-size: 14px;
-    font-weight: 600;
-    border: 1px solid #CA8E82;
+    color: #111111;
 }
 
-.gumbi .gumb[type="submit"] {
-    background: #A75F37;
-    color: #FFFFFF;
-    border-color: #A75F37;
+.vprasanje { margin-bottom: 8px; }
+.odgovor   { margin-left: 58px; margin-bottom: 16px; }
+
+.faq-right p {
+    font-size: 14px;
+    color: #111111;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    max-width: 560px;
+}
+
+/* ── COMMENTS ───────────────────────────────────────────────── */
+.komentar-item {
+    border-bottom: 1px solid var(--peach);
+    padding: 16px 0;
+}
+
+.komentar-item:last-child { border-bottom: none; }
+
+.komentar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.komentar-avtor { font-weight: 700; font-size: 14px; color: var(--dark); }
+.komentar-datum { font-size: 11px; color: var(--rose); }
+.komentar-ocena { color: var(--brown); font-size: 16px; margin-bottom: 6px; }
+.komentar-text  { font-size: 14px; color: #7A958F; line-height: 1.6; }
+
+.prazno-komentarji { color: var(--rose); font-style: italic; font-size: 14px; }
+
+.komentar-form { margin-top: 24px; }
+
+.komentar-form h4 {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.login-hint { font-size: 13px; color: var(--rose); font-style: italic; margin-top: 16px; }
+.login-hint a { color: var(--brown); }
+
+/* ── FAVORITES ──────────────────────────────────────────────── */
+.favorite-btn {
+    background: transparent;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--rose);
+}
+
+.favorite-btn.active {
+    color: #F2C94C;
+    text-shadow: 0 0 1px var(--brown);
+}
+
+.favorite-btn:hover { background: var(--white); }
+
+.favorite-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+}
+
+/* ── BADGES ─────────────────────────────────────────────────── */
+.badge { display: inline-block; padding: 3px 12px; border-radius: 30px; font-size: 11px; font-weight: 700; }
+.badge-active    { background: var(--green-bg); color: var(--green-txt); }
+.badge-cancelled { background: var(--red-bg);   color: var(--red-txt); }
+
+.status {
+    display: inline-block;
+    border-radius: 18px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--peach);
+    color: var(--brown);
+}
+
+.status.active    { background: var(--beige); color: var(--dark); }
+.status.cancelled { background: var(--peach); color: var(--rose); }
+
+.status-znacka {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.status-znacka.prebrano   { background: #E3EFE6; color: #4F7A5B; }
+.status-znacka.neprebrano { background: #F6E0DC; color: #B5503F; }
+
+/* ── CONTACT CARD ───────────────────────────────────────────── */
+.kontakt-card {
+    background: var(--white);
+    border: 1px solid var(--rose);
+    border-radius: 12px;
+    padding: 28px 32px;
+    max-width: 460px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.kontakt-avatar { font-size: 46px; }
+
+.kontakt-ime {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    margin: 8px 0 20px;
+    color: var(--dark);
+}
+
+.kontakt-vrstica {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 4px;
+    border-top: 1px solid #EADBCF;
+    font-size: 14px;
+}
+
+.kontakt-oznaka { text-transform: uppercase; font-size: 11px; letter-spacing: .5px; color: #7A958F; }
+.kontakt-vrednost a { color: var(--brown); text-decoration: none; }
+.kontakt-vrednost a:hover { text-decoration: underline; }
+
+/* ── LOCATION CARDS (frizerji_lokacije) ─────────────────────── */
+.lokacija-blok { max-width: 620px; margin: 0 auto 22px; }
+
+.lokacija-glava {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border-bottom: 2px solid var(--brown);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+}
+
+.lokacija-ime  { font-family: var(--font-head); font-size: 1.1rem; color: var(--dark); }
+.lokacija-mesto { font-size: 12px; color: #7A958F; text-transform: uppercase; }
+
+.frizer-seznam { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.frizer-kartica {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--rose);
+    border-radius: 10px;
+    padding: 12px 18px;
+    min-width: 130px;
+    text-decoration: none;
+    color: var(--dark);
+    transition: border-color .15s, transform .15s;
+}
+
+.frizer-kartica:hover { border-color: var(--brown); transform: translateY(-2px); }
+.frizer-avatar { font-size: 28px; }
+.frizer-ime    { font-weight: 600; font-size: 14px; margin-top: 4px; }
+.frizer-kontakt { font-size: 11px; color: #7A958F; }
+
+/* ── SPOROCILO CARD ─────────────────────────────────────────── */
+.sporocilo-card {
+    background: var(--white);
+    border: 1px solid var(--rose);
+    border-radius: 12px;
+    padding: 26px 30px;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.sporocilo-naslov {
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    color: var(--dark);
+    margin-bottom: 14px;
+}
+
+.sporocilo-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: #5c5550;
+}
+
+.sporocilo-meta a { color: var(--brown); text-decoration: none; }
+
+.sporocilo-locilo { height: 1px; background: #EADBCF; margin: 16px 0; }
+
+.sporocilo-vsebina {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--dark);
+    white-space: pre-wrap;
+}
+
+/* ── FRIZER PROFIL (detail page) ────────────────────────────── */
+.frizer-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: var(--light);
+    position: relative;
+    padding: 32px 32px 30px;
+}
+
+.frizer-layout { display: flex; gap: 48px; align-items: flex-start; }
+
+.frizer-left { width: 260px; text-align: center; flex-shrink: 0; padding-top: 10px; }
+
+.frizer-icon {
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    background: var(--beige);
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 86px;
+    font-weight: bold;
+}
+
+.frizer-left h2 {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 26px;
+}
+
+.frizer-main { flex: 1; }
+
+.box {
+    background: var(--white);
+    border: 1px solid var(--peach);
+    border-radius: 14px;
+    padding: 34px 38px;
+    margin-bottom: 28px;
+}
+
+.box h3 {
+    font-family: var(--font-head);
+    font-size: 1.55rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 26px;
+    text-transform: uppercase;
+}
+
+.info-row { display: flex; margin-bottom: 14px; font-size: 16px; }
+
+.info-label {
+    width: 140px;
+    color: var(--rose);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+}
+
+.info-value a { color: var(--brown); text-decoration: none; }
+.info-value a:hover { text-decoration: underline; }
+
+.storitve-table { width: 100%; border-collapse: collapse; font-size: 16px; }
+
+.storitve-table th {
+    text-align: left;
+    color: var(--rose);
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--peach);
+}
+
+.storitve-table td { padding: 12px 0; border-bottom: 1px solid var(--peach); }
+
+.cena {
+    display: inline-block;
+    background: var(--peach);
+    color: var(--brown);
+    border-radius: 18px;
+    padding: 5px 16px;
+    font-weight: 700;
+}
+
+/* ── PRILJUBLJEN SALONI / STORITVE CARDS ────────────────────── */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: var(--white);
+    border: 1px solid var(--peach);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+
+.card-ime { font-family: var(--font-head); font-size: 1rem; color: var(--dark); margin: 0; }
+
+.fav-btn { border: none; background: none; font-size: 22px; cursor: pointer; color: var(--brown); line-height: 1; padding: 0; }
+.fav-btn:hover { color: var(--rose); }
+
+.card-link { display: inline-block; margin-top: 8px; font-size: 12px; color: var(--brown); text-decoration: none; font-style: italic; }
+.card-link:hover { text-decoration: underline; }
+
+.prazno { text-align: center; padding: 80px 20px; color: #aaa; font-style: italic; font-size: 14px; }
+.prazno a { color: var(--brown); text-decoration: none; }
+.prazno a:hover { text-decoration: underline; }
+
+/* ── REZERVACIJE TABLE ──────────────────────────────────────── */
+.rez-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.rez-table thead { background: var(--beige); }
+.rez-table th { padding: 12px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; text-align: left; color: var(--dark); }
+.rez-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--peach); vertical-align: middle; }
+.rez-table tr:last-child td { border-bottom: none; }
+.rez-table tr:hover td { background: var(--light); }
+
+.btn { display: inline-block; border: none; border-radius: 20px; padding: 6px 16px; font-size: 12px; font-family: var(--font-body); cursor: pointer; text-decoration: none; font-weight: 600; }
+.btn-uredi   { background: var(--brown); color: var(--white); }
+.btn-uredi:hover { background: var(--rose); }
+.btn-preklic { background: var(--peach); color: var(--dark); }
+.btn-preklic:hover { background: var(--rose); color: var(--white); }
+.btn-disabled { background: #eee; color: #aaa; cursor: not-allowed; }
+
+/* ── EMPTY STATE ────────────────────────────────────────────── */
+.empty-state {
+    background: var(--white);
+    border: 1px dashed var(--beige);
+    border-radius: 14px;
+    padding: 40px 24px;
+    text-align: center;
+    color: #7A958F;
+}
+
+.empty-state a { color: var(--brown); font-weight: 600; text-decoration: none; }
+
+/* ── SEARCH / FILTER BOXES ──────────────────────────────────── */
+.iskanjebox,
+.top-row {
+    padding: 16px 32px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.iskanjabar,
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    border-radius: 30px;
+    padding: 8px 16px;
+    width: 260px;
+    border: 1px solid var(--beige);
+}
+
+.iskanjabar input,
+.search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 13px;
+    width: 100%;
+    font-family: var(--font-body);
+}
+
+/* ── URNIK ──────────────────────────────────────────────────── */
+.urnik-dodaj {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.urnik-dodaj select,
+.urnik-dodaj input {
+    padding: 8px;
+    border: 1px solid var(--beige);
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* ── MEDIA QUERIES ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .topbar, .page-header { padding: 12px 18px; }
+    .topbar-logo, .page-header-title { font-size: 1.4rem; }
+    .navbar a { padding: 10px 14px; font-size: 12px; }
+    .nav-footer { padding: 7px 24px; gap: 40px; }
+    .vsebina { flex-direction: column; padding: 20px 18px; }
+    .frizer-layout { flex-direction: column; }
+    .frizer-left { width: 100%; }
+    .info-row { flex-direction: column; gap: 4px; }
+    .info-label { width: auto; }
+    .faq-content { flex-direction: column; gap: 28px; }
+    .faq-left { border-right: none; padding-right: 0; }
+}
+
+@media (max-width: 600px) {
+    .auth-panel { width: 100%; padding: 30px 22px; }
+    .obrazci { flex-direction: column; }
+    .prijava { border-right: none; padding-right: 0; }
+}
+
+/* ── SEZNAM FRIZERJEV ───────────────────────────────────────── */
+.frizerji-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: var(--light);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.cards-wrapper {
+    flex: 1;
+    padding: 18px 32px 26px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    width: 100%;
+}
+
+.frizer-card {
+    min-height: 420px;
+    background: var(--white);
+    border: 1px solid var(--peach);
+    border-radius: 14px;
+    padding: 36px 22px 28px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.frizer-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.35rem;
+    color: var(--dark);
+    margin-bottom: 18px;
+}
+
+.salon-ime {
+    color: var(--rose);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.profil-btn {
+    display: inline-block;
+    margin-top: 28px;
+    background: var(--beige);
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 30px;
+    padding: 11px 36px;
+    font-size: 14px;
+}
+
+.profil-btn:hover {
+    background: var(--rose);
+    color: var(--white);
+}
+
+@media (max-width: 1100px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+    .cards-wrapper { padding: 18px; }
+    .cards { grid-template-columns: 1fr; }
+    .frizer-card { min-height: 340px; }
+}
+
+/* ── SEZNAM SALONOV ─────────────────────────────────────────── */
+.saloni-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: var(--light);
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: var(--white);
+    cursor: pointer;
+    font-size: 17px;
+    color: var(--rose);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.filter-panel {
+    display: none;
+    position: absolute;
+    top: 58px;
+    left: 245px;
+    z-index: 100;
+    background: var(--white);
+    border: 1.5px solid var(--brown);
+    border-radius: 12px;
+    padding: 18px 22px;
+    min-width: 260px;
+    max-height: 270px;
+    overflow: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.filter-panel.open { display: block; }
+
+.filter-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.filter-panel-header strong { font-size: 15px; color: var(--dark); }
+
+.filter-apply {
+    background: #D9D9D9;
+    color: var(--dark);
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.filter-group { margin-bottom: 12px; }
+.filter-group-title { font-size: 15px; color: var(--dark); margin-bottom: 5px; }
+
+.filter-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--dark);
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+.cards-viewport { flex: 1; overflow: hidden; }
+
+/* Horizontal scroll container for saloni/storitve */
+.saloni-page .cards,
+.storitve-page .cards {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    grid-template-columns: unset;
+    width: auto;
+}
+
+.saloni-page .cards::-webkit-scrollbar,
+.storitve-page .cards::-webkit-scrollbar { display: none; }
+
+.saloni-page .card {
+    flex: 0 0 calc((100% - 32px) / 3);
+    min-height: 430px;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--peach);
+    padding: 22px 20px 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: start;
+}
+
+.saloni-page .card.hidden-search { display: none; }
+
+.card.je-priljubljen {
+    border-color: var(--brown);
+    box-shadow: 0 0 0 2px var(--brown);
+}
+
+.priljubljen-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--brown);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.saloni-page .favorite-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    font-size: 31px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--rose);
+    font-family: var(--font-body);
+}
+
+.card-img {
+    width: 105px;
+    height: 105px;
+    border-radius: 28px;
+    background: #D9D9D9;
+    margin: 0 auto 18px;
+    overflow: hidden;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.saloni-page .card h2 {
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    color: var(--dark);
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.arrow-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 34px;
+    color: var(--rose);
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* ── SEZNAM STORITEV ────────────────────────────────────────── */
+.storitve-page {
+    flex: 1;
+    min-height: calc(100vh - 310px);
+    background: var(--light);
+    display: flex;
+    flex-direction: column;
+}
+
+.storitve-page .card {
+    flex: 0 0 calc((100% - 48px) / 4);
+    min-height: 430px;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--peach);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: start;
+}
+
+.storitve-page .card.hidden-search { display: none; }
+
+.storitve-page .card-img {
+    height: 150px;
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+    background: var(--peach);
+}
+
+.storitve-page .favorite-btn {
+    position: absolute;
+    top: 136px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--rose);
+    z-index: 2;
+}
+
+.card-body {
+    padding: 18px 18px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body h2 {
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.storitev-link { color: var(--dark); text-decoration: none; }
+.storitev-link:hover { color: var(--brown); }
+
+@media (max-width: 1000px) {
+    .saloni-page .card { flex-basis: 100%; min-height: 340px; }
+    .filter-panel { left: 32px; }
 }
