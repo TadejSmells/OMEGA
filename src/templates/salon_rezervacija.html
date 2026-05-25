@@ -267,7 +267,6 @@
     }
 </style>
 
-<!-- ── VSEBINA ────────────────────────────────────────────── -->
 <div class="rezervacije-page">
     <div class="rezervacije-panel">
         <div class="profil-ikona">&#128197;</div>
@@ -275,14 +274,19 @@
         <h2>Nova rezervacija</h2>
 
         <form method="POST" action="/rezervacije" class="obrazec">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="polje">
                 <label for="stranka_id">Stranka</label>
                 <select name="stranka_id" id="stranka_id" required>
-                    <option value="" disabled selected>— izberi stranko —</option>
+                    {% if stranke|length > 1 %}
+                        <option value="" disabled selected>— izberi stranko —</option>
+                    {% endif %}
+                    
                     {% for stranka in stranke %}
-                        <option value="{{ stranka[0] }}">{{ stranka[1] }} {{ stranka[2] }}</option>
+                        <option value="{{ stranka[0] }}" {% if stranke|length == 1 %}selected{% endif %}>
+                            {{ stranka[1] }} {{ stranka[2] }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>

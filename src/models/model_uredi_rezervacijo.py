@@ -15,6 +15,8 @@ def get_rezervacijo(id_rezervacije):
                 Rezervacija.id_frizerja,
                 Rezervacija.id_salona,
                 Rezervacija.id_storitve,
+                Rezervacija.datum,
+                Rezervacija.ura,
             )
             .filter(Rezervacija.id_rezervacije == id_rezervacije)
             .first()
@@ -24,7 +26,7 @@ def get_rezervacijo(id_rezervacije):
         session.close()
 
 
-def uredi_rezervacijo(id_rezervacije, stranka_id, frizer_id, salon_id, storitev_id):
+def uredi_rezervacijo(id_rezervacije, stranka_id, frizer_id, salon_id, storitev_id, datum, ura):
     session = db.get_session()
     try:
         r = session.query(Rezervacija).filter(
@@ -35,6 +37,8 @@ def uredi_rezervacijo(id_rezervacije, stranka_id, frizer_id, salon_id, storitev_
             r.id_frizerja = frizer_id
             r.id_salona   = salon_id or None
             r.id_storitve = storitev_id or None
+            r.datum       = datum
+            r.ura         = ura
             session.commit()
     except Exception:
         session.rollback()

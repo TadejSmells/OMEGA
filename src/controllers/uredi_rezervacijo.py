@@ -14,9 +14,11 @@ def uredi_rezervacijo(id_rezervacije):
         frizer_id   = request.form.get('frizer_id')
         salon_id    = request.form.get('salon_id')
         storitev_id = request.form.get('storitev_id')
+        datum       = request.form.get('datum')
+        ura         = request.form.get('ura')
 
         model_uredi_rezervacijo.uredi_rezervacijo(
-            id_rezervacije, stranka_id, frizer_id, salon_id, storitev_id
+            id_rezervacije, stranka_id, frizer_id, salon_id, storitev_id, datum, ura
         )
         return redirect('/rezervacije')
 

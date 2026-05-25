@@ -34,9 +34,19 @@ def nova_rezervacija():
         flash("Rezervacija je bila uspešno ustvarjena.", "success")
         return redirect(next_url)
 
+    # --- GET DEL S FILTRIRANJEM ZA STRANKE ---
+    vse_stranke = model_salon.get_vse('stranka')
+    prikazane_stranke = vse_stranke
+
+    # Če je prijavljen uporabnik z vlogo 'stranka', filtriramo seznam
+    if session.get('role') == 'stranka' and session.get('user_id'):
+        trenutna_stranka_id = komentar_salona.get_stranka_id(session['user_id'])
+        # s[0] predstavlja id_stranke v torki, ki jo vrne model_salon
+        prikazane_stranke = [s for s in vse_stranke if s[0] == trenutna_stranka_id]
+
     return render_template(
         "salon_rezervacija.html",
-        stranke=model_salon.get_vse('stranka'),
+        stranke=prikazane_stranke,
         frizerji=model_salon.get_vse('frizer'),
         saloni=model_salon.get_vse('salon'),
         storitve=model_salon.get_vse('storitev'),

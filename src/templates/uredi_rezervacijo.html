@@ -248,19 +248,19 @@
         <div class="line"></div>
 
         <form method="POST">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {% if rezervacija is defined %}
                 <input type="hidden" name="stranka_id" value="{{ rezervacija[1] }}">
             {% endif %}
 
             <div class="form-row">
                 <label for="datum">Datum</label>
-                <input type="date" id="datum" name="datum">
+                <input type="date" id="datum" name="datum" value="{% if rezervacija is defined %}{{ rezervacija[5] }}{% endif %}" required>
             </div>
 
             <div class="form-row">
                 <label for="ura">Ura</label>
-                <input type="time" id="ura" name="ura">
+                <input type="time" id="ura" name="ura" value="{% if rezervacija is defined %}{{ rezervacija[6] }}{% endif %}" required>
             </div>
 
             <div class="form-row">
