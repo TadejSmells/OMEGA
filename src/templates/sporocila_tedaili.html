@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Sporočilo{% endblock %}
+
+{% block content %}
+<div class="zgodovina-page">
+    <a href="/sporocila" class="back-btn">&#8617;</a>
+
+    <div class="table-box-center">
+        <h1>Sporočilo</h1>
+        <div class="line"></div>
+
+        {% if sporocilo %}
+        <div class="sporocilo-card">
+            <div class="sporocilo-naslov">{{ sporocilo.naslov }}</div>
+
+            <div class="sporocilo-meta">
+                <span><strong>Od:</strong> {{ sporocilo.ime or '—' }}</span>
+                {% if sporocilo.email %}
+                <span><strong>Email:</strong> <a href="mailto:{{ sporocilo.email }}">{{ sporocilo.email }}</a></span>
+                {% endif %}
+                <span><strong>Datum:</strong> {{ sporocilo.datum.strftime('%d. %m. %Y %H:%M') if sporocilo.datum else '—' }}</span>
+            </div>
+
+            <div class="sporocilo-locilo"></div>
+
+            <div class="sporocilo-vsebina">{{ sporocilo.vsebina }}</div>
+        </div>
+        {% else %}
+        <p class="empty">Sporočila ni mogoče najti.</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .sporocilo-card {
+        background: #FFFFFF;
+        border: 1px solid #CA8E82;
+        border-radius: 12px;
+        padding: 26px 30px;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+    .sporocilo-naslov {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #292421;
+        margin-bottom: 14px;
+    }
+    .sporocilo-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 13px;
+        color: #5c5550;
+    }
+    .sporocilo-meta a { color: #A75F37; text-decoration: none; }
+    .sporocilo-locilo {
+        height: 1px;
+        background: #EADBCF;
+        margin: 16px 0;
+    }
+    .sporocilo-vsebina {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #292421;
+        white-space: pre-wrap;
+    }
+</style>
+{% endblock %}

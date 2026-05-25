@@ -1,160 +1,273 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registracija</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-            --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-            --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
-        }
-        body {
-            font-family: var(--font-body); background: #e8ddd5;
-            color: var(--dark); min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .outer { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
-        .back-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--rose); text-decoration: none; }
-        .okvir {
-            background: var(--light); border-radius: 16px;
-            padding: 40px 48px 48px; width: 380px; max-width: 95vw;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.06);
-        }
-        .profil-ikona {
-            width: 80px; height: 80px; border-radius: 50%; background: var(--beige);
-            margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
-            font-size: 36px; color: var(--white);
-        }
-        h2 { font-family: var(--font-head); font-size: 1rem; color: var(--dark); margin-bottom: 24px; letter-spacing: 0.05em; text-align: center; }
-        .polje { margin-bottom: 16px; }
-        .polje label { font-size: 11px; color: var(--dark); display: block; margin-bottom: 4px; letter-spacing: 0.02em; }
-        .input-wrap { position: relative; }
-        .polje input, .polje select {
-            width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
-            background: transparent; padding: 6px 32px 6px 0; font-size: 13px;
-            outline: none; font-family: var(--font-body); color: var(--dark); transition: border-color 0.2s;
-        }
-        .polje input:focus, .polje select:focus { border-bottom-color: var(--brown); }
-        .toggle-pw {
-            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-            background: none; border: none; cursor: pointer;
-            font-size: 16px; color: #aaa; padding: 0 2px; line-height: 1;
-        }
-        .toggle-pw:hover { color: var(--brown); }
-        .hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+{% extends "base.html" %}
+{% block title %}Registracija{% endblock %}
 
-        /* PASSWORD STRENGTH */
-        .strength-bar-wrap {
-            height: 4px; background: #e0d5cc; border-radius: 2px;
-            margin-top: 8px; overflow: hidden;
-        }
-        .strength-bar {
-            height: 100%; width: 0%; border-radius: 2px;
-            transition: width 0.3s, background 0.3s;
-        }
-        .strength-label {
-            font-size: 10px; margin-top: 4px; letter-spacing: 0.04em;
-            text-transform: uppercase; font-weight: 600;
-        }
+{% block content %}
+<style>
+    /* Auth layout — not in shared style.css */
+    .auth-page {
+        flex: 1;
+        min-height: calc(100vh - 170px);
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 28px 32px;
+    }
 
-        .gumb {
-            width: 100%; background: var(--brown); border: none; border-radius: 30px;
-            padding: 12px; font-size: 14px; font-family: var(--font-body);
-            color: var(--white); cursor: pointer; margin-top: 24px;
-            letter-spacing: 0.02em; transition: background 0.2s;
-        }
-        .gumb:hover { background: var(--rose); }
-        .link { text-align: center; margin-top: 16px; font-size: 12px; color: #7A958F; }
-        .link a { color: var(--brown); text-decoration: none; }
-        .link a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-<div class="outer">
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 30px;
+        text-decoration: none;
+    }
+
+    .auth-panel {
+        width: 460px;
+        background: #F2E7DD;
+        padding: 38px 52px 34px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profil-ikona {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        color: #D9B99F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 72px;
+        margin-bottom: 28px;
+    }
+
+    .obrazec { width: 100%; }
+
+    h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #111111;
+        margin-bottom: 24px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    /* Auth-specific overrides for .polje (faq version in style.css differs) */
+    .polje { margin-bottom: 14px; }
+
+    .polje label {
+        display: block;
+        font-size: 11px;
+        color: #111111;
+        margin-bottom: 6px;
+    }
+
+    .polje label small {
+        color: #A75F37;
+        font-size: 10px;
+        font-weight: normal;
+    }
+
+    .polje input,
+    .polje select {
+        width: 100%;
+        height: 32px;
+        border: none;
+        border-radius: 20px;
+        background: #FFFFFF;
+        padding: 4px 14px;
+        font-size: 12px;
+        outline: none;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #292421;
+    }
+
+    .polje select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23A75F37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 32px;
+        cursor: pointer;
+    }
+
+    .submit-wrap {
+        width: 100%;
+        text-align: center;
+        margin-top: 28px;
+    }
+
+    /* Auth-specific override for .gumb (faq version in style.css differs) */
+    .gumb {
+        background: #A75F37;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 30px;
+        padding: 9px 42px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .gumb:hover { background: #CA8E82; }
+
+    .auth-link {
+        margin-top: 22px;
+        font-size: 13px;
+        color: #292421;
+        text-align: center;
+    }
+
+    .auth-link a {
+        color: #A75F37;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .auth-link a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+        .auth-panel { width: 100%; padding: 30px 22px; }
+    }
+</style>
+
+<div class="auth-page">
     <a href="/" class="back-btn">&#8617;</a>
-    <div class="okvir">
+
+    <div class="auth-panel">
         <div class="profil-ikona">&#128100;</div>
-        <h2>REGISTRACIJA</h2>
-        <form method="POST" action="/register">
+
+        <h2>Registracija</h2>
+
+        <form method="POST" action="/register" class="obrazec" onsubmit="return preveriGeslo()">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <div class="polje">
-                <label>Uporabniško ime</label>
-                <div class="input-wrap">
-                    <input type="text" name="username" required autofocus>
+                <label for="username">Uporabniško ime *</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+
+            <div class="polje">
+                <label for="password">Geslo * <small>(vsaj 6 znakov)</small></label>
+                <div class="password-wrap">
+                    <input type="password" id="password" name="password" required minlength="6"
+                           oninput="checkConfirm()">
+                    <button type="button" class="toggle-geslo"
+                            onclick="toggleGeslo('password', this)"
+                            title="Pokaži geslo">👁</button>
                 </div>
             </div>
+
             <div class="polje">
-                <label>Geslo</label>
-                <div class="input-wrap">
-                    <input type="password" name="password" id="pw-register" required minlength="6"
-                           oninput="checkStrength(this.value, 'bar-register', 'label-register')">
-                    <button type="button" class="toggle-pw" onclick="togglePw('pw-register', this)">👁</button>
+                <label for="password_confirm">Potrdi geslo *</label>
+                <div class="password-wrap">
+                    <input type="password" id="password_confirm" name="password_confirm" required
+                           oninput="checkConfirm()">
+                    <button type="button" class="toggle-geslo"
+                            onclick="toggleGeslo('password_confirm', this)"
+                            title="Pokaži geslo">👁</button>
                 </div>
-                <div class="strength-bar-wrap">
-                    <div class="strength-bar" id="bar-register"></div>
-                </div>
-                <div class="strength-label" id="label-register"></div>
-                <div class="hint">Najmanj 6 znakov</div>
+                <div class="geslo-napaka" id="geslo-napaka">Gesli se ne ujemata.</div>
+                <div class="geslo-ujema"  id="geslo-ujema">Gesli se ujemata. ✓</div>
             </div>
+
             <div class="polje">
-                <label>Vloga</label>
-                <div class="input-wrap">
-                    <select name="vloga">
-                        <option value="stranka">Stranka</option>
-                        <option value="frizer">Frizer</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
+                <label for="ime">Ime</label>
+                <input type="text" id="ime" name="ime">
             </div>
-            <button type="submit" class="gumb">Registracija</button>
+
+            <div class="polje">
+                <label for="priimek">Priimek <span id="priimek_required_label"></span></label>
+                <input type="text" id="priimek" name="priimek">
+            </div>
+
+            <div class="polje">
+                <label for="mail">E-mail</label>
+                <input type="email" id="mail" name="mail">
+            </div>
+
+            <div class="polje">
+                <label for="telefon">Telefon</label>
+                <input type="tel" id="telefon" name="telefon">
+            </div>
+
+            <div class="polje">
+                <label for="vloga">Vrsta računa *</label>
+                <select id="vloga" name="vloga" onchange="onVlogaChange(this.value)">
+                    <option value="stranka">Stranka</option>
+                    <option value="frizer">Frizer</option>
+                </select>
+            </div>
+
+            <div class="submit-wrap">
+                <button type="submit" class="gumb">Registriraj se</button>
+            </div>
         </form>
-        <div class="link">
-            Že imaš račun? <a href="/login">Prijava</a>
-        </div>
+
+        <p class="auth-link">Že imaš račun? <a href="/login">Prijavi se</a></p>
     </div>
 </div>
+
 <script>
-    function togglePw(inputId, btn) {
+    function onVlogaChange(vloga) {
+        const label = document.getElementById('priimek_required_label');
+        const priimekInput = document.getElementById('priimek');
+        if (vloga === 'stranka') {
+            label.textContent = '*';
+            priimekInput.required = true;
+        } else {
+            label.textContent = '';
+            priimekInput.required = false;
+        }
+    }
+    onVlogaChange(document.getElementById('vloga').value);
+
+    function toggleGeslo(inputId, btn) {
         const input = document.getElementById(inputId);
         if (input.type === 'password') {
             input.type = 'text';
             btn.textContent = '🙈';
+            btn.title = 'Skrij geslo';
         } else {
             input.type = 'password';
             btn.textContent = '👁';
+            btn.title = 'Pokaži geslo';
         }
     }
 
-    function checkStrength(pw, barId, labelId) {
-        const bar = document.getElementById(barId);
-        const label = document.getElementById(labelId);
-        if (!pw) { bar.style.width = '0%'; label.textContent = ''; return; }
+    function checkConfirm() {
+        const geslo    = document.getElementById('password').value;
+        const potrdilo = document.getElementById('password_confirm').value;
+        const napaka   = document.getElementById('geslo-napaka');
+        const ujema    = document.getElementById('geslo-ujema');
 
-        let score = 0;
-        if (pw.length >= 6)  score++;
-        if (pw.length >= 10) score++;
-        if (/[A-Z]/.test(pw)) score++;
-        if (/[0-9]/.test(pw)) score++;
-        if (/[^A-Za-z0-9]/.test(pw)) score++;
+        if (potrdilo.length === 0) {
+            napaka.style.display = 'none';
+            ujema.style.display  = 'none';
+        } else if (geslo === potrdilo) {
+            napaka.style.display = 'none';
+            ujema.style.display  = 'block';
+        } else {
+            napaka.style.display = 'block';
+            ujema.style.display  = 'none';
+        }
+    }
 
-        const levels = [
-            { width: '20%', color: '#e74c3c', text: 'Zelo šibko' },
-            { width: '40%', color: '#e67e22', text: 'Šibko' },
-            { width: '60%', color: '#f1c40f', text: 'Srednje' },
-            { width: '80%', color: '#2ecc71', text: 'Močno' },
-            { width: '100%', color: '#27ae60', text: 'Zelo močno' },
-        ];
-
-        const level = levels[Math.min(score - 1, 4)];
-        bar.style.width = level.width;
-        bar.style.background = level.color;
-        label.textContent = level.text;
-        label.style.color = level.color;
+    function preveriGeslo() {
+        const geslo    = document.getElementById('password').value;
+        const potrdilo = document.getElementById('password_confirm').value;
+        if (geslo !== potrdilo) {
+            document.getElementById('geslo-napaka').style.display = 'block';
+            document.getElementById('password_confirm').focus();
+            return false;
+        }
+        return true;
     }
 </script>
-</body>
-</html>
+{% endblock %}

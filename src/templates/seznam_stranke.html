@@ -2,86 +2,336 @@
 {% block title %}Seznam strank{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
     }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
     .page-header {
-        background: var(--beige); padding: 14px 32px;
-        display: flex; align-items: center; justify-content: space-between;
+        background: #D9B99F;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
+
     .page-header-title {
-        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
-        letter-spacing: 0.06em; color: var(--dark);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #292421;
     }
-    .vsebina { padding: 24px 32px; }
-    .search-bar {
-        display: flex; align-items: center; gap: 8px;
-        background: var(--white); border-radius: 30px;
-        padding: 8px 16px; width: 260px; border: 1px solid var(--beige); margin-bottom: 20px;
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
     }
-    .search-bar input {
-        border: none; background: transparent; outline: none;
-        font-size: 13px; width: 100%; font-family: var(--font-body);
+
+    .header-username {
+        font-size: 13px;
+        color: #292421;
     }
-    table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; }
-    thead { background: var(--beige); }
-    th { padding: 12px 16px; font-family: var(--font-head); font-size: 0.85rem; color: var(--dark); text-align: left; }
-    td { padding: 10px 16px; font-size: 13px; color: var(--dark); border-bottom: 1px solid var(--peach); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--light); }
-    .prazno { text-align: center; color: #aaa; padding: 40px; font-style: italic; }
+
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    .stranke-page {
+        flex: 1;
+        min-height: calc(100vh - 310px);
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        padding: 24px 32px 30px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 28px;
+        text-decoration: none;
+    }
+
+    .stranke-box {
+        width: 430px;
+        min-height: 430px;
+        background: rgba(255,255,255,0.18);
+        padding: 34px 42px;
+    }
+
+    .stranke-box h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.6rem;
+        text-align: center;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+    }
+
+    .crta {
+        height: 2px;
+        background: #A75F37;
+        margin-bottom: 28px;
+    }
+
+    .vrstica {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 22px;
+    }
+
+    .vrstica label {
+        width: 90px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111111;
+    }
+
+    select, input {
+        border: none;
+        background: #FFFFFF;
+        border-radius: 20px;
+        padding: 7px 12px;
+        font-size: 12px;
+        outline: none;
+        width: 210px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .gumb-vrstica {
+        border-top: 2px solid #A75F37;
+        padding-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #CA8E82;
+        font-size: 12px;
+    }
+
+    .check {
+        width: 18px;
+        height: 18px;
+        border: 1px solid #D9B99F;
+        border-radius: 4px;
+        background: #F2E7DD;
+        display: inline-block;
+    }
+
+    .gumb {
+        border: none;
+        background: transparent;
+        color: #CA8E82;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .uredi-box {
+        margin-top: 26px;
+        border-top: 2px solid #A75F37;
+        padding-top: 18px;
+    }
+
+    .uredi-box h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+        color: #292421;
+    }
+
+    .uredi-box .vrstica {
+        gap: 14px;
+        margin-bottom: 12px;
+    }
+
+    .uredi-box label {
+        font-size: 13px;
+        width: 100px;
+    }
+
+    .stranke-filter {
+        position: absolute;
+        top: 42px;
+        right: 110px;
+        width: 280px;
+        background: #FFFFFF;
+        border-radius: 28px;
+        padding: 22px 26px;
+        border: 1px solid #D9B99F;
+    }
+
+    .stranke-filter h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .stranke-filter ul {
+        list-style: circle;
+        padding-left: 18px;
+        max-height: 90px;
+        overflow: auto;
+    }
+
+    .stranke-filter li {
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+
+    .nav-footer {
+        background: #D9B99F;
+        padding: 7px 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .nav-footer a {
+        font-size: 13px;
+        color: #292421;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .nav-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1000px) {
+        .stranke-filter { display: none; }
+    }
+
+    @media (max-width: 700px) {
+        .page-header { padding: 12px 18px; }
+        .page-header-title { font-size: 1.4rem; }
+        .navbar a { padding: 10px 14px; font-size: 12px; }
+        .stranke-box { width: 100%; padding: 28px 22px; }
+        .vrstica { flex-direction: column; align-items: flex-start; gap: 8px; }
+        select, input { width: 100%; }
+    }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">SEZNAM STRANK</div>
-    <a href="/profil" style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;">&#128100;</a>
-</div>
+<div class="stranke-page">
+    <a href="/admin" class="back-btn">&#8617;</a>
 
-<div class="vsebina">
-    <div class="search-bar">
-        <span>&#128269;</span>
-        <input type="text" placeholder="Išči stranko..." id="searchInput" oninput="filterRows()">
+
+    <div class="stranke-box">
+        <h2>Stranke</h2>
+        <div class="crta"></div>
+
+        <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="vrstica">
+                <label for="stranka_select">Stranka</label>
+
+                <select name="stranka_id" id="stranka_select" required>
+                    <option value="" disabled selected>-izberi stranko-</option>
+
+                    {% for s in stranke %}
+                        <option value="{{ s.id_stranke }}" {% if izbrana and s.id_stranke == izbrana.id_stranke %}selected{% endif %}>
+                            {{ s.ime }} {{ s.priimek }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="gumb-vrstica">
+                <span class="check"></span>
+                <button type="submit" class="gumb">Potrdi</button>
+            </div>
+        </form>
+
+       {% if izbrana %}
+    <div class="uredi-box">
+        <h3>Uredi podatke</h3>
+
+        <form method="POST" action="/stranke_uredi/shrani">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
+
+            <div class="vrstica">
+                <label>Ime</label>
+                <input type="text" name="ime" value="{{ izbrana.ime }}" required>
+            </div>
+
+            <div class="vrstica">
+                <label>Priimek</label>
+                <input type="text" name="priimek" value="{{ izbrana.priimek }}" required>
+            </div>
+
+            <div class="vrstica">
+                <label>Mail</label>
+                <input type="email" name="mail" value="{{ izbrana.mail or '' }}">
+            </div>
+
+            <div class="vrstica">
+                <label>Telefon</label>
+                <input type="text" name="telefon" value="{{ izbrana.telefon or '' }}">
+            </div>
+
+            <div class="vrstica">
+                <label>ID naj frizerja</label>
+                <input type="text" name="id_naj_frizer" value="{{ izbrana.id_naj_frizer or '' }}">
+            </div>
+
+            <div class="gumb-vrstica">
+                <span class="check"></span>
+                <button type="submit" class="gumb">Shrani</button>
+            </div>
+        </form>
+
+        <!-- DELETE BUTTON -->
+<form method="POST" action="/stranke_uredi/izbrisi"
+      onsubmit="return confirm('Res želiš izbrisati stranko {{ izbrana.ime }} {{ izbrana.priimek }}?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
+    <div class="gumb-vrstica" style="margin-top: 10px; border-top: none;">
+        <span class="check"></span>
+        <button type="submit" class="gumb" style="color: #a75f37;">🗑️ Izbriši stranko</button>
     </div>
-
-    {% if stranke %}
-    <table id="strankeTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ime</th>
-                <th>Priimek</th>
-                <th>E-pošta</th>
-                <th>Telefon</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for s in stranke %}
-            <tr data-name="{{ s[1]|lower }} {{ s[2]|lower }}">
-                <td>{{ s[0] }}</td>
-                <td>{{ s[1] }}</td>
-                <td>{{ s[2] }}</td>
-                <td>{{ s[3] or '—' }}</td>
-                <td>{{ s[4] or '—' }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="prazno">Ni strank v bazi.</div>
-    {% endif %}
+</form>
+    </div>
+{% endif %}
+    </div>
 </div>
-
-<script>
-    function filterRows() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('#strankeTable tbody tr').forEach(row => {
-            row.style.display = row.dataset.name.includes(q) ? '' : 'none';
-        });
-    }
-</script>
 {% endblock %}

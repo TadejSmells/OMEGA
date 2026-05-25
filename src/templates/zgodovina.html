@@ -2,66 +2,48 @@
 {% block title %}Zgodovina rezervacij{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
-    }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
-    .page-header {
-        background: var(--beige); padding: 14px 32px;
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .page-header-title {
-        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
-        letter-spacing: 0.06em; color: var(--dark);
-    }
-    .vsebina { padding: 24px 32px; }
-    table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; }
-    thead { background: var(--beige); }
-    th { padding: 12px 16px; font-family: var(--font-head); font-size: 0.85rem; color: var(--dark); text-align: left; }
-    td { padding: 10px 16px; font-size: 13px; color: var(--dark); border-bottom: 1px solid var(--peach); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--light); }
-    .prazno { text-align: center; color: #aaa; padding: 40px; font-style: italic; }
-    .back-btn { display: inline-block; margin: 16px 32px; color: var(--rose); text-decoration: none; font-size: 22px; }
-</style>
 
-<div class="page-header">
-    <div class="page-header-title">ZGODOVINA REZERVACIJ</div>
-    <a href="/profil" style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;">&#128100;</a>
+<div class="zgodovina-page">
+    <a href="/rezervacije" class="back-btn">&#8617;</a>
+
+    <div class="table-box">
+        <h1>Zgodovina rezervacij</h1>
+        <div class="line"></div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Datum</th>
+                        <th>Ura</th>
+                        <th>Stranka</th>
+                        <th>Frizer</th>
+                        <th>Salon</th>
+                        <th>Storitev</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for r in rezervacije %}
+                        <tr>
+                            <td>{{ r[0] }}</td>
+                            <td>{{ r[5].strftime('%d. %m. %Y') if r[5] else '—' }}</td>
+                            <td>{{ r[6].strftime('%H:%M') if r[6] else '—' }}</td>
+                            <td>{{ r[1] or '—' }}</td>
+                            <td>{{ r[2] or '—' }}</td>
+                            <td>{{ r[3] or '—' }}</td>
+                            <td>{{ r[4] or '—' }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="empty">Ni zgodovine rezervacij.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<a href="/" class="back-btn">&#8617;</a>
-
-<div class="vsebina">
-    {% if rezervacije %}
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Stranka</th>
-                <th>Frizer</th>
-                <th>Salon</th>
-                <th>Storitev</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for r in rezervacije %}
-            <tr>
-                <td>{{ r[0] }}</td>
-                <td>{{ r[1] or '—' }}</td>
-                <td>{{ r[2] or '—' }}</td>
-                <td>{{ r[3] or '—' }}</td>
-                <td>{{ r[4] or '—' }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="prazno">Ni še nobenih rezervacij.</div>
-    {% endif %}
-</div>
 {% endblock %}

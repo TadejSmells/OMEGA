@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Frizer Panel{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <p class="podnaslov">Pregled</p>
+    <div class="line"></div>
+
+    <div style="display:flex; gap:20px; margin-bottom:28px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Moje rezervacije ta teden</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.rezervacije_teden if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">{{ stats.rezervacije_danes if stats else '0' }} rezervacij je danes</div>
+        </div>
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Prosti termini danes</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.prosti_termini if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">razpoložljivi</div>
+        </div>
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Stranke ta teden</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.stranke_teden if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">unikatnih strank</div>
+        </div>
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Opravljene storitve</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.opravljene if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">ta mesec</div>
+        </div>
+    </div>
+
+
+
+    <div style="display:flex; gap:28px; flex-wrap:wrap; margin-bottom:28px;">
+
+        <div class="table-box" style="flex:2; min-width:320px;">
+            <h1>Moje rezervacije ta teden</h1>
+            <div class="line"></div>
+            {% if naslednji_termin %}
+            <div style="background:#F2E7DD; border-radius:8px; padding:10px 16px; margin-bottom:14px; font-size:13px;">
+                Naslednji termin danes:
+                <strong>{{ naslednji_termin.stranka or '—' }}</strong> ·
+                {{ naslednji_termin.storitev or '—' }} ·
+                {{ naslednji_termin.salon or '—' }} ·
+                <strong>{{ naslednji_termin.ura | string | truncate(5, True, '') if naslednji_termin.ura else '—' }}</strong>
+            </div>
+            {% endif %}
+            <div class="table-scroll">
+                <table class="simple-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Stranka</th>
+                            <th>Datum &amp; Ura</th>
+                            <th>Storitev</th>
+                            <th>Salon</th>
+                            <th>Status</th>
+                            <th>Akcija</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if rezervacije %}
+                        {% for r in rezervacije %}
+                        <tr>
+                            <td>{{ r['id_rezervacije'] }}</td>
+                            <td>{{ r['stranka'] or '—' }}</td>
+                            <td>{{ r['datum'] or '—' }} {{ r['ura'] | string | truncate(5, True, '') if r['ura'] else '' }}</td>
+                            <td>{{ r['storitev'] or '—' }}</td>
+                            <td>{{ r['salon'] or '—' }}</td>
+                            <td>
+                                {% if r['status'] == 'cancelled' %}Preklicana
+                                {% else %}Aktivna
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if r['status'] != 'cancelled' %}
+                                <form method="POST" action="/frizer/preklic/{{ r['id_rezervacije'] }}"
+                                    onsubmit="return confirm('Ali res želite preklicati to rezervacijo?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="mini-btn" style="color:#c0392b; border-color:#c0392b;">Prekliči</button>
+                                </form>
+                                {% else %}—{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="empty">Ni rezervacij ta teden.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:right; margin-top:10px;">
+                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije →</a>
+            </div>
+        </div>
+
+        <div class="table-box" style="flex:1; min-width:200px;">
+            <h1>Moja orodja</h1>
+            <div class="line"></div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <a href="/urnik" class="mini-btn">Moj urnik</a>
+                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije</a>
+                <a href="/cenik" class="mini-btn">Cenik / Storitve</a>
+                <a href="/blokade" class="mini-btn">Blokirani termini</a>
+                <a href="/sporocila" class="mini-btn">Sporočila strank</a>
+                <a href="/profil" class="mini-btn">Moj profil</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="display:flex; gap:28px; flex-wrap:wrap;">
+
+        <div class="table-box" style="flex:1; min-width:280px;">
+            <h1>Zadnja aktivnost</h1>
+            <div class="line"></div>
+            {% if zadnja_aktivnost %}
+            {% for z in zadnja_aktivnost %}
+            <div style="display:flex; gap:10px; margin-bottom:12px; font-size:13px;">
+                <div>
+                    <div>{{ z['tip'] }} — <strong>{{ z['ime'] }}</strong></div>
+                    <div style="font-size:11px; color:#A75F37;">{{ z['datum'] }}, {{ z['ura'] }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty">Ni nedavne aktivnosti.</div>
+            {% endif %}
+        </div>
+
+        <div class="table-box" style="flex:1; min-width:280px;">
+            <h1>Sporočila strank</h1>
+            <div class="line"></div>
+            {% if sporocila %}
+            {% for s in sporocila %}
+            <div style="display:flex; gap:10px; margin-bottom:12px; font-size:13px;">
+                <div>
+                    <div><strong>{{ s.stranka or '—' }}</strong></div>
+                    <div style="font-size:12px;">{{ s.vsebina | truncate(60) if s.vsebina else '—' }}</div>
+                    <div style="font-size:11px; color:#A75F37;">{{ s.datum.strftime('%d.%m.%Y %H:%M') if s.datum else '' }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            <div style="text-align:right; margin-top:10px;">
+                <a href="/sporocila" class="mini-btn">Vsa sporočila →</a>
+            </div>
+            {% else %}
+            <div class="empty">Ni novih sporočil.</div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

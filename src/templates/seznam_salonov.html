@@ -2,307 +2,538 @@
 {% block title %}Seznam salonov{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
+
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
 
     .page-header {
-        background: var(--beige);
-        padding: 14px 32px;
+        background: #D9B99F;
+        padding: 12px 32px;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
+
     .page-header-title {
-        font-family: var(--font-head);
-        font-size: 1.5rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 2rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
-        color: var(--dark);
+        color: #292421;
+        letter-spacing: 0.02em;
     }
+
     .header-right {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 20px;
     }
-    .header-username { font-size: 13px; color: var(--dark); }
+
+    .header-username {
+        font-size: 13px;
+        color: #292421;
+        background: rgba(255,255,255,0.7);
+        padding: 7px 18px;
+        border-radius: 20px;
+    }
+
     .user-avatar {
-        width: 42px; height: 42px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.6);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 20px; color: var(--beige);
+        background: rgba(255,255,255,0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-decoration: none;
+        font-size: 22px;
+        color: #D9B99F;
+    }
+
+    .navbar {
+        background: #A75F37;
+        display: flex;
+    }
+
+    .navbar a {
+        font-size: 13px;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 10px 28px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .navbar a.active {
+        background: rgba(0,0,0,0.2);
+    }
+
+    .navbar a:hover {
+        background: rgba(0,0,0,0.15);
+    }
+
+    .saloni-page {
+        flex: 1;
+        min-height: calc(100vh - 310px);
+        background: #F2E7DD;
+        display: flex;
+        flex-direction: column;
     }
 
     .iskanjebox {
-        background: var(--light);
-        padding: 12px 32px;
+        background: #F2E7DD;
+        padding: 16px 32px 0;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        position: relative;
     }
+
     .iskanjabar {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: var(--white);
+        background: #FFFFFF;
         border-radius: 30px;
         padding: 8px 16px;
         width: 260px;
-        border: 1px solid var(--beige);
+        border: 1px solid #D9B99F;
     }
+
     .iskanjabar input {
-        border: none; background: transparent; outline: none;
-        font-size: 13px; width: 100%;
-        font-family: var(--font-body);
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 13px;
+        width: 100%;
+        font-family: Arial, Helvetica, sans-serif;
     }
+
     .filter-btn {
-        background: none; border: none; cursor: pointer;
-        font-size: 18px; color: var(--dark);
-        padding: 6px;
-        position: relative;
+        width: 34px;
+        height: 34px;
+        border: none;
+        border-radius: 50%;
+        background: #FFFFFF;
+        cursor: pointer;
+        font-size: 17px;
+        color: #CA8E82;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
     .back-btn {
         margin-left: auto;
-        background: none; border: none; cursor: pointer;
-        font-size: 22px; color: var(--rose);
+        color: #CA8E82;
         text-decoration: none;
+        font-size: 28px;
     }
 
     .filter-panel {
         display: none;
         position: absolute;
-        top: 120px; left: 32px;
+        top: 58px;
+        left: 245px;
         z-index: 100;
-        background: var(--white);
-        border: 1.5px solid var(--beige);
+        background: #FFFFFF;
+        border: 1.5px solid #A75F37;
         border-radius: 12px;
-        padding: 20px 24px;
-        min-width: 240px;
+        padding: 18px 22px;
+        min-width: 260px;
+        max-height: 270px;
+        overflow: auto;
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
-    .filter-panel.open { display: block; }
+
+    .filter-panel.open {
+        display: block;
+    }
+
     .filter-panel-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
     }
+
     .filter-panel-header strong {
-        font-family: var(--font-body);
-        font-weight: 600;
-        font-size: 14px;
-        color: var(--dark);
+        font-size: 15px;
+        color: #292421;
     }
+
     .filter-apply {
-        background: var(--brown);
-        color: var(--white);
+        background: #D9D9D9;
+        color: #292421;
         border: none;
         border-radius: 20px;
-        padding: 5px 14px;
-        font-size: 12px;
+        padding: 5px 15px;
+        font-size: 11px;
+        font-weight: 700;
         cursor: pointer;
-        font-family: var(--font-body);
     }
-    .filter-group { margin-bottom: 14px; }
+
+    .filter-group {
+        margin-bottom: 12px;
+    }
+
     .filter-group-title {
-        font-weight: 600;
-        font-size: 13px;
-        color: var(--dark);
-        margin-bottom: 6px;
+        font-size: 15px;
+        color: #292421;
+        margin-bottom: 5px;
     }
+
     .filter-group label {
         display: flex;
         align-items: center;
         gap: 6px;
         font-size: 12px;
-        color: var(--dark);
-        margin-bottom: 4px;
+        color: #292421;
+        margin-bottom: 3px;
         cursor: pointer;
     }
 
     .cards-wrapper {
-        padding: 20px 32px;
-        position: relative;
+        flex: 1;
+        padding: 14px 32px 24px;
         display: flex;
         align-items: center;
         gap: 12px;
     }
+
+    .cards-viewport {
+        flex: 1;
+        overflow: hidden;
+    }
+
     .cards {
         display: flex;
-        gap: 14px;
-        flex: 1;
-        overflow: hidden;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
     }
+
+    .cards::-webkit-scrollbar {
+        display: none;
+    }
+
     .card {
-        flex: 1;
-        min-width: 0;
-        background: var(--white);
+        flex: 0 0 calc((100% - 32px) / 3);
+        min-height: 430px;
+        background: #FFFFFF;
         border-radius: 14px;
-        overflow: hidden;
-        padding: 20px;
-        border: 1px solid var(--peach);
+        border: 1px solid #F2D6CE;
+        padding: 22px 20px 24px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        scroll-snap-align: start;
     }
-    .card-img {
-        width: 100px; height: 100px;
-        border-radius: 50%;
-        background: var(--beige);
-        margin: 0 auto 16px;
+
+    .card.hidden-search {
+        display: none;
     }
-    .card h2 {
-        font-family: var(--font-head);
-        font-size: 0.95rem;
-        color: var(--dark);
-        margin-bottom: 10px;
-        text-align: center;
+
+    .card.je-priljubljen {
+        border-color: #A75F37;
+        box-shadow: 0 0 0 2px #A75F37;
     }
-    .card .oznaka {
-        font-size: 9px;
+
+    .priljubljen-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: #A75F37;
+        color: #FFFFFF;
+        font-size: 10px;
         font-weight: 700;
-        letter-spacing: 0.08em;
-        color: var(--rose);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .favorite-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        border: none;
+        background: transparent;
+        font-size: 31px;
+        line-height: 1;
+        cursor: pointer;
+        color: #CA8E82;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .favorite-btn.active {
+        color: #F2C94C;
+        text-shadow: 0 0 1px #A75F37;
+    }
+
+    .card-img {
+        width: 105px;
+        height: 105px;
+        border-radius: 28px;
+        background: #D9D9D9;
+        margin: 0 auto 18px;
+    }
+
+    .card h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #292421;
+        margin-bottom: 12px;
+        text-align: left;
+    }
+
+    .card .oznaka {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #CA8E82;
         text-transform: uppercase;
         margin-top: 8px;
     }
+
     .card .opis {
-        font-size: 12px;
-        color: #7A958F;
-        line-height: 1.6;
+        font-size: 13px;
+        color: #292421;
+        line-height: 1.45;
         margin-top: 2px;
     }
+
+    .card .opis.storitve {
+        flex: 1;
+    }
+
     .card a {
         display: inline-block;
         margin-top: 14px;
-        font-size: 12px;
-        color: var(--brown);
+        font-size: 13px;
+        color: #A75F37;
         text-decoration: none;
         font-style: italic;
     }
-    .card a:hover { text-decoration: underline; }
+
+    .card a:hover {
+        text-decoration: underline;
+    }
 
     .arrow-btn {
-        background: none; border: none; cursor: pointer;
-        font-size: 24px; color: var(--rose);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 34px;
+        color: #CA8E82;
         flex-shrink: 0;
+        align-self: center;
     }
 
     .nav-footer {
-        background: var(--beige);
-        padding: 14px 60px;
+        background: #D9B99F;
+        padding: 7px 60px;
         display: flex;
         justify-content: space-between;
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
     }
-    .nav-footer a { font-size: 13px; color: var(--dark); text-decoration: none; font-style: italic; }
+
+    .nav-footer a {
+        font-size: 13px;
+        color: #292421;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .nav-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 1000px) {
+        .card {
+            flex-basis: 100%;
+            min-height: 340px;
+        }
+
+        .filter-panel {
+            left: 32px;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .page-header {
+            padding: 12px 18px;
+        }
+
+        .page-header-title {
+            font-size: 1.4rem;
+        }
+
+        .navbar a {
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .iskanjebox,
+        .cards-wrapper {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+    }
 </style>
 
-<div class="page-header">
-    <div class="page-header-title">SEZNAM SALONOV</div>
-    <div class="header-right">
-        <span class="header-username">Ime priimek</span>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
+<div class="saloni-page">
+    <div class="iskanjebox">
+        <div class="iskanjabar">
+            <span>&#128269;</span>
+            <input type="text" placeholder="Išči salon..." id="searchInput" oninput="filterCards()">
+        </div>
 
-<div class="iskanjebox" style="position:relative;">
-    <div class="iskanjabar">
-        <span>&#128269;</span>
-        <input type="text" placeholder="Išči salon..." id="searchInput" oninput="filterCards()">
-    </div>
-    <button class="filter-btn" onclick="toggleFilter()" title="Filter">&#9878;</button>
-    <a href="/" class="back-btn">&#8617;</a>
+        <button class="filter-btn" onclick="toggleFilter()" title="Filter">&#9878;</button>
+        <a href="/" class="back-btn">&#8617;</a>
 
-    <!-- FILTER PANEL -->
-    <div class="filter-panel" id="filterPanel">
-        <div class="filter-panel-header">
-            <strong>Parametri</strong>
-            <button class="filter-apply" onclick="applyFilter()">POTRDI</button>
-        </div>
-        <div class="filter-group">
-            <div class="filter-group-title">Spol</div>
-            <label><input type="radio" name="spol" value=""> Moški</label>
-            <label><input type="radio" name="spol" value=""> Ženska</label>
-            <label><input type="radio" name="spol" value=""> Moški/Ženska</label>
-        </div>
-        <div class="filter-group">
-            <div class="filter-group-title">Storitev</div>
-            <label><input type="checkbox" name="storitev"> Storitev1</label>
-            <label><input type="checkbox" name="storitev"> Storitev2</label>
-            <label><input type="checkbox" name="storitev"> Storitev3</label>
-            <label style="color:var(--rose);">o ...</label>
-        </div>
-        <div class="filter-group">
-            <div class="filter-group-title">Lokacija</div>
-            <label><input type="radio" name="lokacija" value=""> Lokacija1</label>
-            <label><input type="radio" name="lokacija" value=""> Lokacija2</label>
-            <label><input type="radio" name="lokacija" value=""> Lokacija3</label>
-            <label style="color:var(--rose);">o ...</label>
+        <div class="filter-panel" id="filterPanel">
+            <div class="filter-panel-header">
+                <strong>Parametri</strong>
+                <button class="filter-apply" onclick="applyFilter()">POTRDI</button>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-group-title">Spol</div>
+                <label><input type="radio" name="spol" value=""> Moški</label>
+                <label><input type="radio" name="spol" value=""> Ženska</label>
+                <label><input type="radio" name="spol" value=""> Moški/Ženska</label>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-group-title">Storitev</div>
+                <label><input type="checkbox" name="storitev"> Storitev1</label>
+                <label><input type="checkbox" name="storitev"> Storitev2</label>
+                <label><input type="checkbox" name="storitev"> Storitev3</label>
+                <label style="color:#CA8E82;">o ...</label>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-group-title">Lokacija</div>
+                <label><input type="radio" name="lokacija" value=""> Lokacija1</label>
+                <label><input type="radio" name="lokacija" value=""> Lokacija2</label>
+                <label><input type="radio" name="lokacija" value=""> Lokacija3</label>
+                <label style="color:#CA8E82;">o ...</label>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="cards-wrapper">
-    <button class="arrow-btn" onclick="prevPage()">&#8592;</button>
-    <div class="cards" id="cardsContainer">
-        {# model_salon.get_vse('salon') -> s[0]=id, s[1]=ime, s[2]=naslov, s[3]=mesto, s[4]=telefon #}
-        {% for item in saloni %}
-        {% set s = item.salon %}
-        {% set storitve = item.storitve %}
-        <div class="card" data-name="{{ s[1]|lower }}">
-            <div class="card-img"></div>
-            <h2>{{ s[1] }}</h2>
-            <div class="oznaka">Okvirna cena storitev:</div>
-            <div class="opis">{% if storitve %}{{ storitve[0][2]|round(2) }}€{% else %}N/A{% endif %}</div>
-            <div class="oznaka">Lokacija:</div>
-            <div class="opis">{{ s[2] }}, {{ s[3] }}</div>
-            <div class="oznaka">Storitve:</div>
-            <div class="opis">{% for st in storitve %}{{ st[1] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-            <a href="/salon/{{ s[0] }}">Poglej salon &rarr;</a>
+    <div class="cards-wrapper">
+        <button class="arrow-btn" onclick="scrollSaloni(-1)">&#8592;</button>
+
+        <div class="cards-viewport">
+            <div class="cards" id="cardsContainer">
+                {# item.salon -> s[0]=id, s[1]=ime, s[2]=naslov, s[3]=mesto, s[4]=telefon #}
+                {% for item in saloni %}
+                    {% set s = item.salon %}
+                    {% set storitve = item.storitve %}
+
+                    <div class="card {% if item.priljubljen %}je-priljubljen{% endif %}"
+                         data-id="{{ s[0] }}" data-name="{{ s[1]|lower }}">
+
+                        {% if item.priljubljen %}
+                            <span class="priljubljen-badge">★ Priljubljen</span>
+                        {% endif %}
+
+                        <form method="POST" action="/salon/{{ s[0] }}/favorite"
+                              style="position:absolute; top:15px; right:15px; margin:0;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit"
+                                    class="favorite-btn {% if item.priljubljen %}active{% endif %}"
+                                    title="{% if item.priljubljen %}Odstrani iz priljubljenih{% else %}Dodaj med priljubljene{% endif %}">
+                                {% if item.priljubljen %}★{% else %}☆{% endif %}
+                            </button>
+                        </form>
+
+                        <div class="card-img"></div>
+
+                        <h2>{{ s[1] }}</h2>
+
+                        <div class="oznaka">Okvirna cena storitev:</div>
+                        <div class="opis">
+                            {% if storitve %}{{ storitve[0][2]|round(2) }}€{% else %}N/A{% endif %}
+                        </div>
+
+                        <div class="oznaka">Lokacija:</div>
+                        <div class="opis">{{ s[2] }}, {{ s[3] }}</div>
+
+                        <div class="oznaka">Storitve:</div>
+                        <div class="opis storitve">
+                            {% for st in storitve %}
+                                {{ st[1] }}{% if not loop.last %}, {% endif %}
+                            {% else %}
+                                —
+                            {% endfor %}
+                        </div>
+
+                        <a href="/salon/{{ s[0] }}">Poglej salon &rarr;</a>
+                    </div>
+                {% else %}
+                    <div class="card">
+                        <div class="opis">Ni vpisanih salonov.</div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-        {% else %}
-        <div class="card">
-            <div class="opis">Ni vpisanih salonov.</div>
-        </div>
-        {% endfor %}
+
+        <button class="arrow-btn" onclick="scrollSaloni(1)">&#8594;</button>
     </div>
-    <button class="arrow-btn" onclick="nextPage()">&#8594;</button>
-</div>
-
-<div style="height:60px;"></div>
-<div class="nav-footer">
-    <a href="#">News</a>
-    <a href="#">Vaši termini</a>
-    <a href="#">Informacije</a>
 </div>
 
 <script>
     function toggleFilter() {
         document.getElementById('filterPanel').classList.toggle('open');
     }
+
     function applyFilter() {
         document.getElementById('filterPanel').classList.remove('open');
     }
+
     function filterCards() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('.card[data-name]').forEach(c => {
-            c.style.display = c.dataset.name.includes(q) ? '' : 'none';
+
+        document.querySelectorAll('.card[data-name]').forEach(card => {
+            card.classList.toggle('hidden-search', !card.dataset.name.includes(q));
+        });
+
+        document.getElementById('cardsContainer').scrollLeft = 0;
+    }
+
+    function scrollSaloni(direction) {
+        const container = document.getElementById('cardsContainer');
+        container.scrollBy({
+            left: direction * container.clientWidth,
+            behavior: 'smooth'
         });
     }
+
     document.addEventListener('click', function(e) {
         const panel = document.getElementById('filterPanel');
-        if (!panel.contains(e.target) && !e.target.classList.contains('filter-btn')) {
+        const btn = document.querySelector('.filter-btn');
+
+        if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
             panel.classList.remove('open');
         }
     });
-    function prevPage() { /* pagination logic */ }
-    function nextPage() { /* pagination logic */ }
 </script>
 {% endblock %}

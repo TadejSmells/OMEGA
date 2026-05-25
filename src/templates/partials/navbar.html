@@ -1,0 +1,51 @@
+<nav class="navbar">
+    <a href="/" class="{{ 'active' if request.path == '/' }}">Domov</a>
+    <a href="/saloni" class="{{ 'active' if request.path == '/saloni' }}">Saloni</a>
+    <div class="dropdown">
+        <a href="/frizerji" class="{{ 'active' if request.path.startswith('/frizerji') or request.path.startswith('/frizer/') }}">Frizerji</a>
+        <div class="dropdown-content">
+            <a href="/frizerji">Vsi frizerji</a>
+            <a href="/frizerji/lokacije">Po lokacijah</a>
+        </div>
+    </div>
+    <a href="/cenik" class="{{ 'active' if request.path == '/cenik' }}">Storitve</a>
+
+    <div class="dropdown">
+        <a href="/rezervacije" class="{{ 'active' if request.path.startswith('/rezervacije') or request.path == '/vse_rezervacije' or request.path == '/zgodovina' }}">Rezervacije</a>
+        <div class="dropdown-content">
+            <a href="/rezervacije">Nova rezervacija</a>
+            {% if session.get('role') in ['frizer', 'admin'] %}
+            <a href="/vse_rezervacije">Vse rezervacije</a>
+            <a href="/zgodovina">Zgodovina</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <a href="/prosti_termini" class="{{ 'active' if request.path == '/prosti_termini' or request.path == '/blokade' }}">Termini</a>
+        <div class="dropdown-content">
+            <a href="/prosti_termini">Prosti termini</a>
+            <a href="/blokade">Blokirani termini</a>
+        </div>
+    </div>
+    <a href="/faq" class="{{ 'active' if request.path == '/faq' }}">Q & A</a>
+
+    {% if session.get('role') == 'admin' %}
+    <div class="dropdown">
+        <a href="/admin" class="{{ 'active' if request.path.startswith('/admin') }}">Admin panel</a>
+        <div class="dropdown-content">
+            <!--  Karkol za admin tukaj  -->
+        </div>
+    </div>
+    {% endif %}
+
+    {% if session.get('role') == 'frizer' %}
+    <div class="dropdown">
+        <a href="/frizer" class="{{ 'active' if request.path.startswith('/frizer') }}">Frizer panel</a>
+        <div class="dropdown-content">
+            <!--  Karkol za frizer tukaj  -->
+        </div>
+    </div>
+    {% endif %}
+
+</nav>

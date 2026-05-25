@@ -1,66 +1,61 @@
-from flask import render_template, request, redirect, abort, session, flash
+from flask import render_template, request, redirect
 from models import model_salon
-from models import model_rezervacije
 
 
-def seznam_stranke():
-    stranke = model_salon.get_stranke()
-    return render_template("seznam_stranke.html", stranke=stranke)
-
-
-def salon_detail(salon_id):
-    try:
-        salon = model_salon.get_salon_by_id(salon_id)
-    except Exception:
-        salon = None
-
-    if salon is None:
-        abort(404)
-
-    try:
-        storitve = model_salon.get_storitve_za_salon(salon_id)
-    except Exception:
-        storitve = []
-
-    return render_template("salon.html", salon=salon, storitve=storitve, ocene=[])
-
-
-def saloni_view():
-    return render_template("saloni_view.html", saloni=model_salon.get_salone())
+def pregled():
+    """Preusmeri na glavni seznam salonov."""
+    return redirect('/saloni')
 
 
 def urnik():
     if request.method == 'POST':
-        try:
+        akcija = request.form.get('akcija', 'dodaj')
+        if akcija == 'izbrisi':
+            model_salon.izbrisi_urnik(
+                request.form.get('frizer_id'),
+                request.form.get('dan'),
+                request.form.get('ura')
+            )
+        else:
             model_salon.dodaj_urnik(
                 request.form.get('frizer_id'),
                 request.form.get('dan'),
                 request.form.get('ura')
             )
-            flash("Urnik je bil uspešno dodan.", "success")
-        except ValueError as e:
-            flash(str(e), "error")
-        except Exception:
-            flash("Napaka pri dodajanju urnika. Poskusi znova.", "error")
         return redirect('/urnik')
-
-    return render_template("urnik.html",
-                           urnik=model_salon.get_urnik(),
-                           frizerji=model_salon.get_frizerje())
+    return render_template(
+        "urnik.html",
+        urnik=model_salon.get_vse('urnik'),
+        frizerji=model_salon.get_vse('frizer')
+    )
 
 
 def zgodovina():
-    rezervacije = model_salon.get_rezervacije()
+    rezervacije = model_salon.get_vse('rezervacija')
     return render_template("zgodovina.html", rezervacije=rezervacije)
 
 
-def frizer():
-    if "user_id" not in session:
-        return redirect("/login")
-    if session.get("role") not in ("frizer", "admin"):
-        return "Nimaš dostopa.", 403
+def prosti_termini():
+    salon_id = request.args.get('salon_id', type=int)
+    saloni = model_salon.get_vse('salon')
 
-    # show all reservations for now
-    # in future: filter by this frizer's id
-    rezervacije = model_rezervacije.get_vse_rezervacije()
-    return render_template("frizer_panel.html", rezervacije=rezervacije)
+    if not salon_id:
+        return render_template("prosti_termini.html", saloni=saloni,
+                               salon=None, dnevi=[], najhitrejsi_index=None)
+
+    salon = next((s for s in saloni if s[0] == salon_id), None)
+    if salon is None:
+        return render_template("prosti_termini.html", saloni=saloni,
+                               salon=None, dnevi=[], najhitrejsi_index=None)
+
+    from models import model_prosti_termini
+    dnevi = model_prosti_termini.get_prosti_termini_po_dnevih(salon_id)
+    najhitrejsi_index = model_prosti_termini.najdi_najhitrejsi_index(dnevi)
+
+    return render_template(
+        "prosti_termini.html",
+        saloni=saloni,
+        salon=salon,
+        dnevi=dnevi,
+        najhitrejsi_index=najhitrejsi_index,
+    )

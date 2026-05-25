@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Sporočila strank{% endblock %}
+
+{% block content %}
+<div class="zgodovina-page">
+    <a href="/frizer" class="back-btn">&#8617;</a>
+
+    <div class="table-box">
+        <h1>Sporočila strank</h1>
+        <div class="line"></div>
+
+        {% if sporocila %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stranka</th>
+                        <th>Naslov</th>
+                        <th>Datum</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sporocilo in sporocila %}
+                    <tr>
+                        <td>{{ sporocilo.ime or '—' }}</td>
+                        <td>{{ sporocilo.naslov or '—' }}</td>
+                        <td>{{ sporocilo.datum.strftime('%d. %m. %Y %H:%M') if sporocilo.datum else '—' }}</td>
+                        <td>
+                            {% if sporocilo.prebrano %}
+                                <span class="status-znacka prebrano">Prebrano</span>
+                            {% else %}
+                                <span class="status-znacka neprebrano">Novo</span>
+                            {% endif %}
+                        </td>
+                        <td><a href="/sporocilo/{{ sporocilo.id }}" class="mini-link">Odpri →</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty">Ni prejetih sporočil.</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .status-znacka {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+    .status-znacka.prebrano   { background: #E3EFE6; color: #4F7A5B; }
+    .status-znacka.neprebrano { background: #F6E0DC; color: #B5503F; }
+    .mini-link { color: #A75F37; text-decoration: none; font-size: 12px; }
+    .mini-link:hover { text-decoration: underline; }
+</style>
+{% endblock %}

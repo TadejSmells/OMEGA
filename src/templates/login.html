@@ -1,120 +1,224 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prijava</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-            --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-            --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
-        }
-        body {
-            font-family: var(--font-body); background: #e8ddd5;
-            color: var(--dark); min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .outer { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
-        .back-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--rose); text-decoration: none; }
-        .okvir {
-            background: var(--light); border-radius: 16px;
-            padding: 40px 48px 48px; width: 360px; max-width: 95vw;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.06);
-        }
-        .profil-ikona {
-            width: 80px; height: 80px; border-radius: 50%; background: var(--beige);
-            margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
-            font-size: 36px; color: var(--white);
-        }
-        h2 {
-            font-family: var(--font-head); font-size: 1rem; color: var(--dark);
-            margin-bottom: 24px; letter-spacing: 0.05em; text-align: center;
-        }
-        .polje { margin-bottom: 16px; }
-        .polje label { font-size: 11px; color: var(--dark); display: block; margin-bottom: 4px; letter-spacing: 0.02em; }
-        .input-wrap { position: relative; }
-        .polje input {
-            width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
-            background: transparent; padding: 6px 32px 6px 0; font-size: 13px;
-            outline: none; font-family: var(--font-body); color: var(--dark); transition: border-color 0.2s;
-        }
-        .polje input:focus { border-bottom-color: var(--brown); }
-        .toggle-pw {
-            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-            background: none; border: none; cursor: pointer;
-            font-size: 16px; color: #aaa; padding: 0 2px; line-height: 1;
-        }
-        .toggle-pw:hover { color: var(--brown); }
-        .gumb {
-            width: 100%; background: var(--brown); border: none; border-radius: 30px;
-            padding: 12px; font-size: 14px; font-family: var(--font-body);
-            color: var(--white); cursor: pointer; margin-top: 24px;
-            letter-spacing: 0.02em; transition: background 0.2s;
-        }
-        .gumb:hover { background: var(--rose); }
-        .link { text-align: center; margin-top: 16px; font-size: 12px; color: #7A958F; }
-        .link a { color: var(--brown); text-decoration: none; }
-        .link a:hover { text-decoration: underline; }
+{% extends "base.html" %}
+{% block title %}Prijava{% endblock %}
 
-        /* Flash messages */
-        .flash { padding: 10px 14px; border-radius: 8px; font-size: 12px;
-                 margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .flash-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    </style>
-</head>
-<body>
-<div class="outer">
+{% block content %}
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
+
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .auth-page {
+        flex: 1;
+        min-height: calc(100vh - 170px);
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 28px 32px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 30px;
+        text-decoration: none;
+    }
+
+    .auth-panel {
+        width: 420px;
+        background: #F2E7DD;
+        padding: 38px 52px 34px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profil-ikona {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        color: #D9B99F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 72px;
+        margin-bottom: 28px;
+    }
+
+    .obrazec {
+        width: 100%;
+    }
+
+    h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #111111;
+        margin-bottom: 24px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .polje {
+        margin-bottom: 14px;
+    }
+
+    .polje label {
+        display: block;
+        font-size: 11px;
+        color: #111111;
+        margin-bottom: 6px;
+    }
+
+    .polje input {
+        width: 100%;
+        height: 32px;
+        border: none;
+        border-radius: 20px;
+        background: #FFFFFF;
+        padding: 4px 14px;
+        font-size: 12px;
+        outline: none;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .password-wrap {
+        position: relative;
+    }
+
+    .password-wrap input {
+        padding-right: 42px;
+    }
+
+    .toggle-geslo {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        color: #CA8E82;
+        font-size: 15px;
+    }
+
+    .toggle-geslo:hover {
+        color: #A75F37;
+    }
+
+    .submit-wrap {
+        width: 100%;
+        text-align: center;
+        margin-top: 28px;
+    }
+
+    .gumb {
+        background: #A75F37;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 30px;
+        padding: 9px 42px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .gumb:hover {
+        background: #CA8E82;
+    }
+
+    .auth-link {
+        margin-top: 22px;
+        font-size: 13px;
+        color: #292421;
+        text-align: center;
+    }
+
+    .auth-link a {
+        color: #A75F37;
+        text-decoration: none;
+        font-style: italic;
+    }
+
+    .auth-link a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .auth-panel {
+            width: 100%;
+            padding: 30px 22px;
+        }
+    }
+</style>
+
+<div class="auth-page">
     <a href="/" class="back-btn">&#8617;</a>
-    <div class="okvir">
+
+    <div class="auth-panel">
         <div class="profil-ikona">&#128100;</div>
-        <h2>PRIJAVA</h2>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-            <div class="flash flash-{{ category }}">
-                {% if category == 'error' %}❌{% else %}✅{% endif %}
-                {{ message }}
-            </div>
-            {% endfor %}
-        {% endwith %}
+        <h2>Prijava</h2>
 
-        <form method="POST" action="/login">
+        <form method="POST" action="/login" class="obrazec">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <div class="polje">
-                <label>Uporabniško ime</label>
-                <div class="input-wrap">
-                    <input type="text" name="username" required autofocus>
+                <label for="username">Uporabniško ime</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+
+            <div class="polje">
+                <label for="password">Geslo</label>
+                <div class="password-wrap">
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" class="toggle-geslo" onclick="toggleGeslo()" aria-label="Pokaži/skrij geslo" title="Pokaži/skrij geslo">
+                        👁
+                    </button>
                 </div>
             </div>
-            <div class="polje">
-                <label>Geslo</label>
-                <div class="input-wrap">
-                    <input type="password" name="password" id="pw-login" required>
-                    <button type="button" class="toggle-pw" onclick="togglePw('pw-login', this)">👁</button>
-                </div>
+
+            <div class="submit-wrap">
+                <button type="submit" class="gumb">Prijavi se</button>
             </div>
-            <button type="submit" class="gumb">Prijava</button>
         </form>
-        <div class="link">
-            Nimaš računa? <a href="/register">Registracija</a>
-        </div>
+
+        <p class="auth-link">Nimaš računa? <a href="/register">Registriraj se</a></p>
     </div>
 </div>
+
 <script>
-    function togglePw(inputId, btn) {
-        const input = document.getElementById(inputId);
+    function toggleGeslo() {
+        const input = document.getElementById('password');
+        const btn   = document.querySelector('.toggle-geslo');
         if (input.type === 'password') {
             input.type = 'text';
             btn.textContent = '🙈';
+            btn.title = 'Skrij geslo';
         } else {
             input.type = 'password';
             btn.textContent = '👁';
+            btn.title = 'Pokaži geslo';
         }
     }
 </script>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Kontakti strank{% endblock %}
+
+{% block content %}
+<div class="zgodovina-page">
+    <a href="/frizer" class="back-btn">&#8617;</a>
+
+    <div class="table-box">
+        <h1>Kontakti mojih strank</h1>
+        <div class="line"></div>
+
+        {% if stranke %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ime</th>
+                        <th>Priimek</th>
+                        <th>Email</th>
+                        <th>Telefon</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in stranke %}
+                    <tr>
+                        <td>{{ s.ime or '—' }}</td>
+                        <td>{{ s.priimek or '—' }}</td>
+                        <td>{{ s.mail or '—' }}</td>
+                        <td>{{ s.telefon or '—' }}</td>
+                        <td><a href="/kontakti_strank/{{ s.id_stranke }}" class="mini-link">Podrobnosti →</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty">Nobena stranka nima rezervacije pri vas.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

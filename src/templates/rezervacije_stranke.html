@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Moje rezervacije</h2>
+
+{% if rezervacije %}
+
+<table border="1" cellpadding="6">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Frizer</th>
+            <th>Salon</th>
+            <th>Storitev</th>
+            <th>Cena</th>
+            <th>Trajanje</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for r in rezervacije %}
+        <tr>
+            <td>{{ r.id_rezervacije }}</td>
+            <td>{{ r.frizer }}</td>
+            <td>{{ r.salon }}</td>
+            <td>{{ r.storitev }}</td>
+            <td>{{ r.cena }}</td>
+            <td>{{ r.trajanje }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<p>Nimate nobenih rezervacij.</p>
+
+{% endif %}
+
+{% endblock %}

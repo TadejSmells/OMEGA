@@ -2,128 +2,136 @@
 {% block title %}Admin Panel{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
-    }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
-    .page-header {
-        background: var(--brown); padding: 14px 32px;
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .page-header-title {
-        font-family: var(--font-head); font-size: 1.5rem; font-weight: 700;
-        letter-spacing: 0.06em; color: white;
-    }
-    .page-header-sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; }
-    .vsebina { padding: 32px; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
-    .stat-card {
-        background: var(--white); border: 1px solid var(--peach);
-        border-radius: 14px; padding: 20px 24px; text-align: center;
-    }
-    .stat-icon { font-size: 28px; margin-bottom: 8px; }
-    .stat-num {
-        font-family: var(--font-head); font-size: 2rem; color: var(--brown); font-weight: 700;
-    }
-    .stat-label { font-size: 11px; color: #7A958F; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+<div class="admin-page">
 
-    .section-title {
-        font-family: var(--font-head); font-size: 1rem; color: var(--dark);
-        margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--peach);
-    }
-    table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; }
-    thead { background: var(--beige); }
-    th { padding: 12px 16px; font-family: var(--font-head); font-size: 0.8rem; color: var(--dark); text-align: left; }
-    td { padding: 10px 16px; font-size: 13px; color: var(--dark); border-bottom: 1px solid var(--peach); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--light); }
-    .prazno { text-align: center; color: #aaa; padding: 24px; font-style: italic; font-size: 13px; }
+    <p class="podnaslov">Pregled</p>
+    <div class="line"></div>
 
-    .quick-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
-    .quick-link {
-        background: var(--white); border: 1px solid var(--peach); border-radius: 30px;
-        padding: 8px 18px; text-decoration: none; color: var(--dark);
-        font-size: 12px; transition: background 0.15s;
-    }
-    .quick-link:hover { background: var(--peach); color: var(--dark); }
-</style>
-
-<div class="page-header">
-    <div>
-        <div class="page-header-title">ADMIN PANEL</div>
-        <div class="page-header-sub">Prijavljeni kot: {{ session.get('username') }}</div>
-    </div>
-    <a href="/logout" style="color:rgba(255,255,255,0.8);font-size:13px;text-decoration:none;">Odjava →</a>
-</div>
-
-<div class="vsebina">
-
-    <!-- STATS -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon">💈</div>
-            <div class="stat-num">{{ stats.saloni }}</div>
-            <div class="stat-label">Saloni</div>
+    <div style="display:flex; gap:20px; margin-bottom:28px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Rezervacije ta teden</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.rezervacije_teden if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">{{ stats.rezervacije_danes if stats else '0' }} rezervacij je danes</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">✂️</div>
-            <div class="stat-num">{{ stats.frizerji }}</div>
-            <div class="stat-label">Frizerji</div>
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Predviden promet ta teden</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.promet_teden if stats else '—' }} €</div>
+            <div style="font-size:12px; color:#A75F37;">Cena se lahko spremeni glede na odpovedane termine</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">👤</div>
-            <div class="stat-num">{{ stats.stranke }}</div>
-            <div class="stat-label">Stranke</div>
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Prosti termini danes</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.prosti_termini if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">med vsemi frizerji</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">📅</div>
-            <div class="stat-num">{{ stats.rezervacije }}</div>
-            <div class="stat-label">Rezervacije</div>
+        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div style="font-size:12px; font-weight:700;">Registrirane stranke</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.aktivne_stranke if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">skupaj registriranih</div>
         </div>
     </div>
 
-    <!-- QUICK LINKS -->
-    <div class="section-title">⚡ Hitre povezave</div>
-    <div class="quick-links">
-        <a href="/saloni" class="quick-link">💈 Saloni</a>
-        <a href="/rezervacije" class="quick-link">📅 Rezervacije</a>
-        <a href="/vse_rezervacije" class="quick-link">📋 Vse rezervacije</a>
-        <a href="/stranke" class="quick-link">👤 Stranke</a>
-        <a href="/storitve" class="quick-link">✂️ Storitve</a>
-        <a href="/faq" class="quick-link">❓ FAQ</a>
-        <a href="/setup" class="quick-link">🗄️ Setup baze</a>
-        <a href="/polni_db" class="quick-link">📦 Testni podatki</a>
+    <div style="display:flex; gap:28px; flex-wrap:wrap; margin-bottom:28px;">
+
+        <!-- Rezervacije ta teden -->
+        <div class="table-box" style="flex:2; min-width:320px;">
+            <h1>Rezervacije ta teden</h1>
+            <div class="line"></div>
+            <div class="table-scroll">
+                <table class="simple-table">
+                    <thead>
+                        <tr>
+                            <th>Stranka</th>
+                            <th>Datum &amp; Ura</th>
+                            <th>Frizer/ka</th>
+                            <th>Storitev</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if rezervacije_teden %}
+                        {% for r in rezervacije_teden %}
+                        <tr>
+                            <td>{{ r['stranka_ime'] }}</td>
+                            <td>{{ r['datum'] }} {{ r['ura'] }}</td>
+                            <td>{{ r['frizer_ime'] }}</td>
+                            <td>{{ r['storitev_ime'] }}</td>
+                            <td>
+                                {% if r['status'] == 'active' %}Aktivna
+                                {% elif r['status'] == 'cancelled' %}Preklicana
+                                {% else %}{{ r['status'] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="empty">Ni rezervacij ta teden.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align:right; margin-top:10px;">
+                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije →</a>
+            </div>
+        </div>
+
+        <!-- Hitra dejanja -->
+        <div class="table-box" style="flex:1; min-width:200px;">
+            <h1>Hitra dejanja</h1>
+            <div class="line"></div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <a href="/rezervacije" class="mini-btn">+ Nova rezervacija</a>
+                <a href="/frizerji/dodaj" class="mini-btn">+ Dodaj frizerja</a>
+                <a href="/saloni/dodaj" class="mini-btn">+ Dodaj salon</a>
+                <a href="/storitve/dodaj" class="mini-btn">+ Dodaj storitev</a>
+                <a href="/stranke_uredi" class="mini-btn">Urejanje strank</a>
+                <a href="/cenik" class="mini-btn">Cenik</a>
+                <a href="/urnik" class="mini-btn">Urnik</a>
+                <a href="/setup" class="mini-btn">Baza podatkov</a>
+                <a href="/polni_db" class="mini-btn">Naloži testne podatke</a>
+            </div>
+        </div>
+
     </div>
 
-    <!-- RECENT RESERVATIONS -->
-    <div class="section-title">📅 Zadnje rezervacije</div>
-    {% if rezervacije %}
-    <table>
-        <thead>
-            <tr><th>#</th><th>Stranka</th><th>Frizer</th><th>Salon</th><th>Storitev</th><th>Datum</th><th>Ura</th></tr>
-        </thead>
-        <tbody>
-            {% for r in rezervacije[:10] %}
-            <tr>
-                <td>{{ r[0] }}</td>
-                <td>{{ r[1] or '—' }}</td>
-                <td>{{ r[2] or '—' }}</td>
-                <td>{{ r[3] or '—' }}</td>
-                <td>{{ r[4] or '—' }}</td>
-                <td>{{ r[7] or '—' }}</td>
-                <td>{{ r[8] or '—' }}</td>
-            </tr>
+    <div style="display:flex; gap:28px; flex-wrap:wrap;">
+
+        <!-- Zadnja aktivnost -->
+        <div class="table-box" style="flex:1; min-width:280px;">
+            <h1>Zadnja aktivnost</h1>
+            <div class="line"></div>
+            {% if zadnja_aktivnost %}
+            {% for z in zadnja_aktivnost %}
+            <div style="display:flex; gap:10px; margin-bottom:12px; font-size:13px;">
+                <div>
+                    <div>{{ z['tip'] }} — <strong>{{ z['ime'] }}</strong></div>
+                    <div style="font-size:11px; color:#A75F37;">{{ z['datum'] }}, {{ z['ura'] }}</div>
+                </div>
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="prazno">Ni rezervacij.</div>
-    {% endif %}
+            {% else %}
+            <div class="empty">Ni nedavne aktivnosti.</div>
+            {% endif %}
+        </div>
+
+        <!-- Upravljanje -->
+        <div class="table-box" style="flex:1; min-width:200px;">
+            <h1>Upravljanje</h1>
+            <div class="line"></div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <a href="/stranke_uredi" class="mini-btn">Seznam strank</a>
+                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije</a>
+                <a href="/urnik" class="mini-btn">Urnik</a>
+                <a href="/cenik" class="mini-btn">Cenik / Storitve</a>
+                <a href="/frizerji" class="mini-btn">Seznam frizerjev</a>
+                <a href="/faq" class="mini-btn">FAQ</a>
+            </div>
+        </div>
+
+    </div>
 
 </div>
+
 {% endblock %}

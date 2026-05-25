@@ -1,175 +1,370 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prijava / Registracija</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-            --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-            --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
-        }
-        body {
-            font-family: var(--font-body); background: #e8ddd5;
-            color: var(--dark); min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .outer { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
-        .back-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; color: var(--rose); text-decoration: none; background: none; border: none; cursor: pointer; }
-        .okvir {
-            background: var(--light); border-radius: 16px;
-            padding: 40px 48px 48px; width: 600px; max-width: 95vw;
-            position: relative; box-shadow: 0 4px 32px rgba(0,0,0,0.06);
-        }
-        .profil-ikona {
-            width: 110px; height: 110px; border-radius: 50%;
-            background: var(--beige); margin: 0 auto 32px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 52px; color: var(--white);
-        }
-        .obrazci { display: flex; gap: 0; }
-        .prijava, .registracija { flex: 1; padding: 0 24px; }
-        .registracija { border-left: 1.5px solid var(--rose); }
-        h2 { font-family: var(--font-head); font-size: 1rem; color: var(--dark); margin-bottom: 20px; letter-spacing: 0.05em; text-align: center; }
-        .polje { margin-bottom: 16px; }
-        .polje .label { font-size: 11px; color: var(--dark); margin-bottom: 4px; letter-spacing: 0.02em; }
-        .input-wrap { position: relative; }
-        .polje input {
-            width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
-            background: transparent; padding: 6px 32px 6px 0; font-size: 13px;
-            outline: none; font-family: var(--font-body); color: var(--dark); transition: border-color 0.2s;
-        }
-        .polje input:focus { border-bottom-color: var(--brown); }
-        .toggle-pw {
-            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-            background: none; border: none; cursor: pointer;
-            font-size: 16px; color: #aaa; padding: 0 2px; line-height: 1;
-        }
-        .toggle-pw:hover { color: var(--brown); }
-        .zapomni { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--dark); margin-top: 8px; }
-        .zapomni input[type="checkbox"] { accent-color: var(--brown); }
+{% extends "base.html" %}
+{% block title %}Profil{% endblock %}
 
-        /* PASSWORD STRENGTH */
-        .strength-bar-wrap {
-            height: 4px; background: #e0d5cc; border-radius: 2px;
-            margin-top: 8px; overflow: hidden;
-        }
-        .strength-bar { height: 100%; width: 0%; border-radius: 2px; transition: width 0.3s, background 0.3s; }
-        .strength-label { font-size: 10px; margin-top: 4px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+{% block content %}
+<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        .shared-submit { margin-top: 32px; text-align: center; }
-        .gumb {
-            background: var(--brown); border: none; border-radius: 30px;
-            padding: 13px 56px; font-size: 14px; font-family: var(--font-body);
-            color: var(--white); cursor: pointer; letter-spacing: 0.02em; transition: background 0.2s;
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #F2E7DD;
+        color: #292421;
+    }
+
+    main {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profil-page {
+        flex: 1;
+        min-height: calc(100vh - 170px);
+        background: #F2E7DD;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 28px 32px;
+    }
+
+    .back-btn {
+        position: absolute;
+        top: 18px;
+        right: 34px;
+        color: #CA8E82;
+        font-size: 30px;
+        text-decoration: none;
+    }
+
+    .profil-panel {
+        width: 520px;
+        min-height: 520px;
+        background: #F2E7DD;
+        padding: 38px 52px 34px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profil-ikona {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        color: #D9B99F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 72px;
+        margin-bottom: 28px;
+    }
+
+    .obrazci {
+        width: 100%;
+        display: flex;
+        gap: 0;
+        justify-content: center;
+    }
+
+    .prijava,
+    .registracija {
+        width: 50%;
+        padding: 0 24px;
+    }
+
+    .registracija {
+        border-left: 2px solid #A75F37;
+    }
+
+    h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        color: #111111;
+        margin-bottom: 24px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .polje {
+        margin-bottom: 14px;
+    }
+
+    .polje label {
+        display: block;
+        font-size: 11px;
+        color: #111111;
+        margin-bottom: 6px;
+    }
+
+    .polje input {
+        width: 100%;
+        height: 22px;
+        border: none;
+        border-radius: 20px;
+        background: #FFFFFF;
+        padding: 4px 10px;
+        font-size: 12px;
+        outline: none;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .zapomni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        color: #CA8E82;
+        font-size: 11px;
+    }
+
+    .zapomni input {
+        width: 16px;
+        height: 16px;
+        appearance: none;
+        border: 1px solid #D9B99F;
+        border-radius: 4px;
+        background: #F2E7DD;
+    }
+
+    .submit-wrap {
+        width: 100%;
+        text-align: center;
+        margin-top: 34px;
+    }
+
+    .gumb {
+        background: #A75F37;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 30px;
+        padding: 9px 42px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .gumb:hover {
+        background: #CA8E82;
+    }
+
+    .logged-box {
+        width: 430px;
+        background: #FFFFFF;
+        border: 1px solid #F2D6CE;
+        border-radius: 14px;
+        padding: 34px 38px;
+        text-align: center;
+    }
+
+    .logged-box h2 {
+        margin-bottom: 20px;
+    }
+
+    .profil-table {
+        width: 100%;
+        margin: 18px 0 24px;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .profil-table td {
+        padding: 9px 0;
+        font-size: 14px;
+        border-bottom: 1px solid #F2D6CE;
+    }
+
+    .profil-table strong {
+        color: #CA8E82;
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    .profil-link {
+        display: block;
+        color: #A75F37;
+        text-decoration: none;
+        font-style: italic;
+        margin: 10px 0;
+        font-size: 14px;
+    }
+
+    .profil-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 800px) {
+        .profil-page {
+            padding: 24px 18px;
         }
-        .gumb:hover { background: var(--rose); }
-    </style>
-</head>
-<body>
-<div class="outer">
+
+        .profil-panel {
+            width: 100%;
+            padding: 30px 22px;
+        }
+
+        .obrazci {
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .prijava,
+        .registracija {
+            width: 100%;
+            padding: 0;
+        }
+
+        .registracija {
+            border-left: none;
+            border-top: 2px solid #A75F37;
+            padding-top: 24px;
+        }
+    }
+</style>
+
+<div class="profil-page">
     <a href="/" class="back-btn">&#8617;</a>
-    <div class="okvir">
-        <div class="profil-ikona">&#128100;</div>
-        <div class="obrazci">
 
-            <!-- PRIJAVA -->
-            <div class="prijava">
-                <h2>PRIJAVA</h2>
-                <form method="POST" action="/login" id="form-prijava">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="polje">
-                        <div class="label">Uporabniško ime</div>
-                        <div class="input-wrap">
-                            <input type="text" name="username" required>
+    {% if session.get('user_id') %}
+        <div class="logged-box">
+            <div class="profil-ikona" style="margin-left:auto; margin-right:auto;">&#128100;</div>
+
+            <h2>Moj profil</h2>
+
+            <table class="profil-table">
+                <tr>
+                    <td><strong>Uporabniško ime:</strong></td>
+                    <td>{{ session.get('username') }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Vloga:</strong></td>
+                    <td>
+                        {% if session.get('role') == 'admin' %}
+                            Administrator
+                        {% elif session.get('role') == 'frizer' %}
+                            Frizer
+                        {% else %}
+                            Stranka
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if podatki %}
+                    {% if podatki.ime is defined or podatki.priimek is defined %}
+                    <tr>
+                        <td><strong>Ime in priimek:</strong></td>
+                        <td>{{ podatki.ime or '' }} {{ podatki.priimek or '' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if podatki.mail is defined %}
+                    <tr>
+                        <td><strong>E-pošta:</strong></td>
+                        <td>{{ podatki.mail or '—' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if podatki.telefon is defined %}
+                    <tr>
+                        <td><strong>Telefon:</strong></td>
+                        <td>{{ podatki.telefon or '—' }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if podatki.kontakt is defined %}
+                    <tr>
+                        <td><strong>Kontakt:</strong></td>
+                        <td>{{ podatki.kontakt or '—' }}</td>
+                    </tr>
+                    {% endif %}
+                {% endif %}
+            </table>
+
+            {% if session.get('role') == 'admin' %}
+                <a href="/admin" class="profil-link">Pojdi na admin panel</a>
+            {% elif session.get('role') == 'frizer' %}
+                <a href="/frizer" class="profil-link">Pojdi na frizer panel</a>
+            {% else %}
+                <a href="/rezervacije_stranke" class="profil-link">Moje rezervacije</a>
+                <a href="/rezervacije" class="profil-link">Nova rezervacija</a>
+            {% endif %}
+
+            <a href="/logout" class="profil-link">Odjava</a>
+        </div>
+    {% else %}
+        <div class="profil-panel">
+            <div class="profil-ikona">&#128100;</div>
+
+            <div class="obrazci">
+                <div class="prijava">
+                    <h2>Prijava</h2>
+
+                    <form method="POST" action="/login" id="form-prijava">
+                        <div class="polje">
+                            <label for="login-username">Uporabniško ime ali e-poštni naslov</label>
+                            <input type="text" id="login-username" name="username" required>
                         </div>
-                    </div>
-                    <div class="polje">
-                        <div class="label">Geslo</div>
-                        <div class="input-wrap">
-                            <input type="password" name="password" id="pw-prijava" required>
-                            <button type="button" class="toggle-pw" onclick="togglePw('pw-prijava', this)">👁</button>
+
+                        <div class="polje">
+                            <label for="login-password">Geslo</label>
+                            <input type="password" id="login-password" name="password" required>
                         </div>
-                    </div>
-                    <div class="zapomni">
-                        <input type="checkbox" name="remember"> Zapomni se me
-                    </div>
-                </form>
+
+                        <label class="zapomni">
+                            <input type="checkbox" name="remember">
+                            Zapomni se me
+                        </label>
+                    </form>
+                </div>
+
+                <div class="registracija">
+                    <h2>Registracija</h2>
+
+                    <form method="POST" action="/register" id="form-registracija">
+                        <div class="polje">
+                            <label for="reg-username">Uporabniško ime</label>
+                            <input type="text" id="reg-username" name="username" required>
+                        </div>
+
+                        <div class="polje">
+                            <label for="reg-mail">E-poštni naslov</label>
+                            <input type="email" id="reg-mail" name="mail" required>
+                        </div>
+
+                        <div class="polje">
+                            <label for="reg-password">Geslo</label>
+                            <input type="password" id="reg-password" name="password" required>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <!-- REGISTRACIJA -->
-            <div class="registracija">
-                <h2>REGISTRACIJA</h2>
-                <form method="POST" action="/register" id="form-registracija">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="polje">
-                        <div class="label">Uporabniško ime</div>
-                        <div class="input-wrap">
-                            <input type="text" name="username" required>
-                        </div>
-                    </div>
-                    <div class="polje">
-                        <div class="label">Geslo</div>
-                        <div class="input-wrap">
-                            <input type="password" name="password" id="pw-registracija" required minlength="6"
-                                   oninput="checkStrength(this.value, 'bar-reg', 'label-reg')">
-                            <button type="button" class="toggle-pw" onclick="togglePw('pw-registracija', this)">👁</button>
-                        </div>
-                        <div class="strength-bar-wrap">
-                            <div class="strength-bar" id="bar-reg"></div>
-                        </div>
-                        <div class="strength-label" id="label-reg"></div>
-                    </div>
-                </form>
+            <div class="submit-wrap">
+                <button type="button" class="gumb" onclick="submitActive()">potrdi</button>
             </div>
-
         </div>
-        <div class="shared-submit">
-            <button class="gumb" onclick="submitActive()">potrdi</button>
-        </div>
-    </div>
+    {% endif %}
 </div>
+
 <script>
     let activeForm = 'form-prijava';
-    document.getElementById('form-prijava').addEventListener('focusin', () => activeForm = 'form-prijava');
-    document.getElementById('form-registracija').addEventListener('focusin', () => activeForm = 'form-registracija');
-    function submitActive() { document.getElementById(activeForm).submit(); }
 
-    function togglePw(inputId, btn) {
-        const input = document.getElementById(inputId);
-        if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
-        else { input.type = 'password'; btn.textContent = '👁'; }
+    const prijava = document.getElementById('form-prijava');
+    const registracija = document.getElementById('form-registracija');
+
+    if (prijava) {
+        prijava.addEventListener('focusin', () => activeForm = 'form-prijava');
     }
 
-    function checkStrength(pw, barId, labelId) {
-        const bar = document.getElementById(barId);
-        const label = document.getElementById(labelId);
-        if (!pw) { bar.style.width = '0%'; label.textContent = ''; return; }
+    if (registracija) {
+        registracija.addEventListener('focusin', () => activeForm = 'form-registracija');
+    }
 
-        let score = 0;
-        if (pw.length >= 6)  score++;
-        if (pw.length >= 10) score++;
-        if (/[A-Z]/.test(pw)) score++;
-        if (/[0-9]/.test(pw)) score++;
-        if (/[^A-Za-z0-9]/.test(pw)) score++;
-
-        const levels = [
-            { width: '20%', color: '#e74c3c', text: 'Zelo šibko' },
-            { width: '40%', color: '#e67e22', text: 'Šibko' },
-            { width: '60%', color: '#f1c40f', text: 'Srednje' },
-            { width: '80%', color: '#2ecc71', text: 'Močno' },
-            { width: '100%', color: '#27ae60', text: 'Zelo močno' },
-        ];
-
-        const level = levels[Math.min(score - 1, 4)];
-        bar.style.width = level.width;
-        bar.style.background = level.color;
-        label.textContent = level.text;
-        label.style.color = level.color;
+    function submitActive() {
+        const form = document.getElementById(activeForm);
+        if (form) {
+            form.submit();
+        }
     }
 </script>
-</body>
-</html>
+{% endblock %}

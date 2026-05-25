@@ -2,163 +2,44 @@
 {% block title %}Hairscultures{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
-        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
-        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
-    }
-    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
-
-    .topbar {
-        background: var(--beige); padding: 12px 32px;
-        display: flex; align-items: center; justify-content: space-between;
-    }
-    .topbar-logo {
-        font-family: var(--font-head); font-size: 1.8rem; font-weight: 700;
-        color: var(--dark); letter-spacing: 0.02em;
-    }
-    .topbar-right { display: flex; align-items: center; gap: 20px; }
-    .topbar-contact { font-size: 12px; color: var(--dark); text-align: right; line-height: 1.8; }
-    .user-avatar {
-        width: 44px; height: 44px; border-radius: 50%;
-        background: rgba(255,255,255,0.6);
-        display: flex; align-items: center; justify-content: center;
-        text-decoration: none; font-size: 22px; color: var(--beige);
-    }
-
-    .navbar { background: var(--brown); display: flex; }
-    .navbar a {
-        font-family: var(--font-body); font-size: 13px; color: var(--white);
-        text-decoration: none; padding: 10px 28px; display: block; transition: background 0.2s;
-    }
-    .navbar a.active { background: rgba(0,0,0,0.2); }
-    .navbar a:hover { background: rgba(0,0,0,0.15); }
-
-    .vsebina {
-        padding: 40px 60px; display: flex; gap: 48px;
-        align-items: flex-start; background: var(--light);
-        min-height: calc(100vh - 220px);
-    }
-    .vsebina-levo { flex: 1; }
-    .vsebina-levo h2 {
-        font-family: var(--font-head); font-size: 1.1rem; color: var(--dark);
-        margin-bottom: 20px; letter-spacing: 0.05em;
-    }
-    .vsebina-levo p { font-size: 13px; color: var(--dark); line-height: 1.75; margin-bottom: 14px; }
-    .podnaslov {
-        color: var(--brown); font-style: italic; font-weight: 600;
-        margin-top: 28px; margin-bottom: 10px; font-size: 13px;
-    }
-    .vsebina-levo ul { list-style: none; }
-    .vsebina-levo ul li {
-        font-size: 13px; color: var(--brown); font-style: italic;
-        font-weight: 600; margin-bottom: 8px;
-    }
-    .vsebina-levo ul li::before { content: "· "; }
-    .vsebina-levo ul li a { color: var(--brown); text-decoration: none; }
-    .vsebina-levo ul li a:hover { text-decoration: underline; }
-
-    .vsebina-desno {
-        width: 380px; height: 300px; background: #ccc;
-        flex-shrink: 0; border-radius: 4px;
-    }
-
-    /* DEVELOPER PANEL */
-    .dev-panel {
-        background: var(--white); border: 1.5px dashed var(--beige);
-        border-radius: 14px; padding: 20px 24px; margin-top: 32px;
-    }
-    .dev-panel-title {
-        font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-        color: var(--rose); text-transform: uppercase; margin-bottom: 14px;
-    }
-    .dev-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-    .dev-btn {
-        display: flex; align-items: center; gap: 8px;
-        background: var(--light); border: 1px solid var(--peach);
-        border-radius: 30px; padding: 10px 18px;
-        text-decoration: none; color: var(--dark);
-        font-size: 12px; font-family: var(--font-body);
-        transition: background 0.15s, border-color 0.15s;
-    }
-    .dev-btn:hover { background: var(--peach); border-color: var(--beige); color: var(--dark); }
-    .dev-btn .icon { font-size: 16px; }
-
-    .nav-footer {
-        background: var(--beige); padding: 16px 60px;
-        display: flex; justify-content: space-between;
-    }
-    .nav-footer a { font-size: 13px; color: var(--dark); text-decoration: none; font-style: italic; }
-    .nav-footer a:hover { text-decoration: underline; }
-</style>
-
-<div class="topbar">
-    <div class="topbar-logo">HAIRSCULTURES</div>
-    <div class="topbar-right">
-        <div class="topbar-contact">
-            Tel: &nbsp; 000 - 000 - 000<br>
-            hairculture@gmail.com
-        </div>
-        <a href="/profil" class="user-avatar">&#128100;</a>
-    </div>
-</div>
-
-<nav class="navbar">
-    <a href="/" class="active">Domov</a>
-    <a href="/saloni">Saloni</a>
-    <a href="/storitve">Storitve</a>
-    <a href="/termini">Termini</a>
-    <a href="/faq">O &amp; A</a>
-</nav>
-
 <div class="vsebina">
     <div class="vsebina-levo">
         <h2>O NAS</h2>
+
         {% if saloni %}
-        <p>Dobrodošli v najširšo mrežo frizerskih salonov. Ponujamo storitve v {{ saloni|length }} različnih lokacijah, kjer vas čakajo izkušeni frizerji in stilisti. Vsak salon je opremljen z najnovejšo tehnologijo in ponuja prijazno atmosfero.</p>
-        <p>V naših salonih lahko izberete iz {{ storitve|length }} različnih storitev, od klasičnih oblik do najnovejših trendov. Naš tim strokovnjakov je vedno pripravljen vam pomagati pri izbiri idealne storitve za vašo transformacijo.</p>
-        <p>Rezervirajte svoj termin danes in doživite profesionalno oskrbo na najvišji ravni. Zadovoljstvo naših strank je naša prva prioriteta.</p>
+            <p>Dobrodošli v najširšo mrežo frizerskih salonov. Ponujamo storitve v {{ saloni|length }} različnih lokacijah, kjer vas čakajo izkušeni frizerji in stilisti. Vsak salon je opremljen z najnovejšo tehnologijo in ponuja prijazno atmosfero.</p>
+
+            {% if storitve %}
+                <p>V naših salonih lahko izberete iz {{ storitve|length }} različnih storitev, od klasičnih oblik do najnovejših trendov. Naš tim strokovnjakov je vedno pripravljen vam pomagati pri izbiri idealne storitve za vašo transformacijo.</p>
+            {% else %}
+                <p>V naših salonih lahko izberete različne storitve, od klasičnih oblik do najnovejših trendov. Naš tim strokovnjakov je vedno pripravljen vam pomagati pri izbiri idealne storitve za vašo transformacijo.</p>
+            {% endif %}
+
+            <p>Rezervirajte svoj termin danes in doživite profesionalno oskrbo na najvišji ravni. Zadovoljstvo naših strank je naša prva prioriteta.</p>
         {% else %}
-        <p>Dobrodošli v našo mrežo frizerskih salonov, kjer se lepe stvari dogajajo. Naš tim strokovnjakov je pripravljen, da vas vodi skozi vašo lepotno pot.</p>
-        <p>Ponujamo širok spekter storitev, prilagojenih vašim potrebam in željam. Od klasičnih oblik do najnovejših trendov, imamo vse, kar potrebujete.</p>
-        <p>Pridružite se nam in doživite razliko, ki jo može narediti pravi strokovnjak.</p>
+            <p>Dobrodošli v našo mrežo frizerskih salonov, kjer se lepe stvari dogajajo. Naš tim strokovnjakov je pripravljen, da vas vodi skozi vašo lepotno pot.</p>
+            <p>Ponujamo širok spekter storitev, prilagojenih vašim potrebam in željam.</p>
+            <p>Pridružite se nam in doživite razliko, ki jo lahko naredi pravi strokovnjak.</p>
         {% endif %}
+
         <div class="podnaslov">Še niste član/ica? Pridružite se zdaj!</div>
+
         <ul>
             {% if saloni %}
                 {% for salon in saloni[:3] %}
-                <li><a href="/saloni">{{ salon[1] }} - {{ salon[3] }}</a></li>
+                    <li><a href="/salon/{{ salon[0] }}">{{ salon[1] }} - {{ salon[3] }}</a></li>
                 {% endfor %}
             {% else %}
                 <li><a href="/saloni">Pregled salonov!</a></li>
             {% endif %}
-            <li>Izberite storitev, ki jo želite!</li>
+
+            <li><a href="/cenik">Izberite storitev, ki jo želite!</a></li>
             <li><a href="/faq">Q &amp; A</a></li>
         </ul>
-
-        <!-- DEVELOPER PANEL -->
-        <div class="dev-panel">
-            <div class="dev-panel-title">⚙️ Developer — samo za razvoj</div>
-            <div class="dev-buttons">
-                <a href="/setup" class="dev-btn">
-                    <span class="icon">🗄️</span> Nastavi tabele baze
-                </a>
-                <a href="/polni_db" class="dev-btn">
-                    <span class="icon">📦</span> Naloži testne podatke
-                </a>
-            </div>
-        </div>
-
     </div>
+
     <div class="vsebina-desno"></div>
 </div>
 
-<div class="nav-footer">
-    <a href="#">Novice</a>
-    <a href="#">Vaši termini</a>
-    <a href="#">Informacije</a>
-</div>
+
 {% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Urejanje prostih terminov{% endblock %}
+
+{% block content %}
+<div class="zgodovina-page">
+    <a href="/admin" class="back-btn">&#8617;</a>
+
+    <div class="table-box">
+        <h1>Urejanje prostih terminov</h1>
+        <div class="line"></div>
+
+        <form method="POST" class="urnik-dodaj">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="akcija" value="dodaj">
+            <select name="frizer_id" required>
+                <option value="">— frizer —</option>
+                {% for f in frizerji %}
+                <option value="{{ f[0] }}">{{ f[2] }}</option>
+                {% endfor %}
+            </select>
+            <input type="date" name="dan" required>
+            <input type="time" name="ura" required>
+            <button type="submit" class="oddaj-btn">+ Dodaj termin</button>
+        </form>
+
+        <div class="table-wrap" style="margin-top:18px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Frizer</th>
+                        <th>Dan</th>
+                        <th>Ura</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in urnik %}
+                    <tr>
+                        <td>{{ u[1] }}</td>
+                        <td>{{ u[2].strftime('%d. %m. %Y') if u[2] else '—' }}</td>
+                        <td>{{ u[3].strftime('%H:%M') if u[3] else '—' }}</td>
+                        <td>
+                            <form method="POST" style="margin:0;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="akcija" value="izbrisi">
+                                <input type="hidden" name="frizer_id" value="{{ u[0] }}">
+                                <input type="hidden" name="dan" value="{{ u[2].isoformat() if u[2] else '' }}">
+                                <input type="hidden" name="ura" value="{{ u[3].strftime('%H:%M') if u[3] else '' }}">
+                                <button type="submit" class="btn-cancel">Izbriši</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="empty">Ni prostih terminov.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .urnik-dodaj {
+        display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+        justify-content: center; margin-bottom: 8px;
+    }
+    .urnik-dodaj select, .urnik-dodaj input {
+        padding: 8px; border: 1px solid #D9B99F; border-radius: 6px; font-size: 13px;
+    }
+    .oddaj-btn {
+        background: #A75F37; color: #fff; border: none; border-radius: 6px;
+        padding: 9px 16px; cursor: pointer; font-size: 13px;
+    }
+    .oddaj-btn:hover { background: #8a4e2d; }
+</style>
+{% endblock %}

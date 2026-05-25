@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Uredi rezervacijo{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --beige: #D9B99F; --light: #F2E7DD; --peach: #F2D6CE;
+        --brown: #A75F37; --rose: #CA8E82; --dark: #292421; --white: #FFFFFF;
+        --font-head: 'Inknut Antiqua', serif; --font-body: 'Inter', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--light); color: var(--dark); }
+
+    .page-header {
+        background: var(--beige); padding: 14px 32px;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-header-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.06em; }
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .header-username { font-size: 11px; background: var(--white); border-radius: 30px; padding: 6px 22px; font-family: var(--font-head); font-weight: 600; }
+    .user-avatar { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--beige); text-decoration: none; }
+
+    .navbar { background: var(--brown); display: flex; }
+    .navbar a { font-size: 13px; color: var(--dark); font-weight: 700; font-style: italic; text-decoration: none; padding: 11px 28px; display: block; }
+    .navbar a.active { background: rgba(0,0,0,0.15); }
+    .navbar a:hover { background: rgba(0,0,0,0.12); }
+
+    .main-wrap { padding: 32px; display: flex; justify-content: center; }
+    .form-panel { background: var(--white); border: 1px solid var(--peach); border-radius: 14px; overflow: hidden; width: 480px; }
+    .form-panel-header { background: var(--beige); padding: 14px 22px; font-family: var(--font-head); font-size: 0.95rem; color: var(--dark); display: flex; justify-content: space-between; align-items: center; }
+    .form-panel-header a { font-size: 12px; color: var(--brown); text-decoration: none; font-style: italic; }
+    .form-panel-header a:hover { text-decoration: underline; }
+    .form-panel-body { padding: 28px 32px 36px; }
+
+    .polje { margin-bottom: 20px; }
+    .polje label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--rose); margin-bottom: 6px; }
+    .polje select,
+    .polje input[type="date"],
+    .polje input[type="time"] {
+        width: 100%; border: none; border-bottom: 1.5px solid var(--beige);
+        background: transparent; padding: 7px 0; font-size: 13px;
+        font-family: var(--font-body); color: var(--dark); outline: none;
+        transition: border-color 0.2s;
+    }
+    .polje select:focus,
+    .polje input:focus { border-bottom-color: var(--brown); }
+
+    .divider { height: 1px; background: var(--peach); margin: 8px 0 24px; }
+    .form-actions { display: flex; gap: 10px; }
+    .btn-shrani {
+        flex: 1; background: var(--brown); border: none; border-radius: 30px;
+        padding: 12px; font-size: 13px; font-family: var(--font-body);
+        color: var(--white); cursor: pointer; font-weight: 600;
+        transition: background 0.2s;
+    }
+    .btn-shrani:hover { background: var(--rose); }
+    .btn-preklic {
+        flex: 1; background: var(--light); border: 1px solid var(--peach);
+        border-radius: 30px; padding: 12px; font-size: 13px;
+        font-family: var(--font-body); color: var(--dark);
+        text-decoration: none; text-align: center; font-weight: 600;
+        transition: background 0.2s;
+    }
+    .btn-preklic:hover { background: var(--peach); }
+</style>
+
+<div class="main-wrap">
+    <div class="form-panel">
+        <div class="form-panel-header">
+            Rezervacija #{{ rezervacija[0] }}
+            <a href="/moje_rezervacije">← Nazaj</a>
+        </div>
+        <div class="form-panel-body">
+            <form method="POST" action="/moje_rezervacije/uredi/{{ rezervacija[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="polje">
+                    <label>Datum</label>
+                    <input type="date" name="datum"
+                           value="{{ rezervacija[5] or '' }}" required>
+                </div>
+
+                <div class="polje">
+                    <label>Ura</label>
+                    <input type="time" name="ura"
+                           value="{{ rezervacija[6].strftime('%H:%M') if rezervacija[6] else '' }}" required>
+                </div>
+
+                <div class="polje">
+                    <label>Frizer</label>
+                    <select name="frizer_id">
+                        <option value="">— brez frizerja —</option>
+                        {% for f in frizerji %}
+                        <option value="{{ f[0] }}" {% if f[0] == rezervacija[2] %}selected{% endif %}>
+                            {{ f[1] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="polje">
+                    <label>Salon</label>
+                    <select name="salon_id">
+                        <option value="">— brez salona —</option>
+                        {% for s in saloni %}
+                        <option value="{{ s[0] }}" {% if s[0] == rezervacija[3] %}selected{% endif %}>
+                            {{ s[1] }} — {{ s[3] }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="polje">
+                    <label>Storitev</label>
+                    <select name="storitev_id">
+                        <option value="">— brez storitve —</option>
+                        {% for st in storitve %}
+                        <option value="{{ st[0] }}" {% if st[0] == rezervacija[4] %}selected{% endif %}>
+                            {{ st[1] }} — {{ st[2] }} €
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="divider"></div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-shrani">Shrani</button>
+                    <a href="/moje_rezervacije" class="btn-preklic">Prekliči</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
