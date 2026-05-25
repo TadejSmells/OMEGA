@@ -2,229 +2,6 @@
 {% block title %}Profil{% endblock %}
 
 {% block content %}
-<style>
-    *, *::before, *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #F2E7DD;
-        color: #292421;
-    }
-
-    main {
-        min-height: calc(100vh - 140px);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .profil-page {
-        flex: 1;
-        min-height: calc(100vh - 170px);
-        background: #F2E7DD;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        padding: 28px 32px;
-    }
-
-    .back-btn {
-        position: absolute;
-        top: 18px;
-        right: 34px;
-        color: #CA8E82;
-        font-size: 30px;
-        text-decoration: none;
-    }
-
-    .profil-panel {
-        width: 520px;
-        min-height: 520px;
-        background: #F2E7DD;
-        padding: 38px 52px 34px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .profil-ikona {
-        width: 130px;
-        height: 130px;
-        border-radius: 50%;
-        background: #FFFFFF;
-        color: #D9B99F;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 72px;
-        margin-bottom: 28px;
-    }
-
-    .obrazci {
-        width: 100%;
-        display: flex;
-        gap: 0;
-        justify-content: center;
-    }
-
-    .prijava,
-    .registracija {
-        width: 50%;
-        padding: 0 24px;
-    }
-
-    .registracija {
-        border-left: 2px solid #A75F37;
-    }
-
-    h2 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 1.25rem;
-        color: #111111;
-        margin-bottom: 24px;
-        text-align: center;
-        text-transform: uppercase;
-    }
-
-    .polje {
-        margin-bottom: 14px;
-    }
-
-    .polje label {
-        display: block;
-        font-size: 11px;
-        color: #111111;
-        margin-bottom: 6px;
-    }
-
-    .polje input {
-        width: 100%;
-        height: 22px;
-        border: none;
-        border-radius: 20px;
-        background: #FFFFFF;
-        padding: 4px 10px;
-        font-size: 12px;
-        outline: none;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .zapomni {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 10px;
-        color: #CA8E82;
-        font-size: 11px;
-    }
-
-    .zapomni input {
-        width: 16px;
-        height: 16px;
-        appearance: none;
-        border: 1px solid #D9B99F;
-        border-radius: 4px;
-        background: #F2E7DD;
-    }
-
-    .submit-wrap {
-        width: 100%;
-        text-align: center;
-        margin-top: 34px;
-    }
-
-    .gumb {
-        background: #A75F37;
-        color: #FFFFFF;
-        border: none;
-        border-radius: 30px;
-        padding: 9px 42px;
-        font-size: 12px;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .gumb:hover {
-        background: #CA8E82;
-    }
-
-    .logged-box {
-        width: 430px;
-        background: #FFFFFF;
-        border: 1px solid #F2D6CE;
-        border-radius: 14px;
-        padding: 34px 38px;
-        text-align: center;
-    }
-
-    .logged-box h2 {
-        margin-bottom: 20px;
-    }
-
-    .profil-table {
-        width: 100%;
-        margin: 18px 0 24px;
-        border-collapse: collapse;
-        text-align: left;
-    }
-
-    .profil-table td {
-        padding: 9px 0;
-        font-size: 14px;
-        border-bottom: 1px solid #F2D6CE;
-    }
-
-    .profil-table strong {
-        color: #CA8E82;
-        text-transform: uppercase;
-        font-size: 12px;
-    }
-
-    .profil-link {
-        display: block;
-        color: #A75F37;
-        text-decoration: none;
-        font-style: italic;
-        margin: 10px 0;
-        font-size: 14px;
-    }
-
-    .profil-link:hover {
-        text-decoration: underline;
-    }
-
-    @media (max-width: 800px) {
-        .profil-page {
-            padding: 24px 18px;
-        }
-
-        .profil-panel {
-            width: 100%;
-            padding: 30px 22px;
-        }
-
-        .obrazci {
-            flex-direction: column;
-            gap: 28px;
-        }
-
-        .prijava,
-        .registracija {
-            width: 100%;
-            padding: 0;
-        }
-
-        .registracija {
-            border-left: none;
-            border-top: 2px solid #A75F37;
-            padding-top: 24px;
-        }
-    }
-</style>
 
 <div class="profil-page">
     <a href="/" class="back-btn">&#8617;</a>
@@ -233,7 +10,10 @@
         <div class="logged-box">
             <div class="profil-ikona" style="margin-left:auto; margin-right:auto;">&#128100;</div>
 
-            <h2>Moj profil</h2>
+            <h2>Moj profil</h2> 
+            <button type="button" class="gumb" onclick="document.getElementById('edit-modal').classList.add('open')">
+                ✏️ Uredi profil
+            </button>
 
             <table class="profil-table">
                 <tr>
@@ -366,5 +146,63 @@
             form.submit();
         }
     }
+    document.getElementById('edit-modal').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+    });
 </script>
+
+<div class="modal-backdrop" id="edit-modal">
+    <div class="modal-vsebina">
+        <h3>Uredi profil</h3>
+        <form method="POST" action="/profil/uredi" id="form-uredi">
+            <div class="polje">
+                <label for="e-username">Uporabniško ime</label>
+                <input type="text" id="e-username" name="username"
+                       value="{{ session.get('username') }}" required>
+            </div>
+
+            {% if session.get('role') == 'frizer' %}
+                <div class="polje">
+                    <label for="e-ime">Ime</label>
+                    <input type="text" id="e-ime" name="ime"
+                           value="{{ podatki.ime or '' }}" required>
+                </div>
+                <div class="polje">
+                    <label for="e-kontakt">Kontakt</label>
+                    <input type="text" id="e-kontakt" name="kontakt"
+                           value="{{ podatki.kontakt or '' }}" required>
+                </div>
+            {% else %}
+                <div class="polje">
+                    <label for="e-ime">Ime</label>
+                    <input type="text" id="e-ime" name="ime"
+                           value="{{ podatki.ime or '' }}" required>
+                </div>
+                <div class="polje">
+                    <label for="e-priimek">Priimek</label>
+                    <input type="text" id="e-priimek" name="priimek"
+                           value="{{ podatki.priimek or '' }}" required>
+                </div>
+                <div class="polje">
+                    <label for="e-mail">E-pošta</label>
+                    <input type="email" id="e-mail" name="mail"
+                           value="{{ podatki.mail or '' }}" required>
+                </div>
+                <div class="polje">
+                    <label for="e-telefon">Telefon</label>
+                    <input type="tel" id="e-telefon" name="telefon"
+                           value="{{ podatki.telefon or '' }}" required>
+                </div>
+            {% endif %}
+
+            <div class="gumbi">
+                <button type="button" class="gumb"
+                        onclick="document.getElementById('edit-modal').classList.remove('open')">
+                    Prekliči
+                </button>
+                <button type="submit" class="gumb">Shrani</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

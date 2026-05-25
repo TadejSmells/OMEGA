@@ -38,6 +38,7 @@ import controllers.uredi_rezervacijo
 import controllers.uredi_salon_controller
 import controllers.con_salon_detail
 import controllers.uredi_storitev_controller
+import controllers.uredi_profil
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
@@ -122,6 +123,10 @@ def logout():
 @f_app.get('/profil')
 def profil():
     return controllers.auth.profil()
+
+@f_app.route('/profil/uredi', methods=['POST'])
+def uredi_profil():
+    return controllers.uredi_profil.uredi_profil()
 
 # SALONI
 
