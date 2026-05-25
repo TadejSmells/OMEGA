@@ -289,6 +289,7 @@
         }
 
         saveFavorites(favorites);
+        reorderCards();
     }
 
     function loadFavorites() {
@@ -304,6 +305,47 @@
         });
     }
 
+    // Priljubljene (označene z zvezdico) storitve premakni na začetek seznama.
+    // Znotraj vsake skupine (priljubljene / ostale) ohranimo IZVORNI vrstni red,
+    // zato si ga zapomnimo enkrat ob nalaganju (data-orig-index). Tako se ob
+    // odstranitvi zvezdice kartica vrne na svoje prvotno mesto.
+    function zabelezliIzvorniVrstniRed() {
+        const container = document.getElementById('cardsContainer');
+        if (!container) return;
+        Array.from(container.querySelectorAll('.card[data-id]')).forEach((card, i) => {
+            if (card.dataset.origIndex === undefined) {
+                card.dataset.origIndex = i;
+            }
+        });
+    }
+
+    function reorderCards() {
+        const container = document.getElementById('cardsContainer');
+        if (!container) return;
+
+        const favorites = getFavorites();
+        // Le prave kartice storitev (placeholder "Ni vpisanih storitev." nima data-id).
+        const cards = Array.from(container.querySelectorAll('.card[data-id]'));
+
+        cards.sort((a, b) => {
+            const favA = favorites.includes(a.dataset.id) ? 0 : 1;
+            const favB = favorites.includes(b.dataset.id) ? 0 : 1;
+            if (favA !== favB) return favA - favB;                 // priljubljene najprej
+            return (a.dataset.origIndex - b.dataset.origIndex);    // sicer izvorni red
+        });
+
+        cards.forEach(card => container.appendChild(card));
+
+        // Po prerazporeditvi scrollaj na začetek, da so priljubljene takoj vidne.
+        if (typeof container.scrollTo === 'function') {
+            container.scrollTo({ left: 0, behavior: 'auto' });
+        } else {
+            container.scrollLeft = 0;
+        }
+    }
+
+    zabelezliIzvorniVrstniRed();
     loadFavorites();
+    reorderCards();
 </script>
 {% endblock %}
