@@ -41,6 +41,13 @@ import controllers.uredi_storitev_controller
 
 f_app = Flask(__name__, template_folder='templates')
 f_app.secret_key = os.environ.get('SECRET_KEY', 'pls spremeni')
+
+# Varnostne nastavitve za sejne piškotke
+f_app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,    # JS ne more brati piškotka (zaščita pred XSS krajo seje)
+    SESSION_COOKIE_SAMESITE='Lax',   # zaščita pred CSRF prek tujih strani
+)
+
 f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
 f_app.jinja_env.globals['get_obvestila_frizer'] = (
     controllers.obvestila_frizer_controller.obvestila_za_frizerja
@@ -262,12 +269,12 @@ def uredi_rezervacijo(id_rezervacije):
     return controllers.uredi_rezervacijo.uredi_rezervacijo(id_rezervacije)
 
 @f_app.get('/vse_rezervacije')
-@login_required
+@frizer_required
 def vse_rezervacije():
     return controllers.ab_rezervacije.pregled_rezervacij()
 
 @f_app.get('/zgodovina')
-@login_required
+@frizer_required
 def zgodovina():
     return controllers.sv_salon.zgodovina()
 

@@ -248,6 +248,7 @@
         <div class="line"></div>
 
         <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {% if rezervacija is defined %}
                 <input type="hidden" name="stranka_id" value="{{ rezervacija[1] }}">
             {% endif %}

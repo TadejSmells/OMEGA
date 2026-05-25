@@ -25,12 +25,27 @@ VALUES
     ('Salon Elegance',   'Ulica 3',        'Celje',     '03-789-012')
 ON CONFLICT DO NOTHING;
 
--- ── FRIZERJI ──────────────────────────────────────────────────────────────────
+-- ── FRIZERJI (5 na salon) ─────────────────────────────────────────────────────
 INSERT INTO frizer (salon_id, ime, kontakt)
 VALUES
-    (1, 'Ana Kovač',  '031-555-666'),
-    (2, 'Tina Zupan', '041-777-888'),
-    (3, 'Miha Novak', '040-999-000')
+    -- Salon 1 — Salon Lepote (Ljubljana)
+    (1, 'Ana Kovač',      '031-555-666'),
+    (1, 'Eva Zajc',       '031-555-101'),
+    (1, 'Maša Lah',       '031-555-102'),
+    (1, 'Nina Hočevar',   '031-555-103'),
+    (1, 'Katja Pirc',     '031-555-104'),
+    -- Salon 2 — Frizerski Studio (Maribor)
+    (2, 'Tina Zupan',     '041-777-888'),
+    (2, 'Sara Kralj',     '041-777-201'),
+    (2, 'Lara Mlakar',    '041-777-202'),
+    (2, 'Petra Vidmar',   '041-777-203'),
+    (2, 'Maja Kos',       '041-777-204'),
+    -- Salon 3 — Salon Elegance (Celje)
+    (3, 'Miha Novak',     '040-999-000'),
+    (3, 'Žan Turk',       '040-999-301'),
+    (3, 'Luka Golob',     '040-999-302'),
+    (3, 'Tjaša Hribar',   '040-999-303'),
+    (3, 'Rok Bavdek',     '040-999-304')
 ON CONFLICT DO NOTHING;
 
 -- ── STRANKE ───────────────────────────────────────────────────────────────────
@@ -58,20 +73,35 @@ VALUES
     ('Aljaž',   'Rozman',    'aljaz@test.si',     '051-778-899')
 ON CONFLICT DO NOTHING;
 
--- ── STORITVE ──────────────────────────────────────────────────────────────────
-INSERT INTO storitev (ime_storitve, cena, trajanje,opis)
+-- ── STORITVE (20) ─────────────────────────────────────────────────────────────
+INSERT INTO storitev (ime_storitve, cena, trajanje, opis)
 VALUES
-    ('Upravljanje s kozmetičnimi izdelki', 50.0, '01:00:00', NULL),
-    ('Barvanje las',                       70.0, '01:30:00', NULL),
-    ('Striženje las',                      30.0, '00:45:00', NULL),
-    ('Podaljševanje las',                  100.0, '02:00:00', NULL),
-    ('Nega las',                           40.0, '01:15:00', NULL),
-    ('Frizura za posebne priložnosti',     60.0, '01:00:00', NULL)
-
+    ('Upravljanje s kozmetičnimi izdelki', 50.00, '01:00:00', 'Svetovanje in nega z izbranimi izdelki.'),
+    ('Barvanje las',                       70.00, '01:30:00', 'Profesionalno barvanje z kakovostnimi barvami.'),
+    ('Striženje las',                      30.00, '00:45:00', 'Klasično striženje za ženske in moške.'),
+    ('Podaljševanje las',                  100.00, '02:00:00', 'Podaljševanje s kakovostnimi pramenoma.'),
+    ('Nega las',                           40.00, '01:15:00', 'Globinska nega in regeneracija las.'),
+    ('Frizura za posebne priložnosti',     60.00, '01:00:00', 'Svečane in poročne pričeske.'),
+    ('Moško striženje',                    20.00, '00:30:00', 'Hitro in natančno moško striženje.'),
+    ('Otroško striženje',                  15.00, '00:30:00', 'Striženje za otroke do 12 let.'),
+    ('Britje brade',                       18.00, '00:30:00', 'Tradicionalno britje in oblikovanje brade.'),
+    ('Pranje in fen',                      15.00, '00:30:00', 'Pranje las in oblikovanje s fenom.'),
+    ('Trajna ondulacija',                  65.00, '02:00:00', 'Trajna za volumen in kodre.'),
+    ('Pramenovanje (highlights)',          80.00, '02:00:00', 'Pramenovanje za naraven videz.'),
+    ('Balayage',                           95.00, '02:30:00', 'Tehnika prehodnih odtenkov.'),
+    ('Keratinska nega',                    85.00, '01:45:00', 'Glajenje in nega s keratinom.'),
+    ('Lasna maska',                        25.00, '00:30:00', 'Intenzivna vlažilna maska.'),
+    ('Oblikovanje pričeske',               35.00, '00:45:00', 'Stiliziranje za vsakodnevni videz.'),
+    ('Poročna pričeska',                   120.00, '02:00:00', 'Pričeska za nevesto, vključno s preizkusom.'),
+    ('Nega lasišča',                       45.00, '01:00:00', 'Tretma proti prhljaju in izpadanju.'),
+    ('Tonisanje las',                      55.00, '01:00:00', 'Osvežitev barve in odtenka.'),
+    ('Moško oblikovanje brade in las',     30.00, '00:45:00', 'Kombiniran paket za moške.')
 ON CONFLICT DO NOTHING;
 
+-- Vsak salon ponuja vse storitve (vsi frizerji lahko izvajajo te storitve)
 INSERT INTO saloni_in_storitve (salon_id, storitev_id)
-VALUES (1, 1), (1, 2), (2, 2), (3, 1), (3, 2)
+SELECT s.id, st.id_storitve
+FROM salon s CROSS JOIN storitev st
 ON CONFLICT DO NOTHING;
 
 -- ── FAQ ───────────────────────────────────────────────────────────────────────
@@ -95,24 +125,14 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- ── URNIK (dinamično: od CURRENT_DATE naprej 14 dni) ─────────────────────────
--- Ana (frizer 1): vsak dan ob 09:00, 10:00, 11:00, 14:00, 15:00
+-- Vsi frizerji dobijo urnik na delovne dni (pon–pet) ob standardnih urah.
 INSERT INTO urnik (id_frizerja, dan, ura)
-SELECT 1, CURRENT_DATE + d, u::time
-FROM generate_series(0, 13) AS d
-CROSS JOIN unnest(ARRAY['09:00','10:00','11:00','14:00','15:00']) AS u;
-
--- Tina (frizer 2): vsak drugi dan ob 10:00, 12:00, 16:00
-INSERT INTO urnik (id_frizerja, dan, ura)
-SELECT 2, CURRENT_DATE + d, u::time
-FROM generate_series(0, 13, 2) AS d
-CROSS JOIN unnest(ARRAY['10:00','12:00','16:00']) AS u;
-
--- Miha (frizer 3): delovni dnevi (pon–pet) ob 08:00, 09:00, 13:00, 14:00
-INSERT INTO urnik (id_frizerja, dan, ura)
-SELECT 3, CURRENT_DATE + d, u::time
-FROM generate_series(0, 13) AS d
-CROSS JOIN unnest(ARRAY['08:00','09:00','13:00','14:00']) AS u
-WHERE EXTRACT(DOW FROM CURRENT_DATE + d) NOT IN (0, 6);
+SELECT f.id_frizer, CURRENT_DATE + d, u::time
+FROM frizer f
+CROSS JOIN generate_series(0, 13) AS d
+CROSS JOIN unnest(ARRAY['09:00','10:00','11:00','14:00','15:00']) AS u
+WHERE EXTRACT(DOW FROM CURRENT_DATE + d) NOT IN (0, 6)
+ON CONFLICT DO NOTHING;
 
 -- ── REZERVACIJE (dinamično glede na CURRENT_DATE) ────────────────────────────
 INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
@@ -125,23 +145,23 @@ INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum,
 VALUES (2, 1, 1, 1, CURRENT_DATE + 1, '14:00'::time, 'active');
 
 INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
-VALUES (3, 2, 1, 2, CURRENT_DATE + 3, '10:00'::time, 'active');
+VALUES (3, 6, 1, 2, CURRENT_DATE + 3, '10:00'::time, 'active');
 
 INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
-VALUES (5, 2, 1, 2, CURRENT_DATE + 3, '12:00'::time, 'active');
+VALUES (5, 6, 1, 2, CURRENT_DATE + 3, '12:00'::time, 'active');
 
 INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
-VALUES (7, 2, 1, 1, CURRENT_DATE + 3, '16:00'::time, 'active');
+VALUES (7, 6, 1, 1, CURRENT_DATE + 3, '16:00'::time, 'active');
 
 INSERT INTO rezervacija (id_stranke, id_frizerja, id_salona, id_storitve, datum, ura, status)
-VALUES (1, 3, 3, 1, CURRENT_DATE + 5, '13:00'::time, 'active');
+VALUES (1, 11, 3, 1, CURRENT_DATE + 5, '13:00'::time, 'active');
 
 -- ── BLOKIRANI TERMINI (dinamično glede na CURRENT_DATE) ──────────────────────
 INSERT INTO blokiran_termin (id_frizerja, datum, ura_od, ura_do, razlog)
 VALUES (1, CURRENT_DATE + 2, '10:00'::time, '12:00'::time, 'Zdravniški pregled');
 
 INSERT INTO blokiran_termin (id_frizerja, datum, ura_od, ura_do, razlog)
-VALUES (2, CURRENT_DATE + 7, '00:00'::time, '23:59'::time, 'Dopust');
+VALUES (6, CURRENT_DATE + 7, '00:00'::time, '23:59'::time, 'Dopust');
 
 --13/05/26: testni podatki za priljubljene vse, komentarji, še testni uporabniki(na njih so fav/komentarji)
 -- up:stranka123    geslo: stranka123
@@ -180,7 +200,7 @@ ON CONFLICT DO NOTHING;
 -- Najljubši frizerji
 INSERT INTO priljubljeni_frizerji (id_stranke, id_frizerja) VALUES
     ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 1),  
-    ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 3)
+    ((SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'), 11)
 ON CONFLICT DO NOTHING;
 
 -- Najljubše storitve
@@ -207,9 +227,9 @@ INSERT INTO komentar_frizerja (id_frizerja, id_stranke, ocena, komentar, datum) 
     (1, 5, 5, 'Najboljša frizerka v Ljubljani, brez dvoma.',                         '2026-04-22 10:10'),
     (1, (SELECT id_stranke FROM stranka WHERE mail = 'stranka@test.si'),
         5, 'Razume, kaj rabim, brez dolgih razlag. Top!',                            '2026-05-10 16:50'),
-    (2, 2, 4, 'Tina dobro svetuje pri barvanju las.',                                '2026-04-30 11:05'),
-    (3, 3, 5, 'Miha je čaroben — kratke pričeske so njegov forte.',                  '2026-05-05 17:15'),
-    (3, 7, 4, 'Hiter in učinkovit, brez nepotrebnega klepetanja.',                   '2026-04-28 13:20')
+    (6, 2, 4, 'Tina dobro svetuje pri barvanju las.',                                '2026-04-30 11:05'),
+    (11, 3, 5, 'Miha je čaroben — kratke pričeske so njegov forte.',                  '2026-05-05 17:15'),
+    (11, 7, 4, 'Hiter in učinkovit, brez nepotrebnega klepetanja.',                   '2026-04-28 13:20')
 ON CONFLICT DO NOTHING;
 
 -- ── Komentarji storitev ──

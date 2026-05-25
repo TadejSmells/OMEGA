@@ -229,6 +229,7 @@
         <div class="line"></div>
 
         <form method="POST" action="/rezervacije">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-row">
                 <label for="stranka_id">Stranka</label>
                 <select name="stranka_id" id="stranka_id" required>

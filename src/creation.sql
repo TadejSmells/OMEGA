@@ -34,7 +34,7 @@ ALTER TABLE public.frizer ADD COLUMN IF NOT EXISTS user_id integer REFERENCES pu
 CREATE TABLE IF NOT EXISTS public.storitev (
     id_storitve  serial PRIMARY KEY,
     ime_storitve character varying(100),
-    cena         double precision,
+    cena         numeric(10, 2),
     trajanje     time without time zone,
     opis         text
 );

@@ -429,6 +429,7 @@
                 <div class="oznaka" style="margin-top:24px;">
                     <strong>Oddaj komentar</strong>
                     <form method="POST" action="/salon/{{ salon[0] }}/komentar" class="komentar-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="zvezdice-input">
                             {% for i in range(5, 0, -1) %}
                             <input type="radio" id="oc{{ i }}" name="ocena" value="{{ i }}" required>

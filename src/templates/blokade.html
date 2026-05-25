@@ -11,6 +11,7 @@
         <div class="form-line"></div>
 
         <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="tip" value="dopust">
 
             <div class="form-row">

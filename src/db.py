@@ -13,7 +13,15 @@ DATABASE_URL = (
     f"/{os.environ['DBNAME']}"
 )
 
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(
+    DATABASE_URL,
+    echo=False,
+    pool_size=10,           # stalne povezave v bazenu
+    max_overflow=20,        # dodatne povezave ob konici
+    pool_timeout=30,        # sekunde čakanja na prosto povezavo
+    pool_recycle=1800,      # reciklira povezave starejše od 30 min
+    pool_pre_ping=True,     # preveri povezavo pred uporabo (prepreči "stale connection" sesutje)
+)
 Session = sessionmaker(bind=engine)
 
 

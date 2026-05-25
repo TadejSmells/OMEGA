@@ -38,6 +38,7 @@
         <h1>STRANKE</h1>
         <div class="line"></div>
         <form method="POST" action="/stranke">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-row">
                 <label>Stranka</label>
                 <select name="stranka_id" required>

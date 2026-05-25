@@ -275,6 +275,7 @@
         <h2>Nova rezervacija</h2>
 
         <form method="POST" action="/rezervacije" class="obrazec">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="polje">
                 <label for="stranka_id">Stranka</label>

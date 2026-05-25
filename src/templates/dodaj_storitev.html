@@ -80,6 +80,7 @@
         <div class="form-panel-header">Nova storitev</div>
         <div class="form-panel-body">
             <form method="POST" action="/storitve/dodaj">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="polje">
                     <label>Ime storitve</label>
                     <input type="text" name="ime_storitve" required autofocus placeholder="npr. Striženje las">

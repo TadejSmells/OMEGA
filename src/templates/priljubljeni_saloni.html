@@ -65,6 +65,7 @@
             <div class="card-top">
                 <h2 class="card-ime">{{ s[1] }}</h2>
                 <form action="/salon/{{ s[0] }}/favorite" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="fav-btn" title="Odstrani iz priljubljenih">★</button>
                 </form>
             </div>

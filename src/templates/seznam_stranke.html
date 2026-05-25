@@ -260,6 +260,7 @@
         <div class="crta"></div>
 
         <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="vrstica">
                 <label for="stranka_select">Stranka</label>
 
@@ -285,6 +286,7 @@
         <h3>Uredi podatke</h3>
 
         <form method="POST" action="/stranke_uredi/shrani">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
 
             <div class="vrstica">
@@ -321,6 +323,7 @@
         <!-- DELETE BUTTON -->
 <form method="POST" action="/stranke_uredi/izbrisi"
       onsubmit="return confirm('Res želiš izbrisati stranko {{ izbrana.ime }} {{ izbrana.priimek }}?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="id_stranke" value="{{ izbrana.id_stranke }}">
     <div class="gumb-vrstica" style="margin-top: 10px; border-top: none;">
         <span class="check"></span>

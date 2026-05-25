@@ -278,6 +278,7 @@
                         <form method="POST"
                               action="/storitve/priljubljena/{{ st[0] }}"
                               class="favorite-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="next" value="{{ request.path }}">
                             <button type="submit"
                                     class="favorite-btn is-favorite"

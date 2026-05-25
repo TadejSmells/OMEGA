@@ -14,8 +14,10 @@
         <a href="/rezervacije" class="{{ 'active' if request.path.startswith('/rezervacije') or request.path == '/vse_rezervacije' or request.path == '/zgodovina' }}">Rezervacije</a>
         <div class="dropdown-content">
             <a href="/rezervacije">Nova rezervacija</a>
+            {% if session.get('role') in ['frizer', 'admin'] %}
             <a href="/vse_rezervacije">Vse rezervacije</a>
             <a href="/zgodovina">Zgodovina</a>
+            {% endif %}
         </div>
     </div>
 
