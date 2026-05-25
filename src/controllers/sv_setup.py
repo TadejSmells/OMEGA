@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, request
+from flask import render_template, session, redirect
 from werkzeug.security import generate_password_hash
 import models.model_salon as model_salon
 import models.model_rezervacije as model_rezervacije

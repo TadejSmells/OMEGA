@@ -27,21 +27,6 @@ def get_priljubljene_ids(user_id):
     finally:
         session.close()
 
-
-def je_priljubljena(user_id, id_storitve):
-    session = db.get_session()
-    try:
-        id_stranke = _stranka_id_iz_user_id(session, user_id)
-        if id_stranke is None:
-            return False
-        return session.query(PriljubljeneStoritve).filter(
-            PriljubljeneStoritve.id_stranke == id_stranke,
-            PriljubljeneStoritve.id_storitve == id_storitve
-        ).first() is not None
-    finally:
-        session.close()
-
-
 def toggle_priljubljeno(user_id, id_storitve):
     
     session = db.get_session()
@@ -81,54 +66,6 @@ def toggle_priljubljeno(user_id, id_storitve):
         raise
     finally:
         session.close()
-
-
-def dodaj_priljubljeno(user_id, id_storitve):
-    session = db.get_session()
-    try:
-        id_stranke = _stranka_id_iz_user_id(session, user_id)
-        if id_stranke is None:
-            raise ValueError("Uporabnik nima povezane stranke.")
-
-        obstoječa = session.query(PriljubljeneStoritve).filter(
-            PriljubljeneStoritve.id_stranke == id_stranke,
-            PriljubljeneStoritve.id_storitve == id_storitve
-        ).first()
-        if obstoječa:
-            return  # že obstaja, nič za narediti
-
-        session.add(PriljubljeneStoritve(
-            id_stranke=id_stranke,
-            id_storitve=id_storitve
-        ))
-        session.commit()
-    except ValueError:
-        raise
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
-
-def odstrani_priljubljeno(user_id, id_storitve):
-    session = db.get_session()
-    try:
-        id_stranke = _stranka_id_iz_user_id(session, user_id)
-        if id_stranke is None:
-            return
-
-        session.query(PriljubljeneStoritve).filter(
-            PriljubljeneStoritve.id_stranke == id_stranke,
-            PriljubljeneStoritve.id_storitve == id_storitve
-        ).delete()
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
 
 def get_priljubljene_storitve(user_id):
     session = db.get_session()

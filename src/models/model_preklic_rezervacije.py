@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-from models.models import Rezervacija, Stranka, Frizer, Salon, Storitev
+from models.models import Rezervacija, Stranka, Salon, Storitev
 
 
 def get_rezervacije_frizerja(frizer_id):

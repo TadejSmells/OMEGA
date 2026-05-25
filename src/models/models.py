@@ -155,13 +155,6 @@ class KontaktSporocilo(Base):
 
 # ── PRILJUBLJENI ──────────────────────────────────────────────────────────────
 
-class PriljubljeniFrizerji(Base):
-    __tablename__ = 'priljubljeni_frizerji'
-    id          = Column(Integer, primary_key=True)
-    id_stranke  = Column(Integer, ForeignKey('stranka.id_stranke'))
-    id_frizerja = Column(Integer, ForeignKey('frizer.id_frizer'))
-
-
 class PriljubljeneStoritve(Base):
     __tablename__ = 'priljubljene_storitve'
     id          = Column(Integer, primary_key=True)

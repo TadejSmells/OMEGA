@@ -3,7 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sys, os, time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-import traceback
 from models.models import Uporabnik, Stranka, Frizer
 import controllers.stranka_opomnik as opomnik_controller
 import controllers.opomnik_rezervacij_controller as frizer_opomnik_controller

@@ -164,51 +164,6 @@ def get_storitve_za_salon(salon_id):
     finally:
         session.close()
 
-
-def iskanje(query):
-    """
-    Išče salone, frizerje in storitve po delnem ujemanju brez upoštevanja velikosti črk.
-    Vrne dict z ključi: saloni, frizerji, storitve.
-    """
-    if not query or not query.strip():
-        return {'saloni': [], 'frizerji': [], 'storitve': []}
-
-    q = f"%{query.strip().lower()}%"
-    db_session = db.get_session()
-    try:
-        from sqlalchemy import func
-
-        saloni = (
-            db_session.query(Salon)
-            .filter(
-                func.lower(Salon.ime).like(q) |
-                func.lower(Salon.mesto).like(q) |
-                func.lower(Salon.naslov).like(q)
-            )
-            .order_by(Salon.ime).all()
-        )
-
-        frizerji = (
-            db_session.query(Frizer)
-            .filter(func.lower(Frizer.ime).like(q))
-            .order_by(Frizer.ime).all()
-        )
-
-        storitve = (
-            db_session.query(Storitev)
-            .filter(func.lower(Storitev.ime_storitve).like(q))
-            .order_by(Storitev.ime_storitve).all()
-        )
-
-        return {
-            'saloni':   [(s.id, s.ime, s.naslov, s.mesto) for s in saloni],
-            'frizerji': [(f.id_frizer, f.ime, f.kontakt) for f in frizerji],
-            'storitve': [(s.id_storitve, s.ime_storitve, s.cena) for s in storitve],
-        }
-    finally:
-        db_session.close()
-
-
 # ── INSERTS ───────────────────────────────────────────────────────────────────
 
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id):

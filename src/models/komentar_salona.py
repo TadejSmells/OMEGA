@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import db
-from models.models import KomentarSalona, Salon, Stranka
+from models.models import KomentarSalona, Stranka
 
 
 def get_stranka_id(user_id):

@@ -52,7 +52,7 @@ f_app.jinja_env.globals['csrf_token'] = generate_csrf_token
 f_app.jinja_env.globals['get_obvestila_frizer'] = (
     controllers.obvestila_frizer_controller.obvestila_za_frizerja
 )
-from flask import Flask, redirect, request, session
+from flask import redirect
 from flask import session as _session
 from models import model_rezervacije_stranke as _mrs
 

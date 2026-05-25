@@ -1,5 +1,4 @@
-from datetime import datetime, date, time, timedelta
-from flask import render_template, redirect, flash, session
+from flask import redirect, flash, session
 from models import model_preklic_rezervacije as model
 import db
 

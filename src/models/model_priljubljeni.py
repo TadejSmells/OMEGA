@@ -35,12 +35,6 @@ def _get_fav_key(user_id):
     finally:
         db_session.close()
 
-
-# Keep old name for backwards compatibility with any code that calls it directly
-def get_id_stranke(user_id):
-    return _get_fav_key(user_id)
-
-
 def get_priljubljene_ids(user_id):
     """
     Vrne set id-jev salonov, ki jih je uporabnik označil kot priljubljene.

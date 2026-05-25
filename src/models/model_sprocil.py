@@ -3,8 +3,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from sqlalchemy import func
 import db
-from models.models import Sporocilo, Stranka, Frizer
-
+from models.models import Sporocilo, Stranka
 
 def seznam_sporocil(id_frizerja):
     session = db.get_session()
@@ -45,19 +44,6 @@ def podrobnosti_sporocila(id):
             .filter(Sporocilo.id == id)
             .first()
         )
-    finally:
-        session.close()
-
-def poslji_sporocilo(stranka_id, frizer_id, vsebina):
-    session = db.get_session()
-    try:
-        sporocilo = Sporocilo(
-            id_stranke=stranka_id,
-            id_frizerja=frizer_id,
-            vsebina=vsebina
-        )
-        session.add(sporocilo)
-        session.commit()
     finally:
         session.close()
 

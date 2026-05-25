@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from datetime import datetime, time as Time
+from datetime import time as Time
 from decimal import Decimal, InvalidOperation
 
 import db

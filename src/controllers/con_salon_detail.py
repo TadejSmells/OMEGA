@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, abort, session
+from flask import render_template, abort
 from models import model_salon
 from models import komentar_salona as ks_model  
 
