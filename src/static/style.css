@@ -185,6 +185,14 @@ main {
     background: #cccccc;
     flex-shrink: 0;
     border-radius: 4px;
+    overflow: hidden;
+}
+
+.vsebina-desno img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .nav-footer {

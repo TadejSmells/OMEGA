@@ -199,6 +199,18 @@
         text-decoration: none;
         font-style: italic;
     }
+    .card-img {
+        height: 150px;
+        background: #F2D6CE;
+        overflow: hidden;
+    }
+
+    .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 </style>
 
 <div class="storitve-page">
@@ -220,7 +232,8 @@
                     <div class="card" data-id="{{ st[0] }}" data-name="{{ st[1]|lower }}">
                         <button type="button" class="favorite-btn" onclick="toggleFavorite('{{ st[0] }}', this)">☆</button>
 
-                        <div class="card-img"></div>
+                        <div class="card-img"><img src="/static/storitve.jpg" alt="TOJEROYALTYFREESLIKA"></div>
+                        <!-- https://www.pexels.com/ in https://www.vecteezy.com/ so crpane slike, royalty free-->
 
                         <div class="card-body">
                             <h2><a href="/storitev/{{ st[0] }}" class="storitev-link">{{ st[1] }}</a></h2>

@@ -127,6 +127,14 @@
         background: #D9B99F;
         border-radius: 12px;
         flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .salon-slika img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     .salon-info h2 {
@@ -397,8 +405,8 @@
 
         <!-- LEFT COLUMN -->
         <div class="salon-levo">
-            <div class="salon-slika"></div>
-
+            <div class="salon-slika"><img src="/static/" alt="TOJEROYALTYFREESLIKA"></div>
+            <!-- https://www.pexels.com/ in https://www.vecteezy.com/ so crpane slike, royalty free-->
             <div class="salon-info">
                 <h2>
                     {{ salon[1] }}
