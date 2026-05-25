@@ -457,6 +457,32 @@
                 {% endif %}
             </div>
 
+            <div class="box sporocilo-box">
+                <h3>Pošlji sporočilo</h3>
+                <div class="line"></div>
+
+                {% if session.get('user_id') and session.get('role') == 'stranka' %}
+                <div class="komentar-form">
+                    <form method="POST" action="/frizer/{{ frizer['id'] }}/sporocilo">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-vrstica">
+                            <label>Naslov</label>
+                            <textarea name="naslov" rows="1" placeholder="Npr. Vprašanje o terminu..."></textarea>
+                        </div>
+                        <div class="form-vrstica">
+                            <label>Sporočilo</label>
+                            <textarea name="vsebina" placeholder="Napiši sporočilo frizerju..." required></textarea>
+                        </div>
+                        <button type="submit" class="oddaj-btn">Pošlji sporočilo</button>
+                    </form>
+                </div>
+                {% elif session.get('user_id') %}
+                <div class="prazno-komentarji">Sporočilo frizerju lahko pošljejo le stranke.</div>
+                {% else %}
+                <div class="login-hint"><a href="/login">Prijavi se</a>, da pošlješ sporočilo.</div>
+                {% endif %}
+            </div>
+
             <div class="box komentarji-box">
                 <h3>Komentarji</h3>
                 <div class="line"></div>

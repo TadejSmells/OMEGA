@@ -356,12 +356,19 @@ def blokade():
 # SPOROČILA
 
 @f_app.get('/sporocila')
+@frizer_required
 def vsa_sporocila():
     return controllers.sporocila.vsa_sporocila()
 
 @f_app.get('/sporocilo/<int:id>')
+@frizer_required
 def sporocilo_detail(id):
     return controllers.sporocila.podrobnosti_sporocila(id)
+
+@f_app.post('/frizer/<int:id_frizerja>/sporocilo')
+@login_required
+def poslji_sporocilo_frizerju(id_frizerja):
+    return controllers.sporocila.poslji_frizerju(id_frizerja)
 
 # ADMIN
 
