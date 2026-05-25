@@ -8,183 +8,162 @@
     .back-wrap { padding: 14px 32px 0; }
     .back-btn  { font-size: 28px; color: #CA8E82; text-decoration: none; }
 
-    /* ── SALON PICKER ─────────────────────────────────── */
     .picker-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 48px 32px;
-        gap: 14px;
+        display: flex; flex-direction: column; align-items: center;
+        padding: 48px 32px; gap: 14px;
     }
-    .picker-wrap h2 {
-        font-family: Georgia, serif;
-        font-size: 1.5rem;
-        color: #292421;
-        margin-bottom: 6px;
-    }
-    .picker-wrap p {
-        font-size: 14px;
-        color: #7A958F;
-        margin-bottom: 10px;
-    }
+    .picker-wrap h2 { font-family: Georgia, serif; font-size: 1.5rem; color: #292421; margin-bottom: 6px; }
+    .picker-wrap p  { font-size: 14px; color: #7A958F; margin-bottom: 10px; }
     .salon-select {
-        width: 100%;
-        max-width: 400px;
-        height: 40px;
-        border: none;
-        border-radius: 20px;
-        background: #FFFFFF;
-        padding: 0 18px;
-        font-size: 14px;
-        color: #292421;
-        outline: none;
+        width: 100%; max-width: 400px; height: 40px; border: none; border-radius: 20px;
+        background: #FFFFFF; padding: 0 18px; font-size: 14px; color: #292421; outline: none;
         appearance: none;
         background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23A75F37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 16px center;
-        cursor: pointer;
+        background-repeat: no-repeat; background-position: right 16px center; cursor: pointer;
     }
     .picker-gumb {
-        background: #A75F37;
-        color: #FFFFFF;
-        border: none;
-        border-radius: 30px;
-        padding: 10px 40px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 4px;
+        background: #A75F37; color: #FFFFFF; border: none; border-radius: 30px;
+        padding: 10px 40px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px;
     }
     .picker-gumb:hover { background: #CA8E82; }
 
-    /* ── TERMINI ──────────────────────────────────────── */
-    .termini-page { padding: 20px 32px 48px; }
+    /* layout */
+    .termini-page { padding: 20px 32px 48px; transition: padding-right 0.35s ease; }
+    .termini-page.panel-open { padding-right: 390px; }
 
     .termini-glava { margin-bottom: 20px; }
-    .termini-glava h2 {
-        font-family: Georgia, serif;
-        font-size: 1.6rem;
-        margin-bottom: 4px;
-    }
-    .termini-glava .podnaslov {
-        font-size: 13px;
-        color: #7A958F;
-        margin-bottom: 10px;
-    }
-    .zamenjaj-salon {
-        font-size: 12px;
-        color: #A75F37;
-        text-decoration: none;
-        font-weight: 600;
-    }
+    .termini-glava h2 { font-family: Georgia, serif; font-size: 1.6rem; margin-bottom: 4px; }
+    .termini-glava .podnaslov { font-size: 13px; color: #7A958F; margin-bottom: 10px; }
+    .zamenjaj-salon { font-size: 12px; color: #A75F37; text-decoration: none; font-weight: 600; }
     .zamenjaj-salon:hover { text-decoration: underline; }
 
-    /* ── KOLEDAR ─────────────────────────────────────── */
-    .koledar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-        max-width: 1200px;
-    }
+    /* koledar */
+    .koledar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; max-width: 1200px; }
 
     .dan-kartica {
-        background: #FFFFFF;
-        border: 1px solid #F2D6CE;
-        border-radius: 10px;
-        padding: 10px 8px;
-        min-height: 100px;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
+        background: #FFFFFF; border: 1px solid #F2D6CE; border-radius: 10px;
+        padding: 10px 8px; min-height: 100px; display: flex; flex-direction: column; gap: 2px;
     }
-    .dan-kartica.prazen {
-        background: #F2E7DD;
-    }
-    .dan-kartica.najhitrejsi {
-        background: #C8E6C9;
-        border-color: #4CAF50;
-        box-shadow: 0 0 0 2px #4CAF50;
-    }
+    .dan-kartica.prazen    { background: #F2E7DD; }
+    .dan-kartica.najhitrejsi { background: #C8E6C9; border-color: #4CAF50; box-shadow: 0 0 0 2px #4CAF50; }
 
-    .dan-glava {
-        font-weight: 700;
-        font-size: 11px;
-        text-transform: uppercase;
-        color: #A75F37;
-        letter-spacing: 0.05em;
-    }
+    .dan-glava { font-weight: 700; font-size: 11px; text-transform: uppercase; color: #A75F37; letter-spacing: .05em; }
     .dan-kartica.najhitrejsi .dan-glava { color: #2E7D32; }
-    .dan-kartica.prazen .dan-glava { color: #B8A89A; }
+    .dan-kartica.prazen .dan-glava      { color: #B8A89A; }
 
-    .dan-stevilka {
-        font-family: Georgia, serif;
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
+    .dan-stevilka { font-family: Georgia, serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
     .dan-kartica.prazen .dan-stevilka { color: #B8A89A; }
 
-    /* posamezen termin */
-    .ure-seznam {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
+    .ure-seznam { display: flex; flex-direction: column; gap: 4px; }
+
     .termin-row {
-        display: flex;
-        align-items: baseline;
-        gap: 5px;
-        background: #F2E7DD;
-        border-radius: 6px;
-        padding: 4px 7px;
-        font-size: 12px;
-        line-height: 1.3;
+        display: flex; align-items: center; gap: 5px;
+        background: #F2E7DD; border-radius: 6px; padding: 5px 7px;
+        font-size: 12px; line-height: 1.3; cursor: pointer;
+        border: 1px solid transparent; user-select: none;
+        transition: background .15s, border-color .15s, transform .1s;
     }
-    .dan-kartica.najhitrejsi .termin-row {
-        background: rgba(255,255,255,0.6);
-    }
-    .termin-ura {
-        font-weight: 700;
-        color: #292421;
-        white-space: nowrap;
-        min-width: 36px;
-    }
-    .termin-frizer {
-        color: #7A958F;
-        font-size: 11px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+    .termin-row:hover    { background: #E8C9A0; border-color: #A75F37; transform: translateY(-1px); }
+    .termin-row:active   { transform: translateY(0); }
+    .termin-row.aktiven  { background: #A75F37; border-color: #A75F37; color: #FFF; }
+    .termin-row.aktiven .termin-frizer { color: #F2D6CE; }
 
-    .ni-prostih {
-        font-size: 11px;
-        color: #B8A89A;
-        font-style: italic;
-        margin-top: 4px;
-    }
+    .dan-kartica.najhitrejsi .termin-row         { background: rgba(255,255,255,.6); }
+    .dan-kartica.najhitrejsi .termin-row:hover   { background: rgba(255,255,255,.9); border-color: #4CAF50; }
+    .dan-kartica.najhitrejsi .termin-row.aktiven { background: #2E7D32; border-color: #2E7D32; }
 
-    .legend {
-        margin-top: 20px;
-        font-size: 12px;
-        color: #7A958F;
-    }
+    .termin-ura    { font-weight: 700; white-space: nowrap; min-width: 36px; }
+    .termin-frizer { color: #7A958F; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .termin-arrow  { font-size: 10px; color: #A75F37; margin-left: auto; flex-shrink: 0; opacity: 0; transition: opacity .15s; }
+    .termin-row:hover .termin-arrow   { opacity: 1; }
+    .termin-row.aktiven .termin-arrow { opacity: 1; color: #F2D6CE; }
+
+    .ni-prostih { font-size: 11px; color: #B8A89A; font-style: italic; margin-top: 4px; }
+
+    .legend { margin-top: 20px; font-size: 12px; color: #7A958F; }
     .legend .swatch {
-        display: inline-block;
-        width: 12px; height: 12px;
-        border-radius: 3px;
-        background: #C8E6C9;
-        border: 1px solid #4CAF50;
-        vertical-align: middle;
-        margin: 0 4px 0 12px;
+        display: inline-block; width: 12px; height: 12px; border-radius: 3px;
+        background: #C8E6C9; border: 1px solid #4CAF50; vertical-align: middle; margin: 0 4px 0 12px;
+    }
+
+    /* panel */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(41,36,33,.25); z-index: 90; backdrop-filter: blur(1px); }
+    .overlay.show { display: block; }
+
+    .rez-panel {
+        position: fixed; top: 0; right: 0; width: 360px; height: 100%;
+        background: #F2E7DD; box-shadow: -4px 0 24px rgba(0,0,0,.15);
+        z-index: 100; display: flex; flex-direction: column;
+        transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+        overflow-y: auto;
+    }
+    .rez-panel.open { transform: translateX(0); }
+
+    .panel-header {
+        background: #D9B99F; padding: 18px 22px 16px;
+        display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .panel-title { font-family: Georgia, serif; font-size: 1.2rem; font-weight: 700; color: #292421; }
+    .panel-close {
+        background: none; border: none; font-size: 22px; color: #7A5C4A;
+        cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 4px; transition: background .15s;
+    }
+    .panel-close:hover { background: rgba(0,0,0,.1); }
+
+    .panel-termin-info {
+        background: #FFFFFF; margin: 18px 20px 0; border-radius: 10px;
+        padding: 14px 18px; border-left: 4px solid #A75F37;
+    }
+    .info-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #A75F37; letter-spacing: .07em; margin-bottom: 8px; }
+    .info-row   { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #292421; margin-bottom: 5px; }
+    .info-row:last-child { margin-bottom: 0; }
+    .info-icon  { font-size: 15px; width: 20px; text-align: center; }
+    .info-val   { font-weight: 600; }
+
+    .panel-form { padding: 20px 20px 30px; display: flex; flex-direction: column; gap: 14px; }
+    .panel-divider { height: 1px; background: #D9B99F; margin: 2px 0; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 11px; font-weight: 700; color: #7A5C4A; text-transform: uppercase; letter-spacing: .06em; }
+    .form-group select {
+        height: 38px; border: 1px solid #D9B99F; border-radius: 20px;
+        background: #FFFFFF; padding: 0 16px; font-size: 13px; color: #292421;
+        outline: none; appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23A75F37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center; cursor: pointer; transition: border-color .15s;
+    }
+    .form-group select:focus { border-color: #A75F37; }
+
+    .panel-submit {
+        background: #A75F37; color: #FFF; border: none; border-radius: 30px;
+        padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer;
+        width: 100%; margin-top: 6px; letter-spacing: .03em; transition: background .2s;
+    }
+    .panel-submit:hover { background: #CA8E82; }
+
+    .stranka-prikaz {
+        background: #FFFFFF;
+        border: 1px solid #D9B99F;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #292421;
+    }
+
+    .panel-error {
+        display: none; background: #FDECEA; border: 1px solid #E57373;
+        border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #C62828;
     }
 
     @media (max-width: 900px) {
         .koledar { grid-template-columns: repeat(2, 1fr); }
+        .termini-page.panel-open { padding-right: 32px; }
+        .rez-panel { width: 100%; }
     }
     @media (max-width: 500px) {
         .termini-page { padding: 16px 14px 40px; }
-        .back-wrap { padding: 12px 14px 0; }
+        .back-wrap    { padding: 12px 14px 0; }
     }
 </style>
 
@@ -197,7 +176,6 @@
 </div>
 
 {% if not salon %}
-    {# ── SALON PICKER ── #}
     <div class="picker-wrap">
         <h2>Prosti termini</h2>
         <p>Izberi salon in poglej razpoložljive termine za naslednjih 14 dni.</p>
@@ -213,11 +191,64 @@
     </div>
 
 {% else %}
-    {# ── TERMINI PRIKAZ ── #}
-    <div class="termini-page">
+
+    <div class="overlay" id="overlay" onclick="zapriPanel()"></div>
+
+    <div class="rez-panel" id="rez-panel">
+        <div class="panel-header">
+            <span class="panel-title">Nova rezervacija</span>
+            <button class="panel-close" onclick="zapriPanel()">&#x2715;</button>
+        </div>
+
+        <div class="panel-termin-info">
+            <div class="info-label">Izbrani termin</div>
+            <div class="info-row"><span class="info-icon">📅</span><span class="info-val" id="pnl-datum">—</span></div>
+            <div class="info-row"><span class="info-icon">🕐</span><span class="info-val" id="pnl-ura">—</span></div>
+            <div class="info-row"><span class="info-icon">✂️</span><span class="info-val" id="pnl-frizer">—</span></div>
+            <div class="info-row"><span class="info-icon">📍</span><span>{{ salon[1] }}</span></div>
+        </div>
+
+        <form class="panel-form" method="POST" action="/rezervacije" onsubmit="return preveriFormo()">
+            <input type="hidden" name="frizer_id" id="inp-frizer">
+            <input type="hidden" name="salon_id"  value="{{ salon[0] }}">
+            <input type="hidden" name="datum"      id="inp-datum">
+            <input type="hidden" name="ura"        id="inp-ura">
+            <input type="hidden" name="next"       value="/prosti_termini?salon_id={{ salon[0] }}">
+
+            <div class="panel-divider"></div>
+
+            {% if stranka %}
+                <input type="hidden" name="stranka_id" value="{{ stranka[0] }}">
+                <div class="form-group">
+                    <label>Stranka</label>
+                    <div class="stranka-prikaz">{{ stranka[1] }} {{ stranka[2] }}</div>
+                </div>
+            {% else %}
+                <div class="panel-error" style="display:block; background:#FFF8E1; border-color:#FFB300; color:#7A5C00;">
+                    Za rezervacijo se moraš prijaviti.
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="sel-storitev">Storitev</label>
+                <select name="storitev_id" id="sel-storitev" required>
+                    <option value="" disabled selected>— izberi storitev —</option>
+                    {% for st in storitve %}
+                        <option value="{{ st[0] }}">{{ st[1] }}{% if st[2] %} · {{ "%.2f"|format(st[2]) }} €{% endif %}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="panel-error" id="panel-error">Prosim izberi stranko in storitev.</div>
+
+            <button type="submit" class="panel-submit">Potrdi rezervacijo →</button>
+        </form>
+    </div>
+
+    <div class="termini-page" id="termini-page">
         <div class="termini-glava">
             <h2>{{ salon[1] }} — prosti termini</h2>
-            <div class="podnaslov">Naslednjih 14 dni. Najhitrejši prost dan je označen zeleno.</div>
+            <div class="podnaslov">Klikni na termin za rezervacijo. Najhitrejši prost dan je označen zeleno.</div>
             <a href="/prosti_termini" class="zamenjaj-salon">↩ zamenjaj salon</a>
         </div>
 
@@ -233,9 +264,12 @@
                     {% if d.proste_ure %}
                         <div class="ure-seznam">
                             {% for ura, frizer_ime, frizer_id in d.proste_ure %}
-                                <div class="termin-row">
+                                <div class="termin-row"
+                                     onclick="odpriPanel(this, '{{ frizer_id }}', '{{ frizer_ime }}', '{{ d.datum.strftime('%Y-%m-%d') }}', '{{ d.datum.strftime('%d. %m. %Y') }}', '{{ ura }}')"
+                                     title="Rezerviraj: {{ ura }} pri {{ frizer_ime }}">
                                     <span class="termin-ura">{{ ura }}</span>
                                     <span class="termin-frizer">{{ frizer_ime }}</span>
+                                    <span class="termin-arrow">→</span>
                                 </div>
                             {% endfor %}
                         </div>
@@ -247,10 +281,47 @@
         </div>
 
         <div class="legend">
-            Legenda:
-            <span class="swatch"></span> najhitrejši prost dan
+            Legenda: <span class="swatch"></span> najhitrejši prost dan &nbsp;·&nbsp; klikni termin za rezervacijo
         </div>
     </div>
+
+    <script>
+    let aktivniEl = null;
+
+    function odpriPanel(el, frizerID, frizerIme, datumISO, datumPrikaz, ura) {
+        if (aktivniEl) aktivniEl.classList.remove('aktiven');
+        el.classList.add('aktiven');
+        aktivniEl = el;
+
+        document.getElementById('pnl-datum').textContent  = datumPrikaz;
+        document.getElementById('pnl-ura').textContent    = ura;
+        document.getElementById('pnl-frizer').textContent = frizerIme;
+
+        document.getElementById('inp-frizer').value = frizerID;
+        document.getElementById('inp-datum').value  = datumISO;
+        document.getElementById('inp-ura').value    = ura;
+
+        document.getElementById('panel-error').style.display = 'none';
+        document.getElementById('rez-panel').classList.add('open');
+        document.getElementById('overlay').classList.add('show');
+        document.getElementById('termini-page').classList.add('panel-open');
+    }
+
+    function zapriPanel() {
+        document.getElementById('rez-panel').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+        document.getElementById('termini-page').classList.remove('panel-open');
+        if (aktivniEl) { aktivniEl.classList.remove('aktiven'); aktivniEl = null; }
+    }
+
+    function preveriFormo() {
+        const ok = document.getElementById('sel-storitev').value;
+        if (!ok) { document.getElementById('panel-error').style.display = 'block'; return false; }
+        return true;
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') zapriPanel(); });
+    </script>
 {% endif %}
 
 {% endblock %}

@@ -2,6 +2,8 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 import db
+from datetime import datetime
+from sqlalchemy import text
 from models.models import Rezervacija, Stranka, Frizer, Salon, Storitev
 
 
@@ -32,41 +34,90 @@ def get_vse_rezervacije():
         session.close()
 
 
+def get_stranka_za_user(user_id):
+    """Vrne (id_stranke, ime, priimek) za prijavljenega userja, ali None."""
+    session = db.get_session()
+    try:
+        row = (
+            session.query(Stranka.id_stranke, Stranka.ime, Stranka.priimek)
+            .filter(Stranka.user_id == user_id)
+            .first()
+        )
+        return row  # (id_stranke, ime, priimek) ali None
+    finally:
+        session.close()
+
+
+def get_storitve_za_salon(salon_id):
+    """
+    Storitve, ki jih ponuja izbrani salon (prek povezovalne tabele
+    saloni_in_storitve). Vrne SAMO storitve, ki so dejansko vezane na ta salon
+    — ne vec vseh storitev iz baze.
+    """
+    session = db.get_session()
+    try:
+        rows = session.execute(
+            text("""
+                SELECT s.id_storitve, s.ime_storitve, s.cena, s.trajanje, s.opis
+                FROM storitev s
+                JOIN saloni_in_storitve ss ON ss.storitev_id = s.id_storitve
+                WHERE ss.salon_id = :salon_id
+                ORDER BY s.ime_storitve
+            """),
+            {'salon_id': salon_id}
+        ).fetchall()
+        return rows
+    finally:
+        session.close()
+
+
+def get_frizerje_za_salon(salon_id):
+    """Vrne frizerje danega salona."""
+    session = db.get_session()
+    try:
+        rows = (
+            session.query(Frizer.id_frizer, Frizer.salon_id, Frizer.ime, Frizer.kontakt)
+            .filter(Frizer.salon_id == salon_id)
+            .order_by(Frizer.ime)
+            .all()
+        )
+        return rows
+    finally:
+        session.close()
+
+
 def je_termin_zaseden(frizer_id, datum, ura):
-    """Vrne True, če ima frizer na ta datum/uro že aktivno rezervacijo."""
-    from datetime import date as _date, time as _time
-    if isinstance(datum, str):
-        datum = _date.fromisoformat(datum)
-    if isinstance(ura, str):
-        ura = _time.fromisoformat(ura if len(ura) > 5 else ura + ":00")
+    """
+    True, ce za danega frizerja na ta datum in uro ze obstaja AKTIVNA rezervacija.
+    Ura se primerja na natancnost HH:MM (obrazec poslje npr. '14:00',
+    v bazi pa je shranjena kot '14:00:00').
+    """
+    if not frizer_id or not datum or not ura:
+        return False
 
     session = db.get_session()
     try:
-        obstaja = (
-            session.query(Rezervacija)
-            .filter(
-                Rezervacija.id_frizerja == int(frizer_id),
-                Rezervacija.datum == datum,
-                Rezervacija.ura == ura,
-                Rezervacija.status != 'cancelled',
-            )
-            .first()
+        # datum normaliziraj v date objekt (obrazec poslje 'YYYY-MM-DD')
+        try:
+            d = datetime.strptime(str(datum)[:10], '%Y-%m-%d').date()
+        except ValueError:
+            d = datum  # pusti, naj pretvorbo opravi baza
+
+        ura_hhmm = str(ura)[:5]
+
+        ure = (
+            session.query(Rezervacija.ura)
+            .filter(Rezervacija.id_frizerja == frizer_id)
+            .filter(Rezervacija.datum == d)
+            .filter(Rezervacija.status == 'active')
+            .all()
         )
-        return obstaja is not None
+        return any(str(u)[:5] == ura_hhmm for (u,) in ure)
     finally:
         session.close()
 
 
 def dodaj_rezervacijo(stranka_id, frizer_id, salon_id, storitev_id, datum, ura):
-    """
-    Doda novo rezervacijo z statusom 'aktiven'. datum in ura sta obvezna.
-    """
-    from datetime import date as _date, time as _time
-    if isinstance(datum, str):
-        datum = _date.fromisoformat(datum)
-    if isinstance(ura, str):
-        ura = _time.fromisoformat(ura if len(ura) > 5 else ura + ":00")
-
     session = db.get_session()
     try:
         session.add(Rezervacija(

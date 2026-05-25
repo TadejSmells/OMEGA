@@ -142,18 +142,40 @@
         color: #111111;
     }
 
-    select {
+    select, input[type="date"], input[type="time"] {
         width: 100%;
-        height: 24px;
+        height: 30px;
         border: none;
         border-radius: 20px;
         background: #FFFFFF;
         padding: 0 12px;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
+        font-size: 12px;
         color: #292421;
         outline: none;
         text-align: center;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    /* Prefilled field (iz termina) — rahlo poudarjen rob */
+    .prefilled {
+        background: #FFF8F4;
+        border: 1px solid #D9B99F;
+    }
+
+    .prefill-badge {
+        grid-column: 1 / -1;
+        background: #EAF4EA;
+        border: 1px solid #81C784;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 12px;
+        color: #2E7D32;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
     }
 
     .check-row {
@@ -222,44 +244,70 @@
 </style>
 
 <div class="rezervacije-page">
-    <a href="/" class="back-btn">&#8617;</a>
+    {# Nazaj — če prihajamo iz prostih terminov, se vrnemo tja #}
+    <a href="{{ request.referrer or '/prosti_termini' }}" class="back-btn">&#8617;</a>
 
     <div class="panel">
         <h1>Vaše rezervacije</h1>
         <div class="line"></div>
 
         <form method="POST" action="/rezervacije">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            {# ── Obvestilo, ko je termin pre-izpolnjen ── #}
+            {% if pre and pre.datum and pre.ura %}
+            <div class="form-row">
+                <div class="prefill-badge">
+                    ✓ Termin {{ pre.datum }} ob {{ pre.ura }} je bil samodejno izbran.
+                    Preverite podatke in potrdite rezervacijo.
+                </div>
+            </div>
+            {% endif %}
+
+            {# ── Stranka ── #}
             <div class="form-row">
                 <label for="stranka_id">Stranka</label>
                 <select name="stranka_id" id="stranka_id" required>
-                    <option value="" disabled selected>-izberi stranko-</option>
+                    <option value="" disabled {% if not pre or not pre.stranka_id %}selected{% endif %}>-izberi stranko-</option>
                     {% for s in stranke %}
-                        <option value="{{ s[0] }}">{{ s[1] }} {{ s[2] }}</option>
+                        <option value="{{ s[0] }}"
+                            {% if pre and pre.stranka_id and pre.stranka_id == s[0] %}selected{% endif %}>
+                            {{ s[1] }} {{ s[2] }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="form-row">
-                <label for="frizer_id">Frizer</label>
-                <select name="frizer_id" id="frizer_id" required>
-                    <option value="" disabled selected>-izberi frizerja-</option>
-                    {% for f in frizerji %}
-                        <option value="{{ f[0] }}">{{ f[2] }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
+            {# ── Salon ── #}
             <div class="form-row">
                 <label for="salon_id">Salon</label>
-                <select name="salon_id" id="salon_id" required>
-                    <option value="" disabled selected>-izberi salon-</option>
+                <select name="salon_id" id="salon_id" required
+                        {% if pre and pre.salon_id %}class="prefilled"{% endif %}>
+                    <option value="" disabled {% if not pre or not pre.salon_id %}selected{% endif %}>-izberi salon-</option>
                     {% for s in saloni %}
-                        <option value="{{ s[0] }}">{{ s[1] }}</option>
+                        <option value="{{ s[0] }}"
+                            {% if pre and pre.salon_id and pre.salon_id == s[0] %}selected{% endif %}>
+                            {{ s[1] }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
 
+            {# ── Frizer ── #}
+            <div class="form-row">
+                <label for="frizer_id">Frizer</label>
+                <select name="frizer_id" id="frizer_id" required
+                        {% if pre and pre.frizer_id %}class="prefilled"{% endif %}>
+                    <option value="" disabled {% if not pre or not pre.frizer_id %}selected{% endif %}>-izberi frizerja-</option>
+                    {% for f in frizerji %}
+                        <option value="{{ f[0] }}"
+                            {% if pre and pre.frizer_id and pre.frizer_id == f[0] %}selected{% endif %}>
+                            {{ f[2] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {# ── Storitev (filtrirana po salonu) ── #}
             <div class="form-row">
                 <label for="storitev_id">Storitev</label>
                 <select name="storitev_id" id="storitev_id" required>
@@ -271,6 +319,22 @@
             </div>
 
             <div class="line"></div>
+
+            {# ── Datum ── #}
+            <div class="form-row">
+                <label for="datum">Datum</label>
+                <input type="date" name="datum" id="datum" required
+                       value="{{ pre.datum if pre and pre.datum else '' }}"
+                       {% if pre and pre.datum %}class="prefilled"{% endif %}>
+            </div>
+
+            {# ── Ura ── #}
+            <div class="form-row">
+                <label for="ura">Ura</label>
+                <input type="time" name="ura" id="ura" required
+                       value="{{ pre.ura if pre and pre.ura else '' }}"
+                       {% if pre and pre.ura %}class="prefilled"{% endif %}>
+            </div>
 
             <div class="check-row">
                 <span class="check-box"></span>
