@@ -45,7 +45,7 @@ def register():
         username = request.form['username'].strip()
         password = request.form['password']
         password_confirm = request.form.get('password_confirm', '')
-        vloga    = request.form.get('vloga', 'stranka')
+        vloga    = 'stranka'  # default role;
         ime      = request.form.get('ime', '').strip()
         priimek  = request.form.get('priimek', '').strip()
         mail     = request.form.get('mail', '').strip()
@@ -68,10 +68,6 @@ def register():
             flash("Priimek je obvezen za stranke.", "error")
             return render_template('register.html')
 
-        if vloga not in ('stranka', 'frizer'):
-            flash("Neveljavna vloga.", "error")
-            return render_template('register.html')
-
         db_session = db.get_session()
         try:
             # Check username is unique
@@ -90,22 +86,14 @@ def register():
                 vloga=vloga
             )
             db_session.add(novi_user)
-            db_session.flush()  # populates novi_user.id before commit
+            db_session.flush() 
 
-            # Create linked stranka or frizer row
             if vloga == 'stranka':
                 db_session.add(Stranka(
                     ime=ime or None,
                     priimek=priimek,
                     mail=mail or None,
                     telefon=telefon or None,
-                    user_id=novi_user.id
-                ))
-            elif vloga == 'frizer':
-                full_name = f"{ime} {priimek}".strip() or username
-                db_session.add(Frizer(
-                    ime=full_name,
-                    kontakt=mail or telefon or None,
                     user_id=novi_user.id
                 ))
 

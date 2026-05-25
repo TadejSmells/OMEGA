@@ -63,14 +63,6 @@
                 <input type="tel" id="telefon" name="telefon">
             </div>
 
-            <div class="polje">
-                <label for="vloga">Vrsta računa *</label>
-                <select id="vloga" name="vloga" onchange="onVlogaChange(this.value)">
-                    <option value="stranka">Stranka</option>
-                    <option value="frizer">Frizer</option>
-                </select>
-            </div>
-
             <div class="submit-wrap">
                 <button type="submit" class="gumb">Registriraj se</button>
             </div>
@@ -81,18 +73,6 @@
 </div>
 
 <script>
-    function onVlogaChange(vloga) {
-        const label = document.getElementById('priimek_required_label');
-        const priimekInput = document.getElementById('priimek');
-        if (vloga === 'stranka') {
-            label.textContent = '*';
-            priimekInput.required = true;
-        } else {
-            label.textContent = '';
-            priimekInput.required = false;
-        }
-    }
-    onVlogaChange(document.getElementById('vloga').value);
 
     function toggleGeslo(inputId, btn) {
         const input = document.getElementById(inputId);
