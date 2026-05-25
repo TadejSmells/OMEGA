@@ -20,11 +20,6 @@
             <div style="font-size:12px; color:#A75F37;">Cena se lahko spremeni glede na odpovedane termine</div>
         </div>
         <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Prosti termini danes</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.prosti_termini if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">med vsemi frizerji</div>
-        </div>
-        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
             <div style="font-size:12px; font-weight:700;">Registrirane stranke</div>
             <div style="font-size:2rem; font-weight:700;">{{ stats.aktivne_stranke if stats else '—' }}</div>
             <div style="font-size:12px; color:#A75F37;">skupaj registriranih</div>
@@ -73,7 +68,7 @@
                 </table>
             </div>
             <div style="text-align:right; margin-top:10px;">
-                <a href="/vse_rezervacije" class="mini-btn">Vse rezervacije →</a>
+                <a href="/vse_rezervacije" class="mini-btn">Upravljanje rezervacij →</a>
             </div>
         </div>
 
@@ -89,8 +84,6 @@
                 <a href="/stranke_uredi" class="mini-btn">Urejanje strank</a>
                 <a href="/cenik" class="mini-btn">Cenik</a>
                 <a href="/urnik" class="mini-btn">Urnik</a>
-                <a href="/setup" class="mini-btn">Baza podatkov</a>
-                <a href="/polni_db" class="mini-btn">Naloži testne podatke</a>
             </div>
         </div>
 
@@ -98,9 +91,8 @@
 
     <div style="display:flex; gap:28px; flex-wrap:wrap;">
 
-        <!-- Zadnja aktivnost -->
         <div class="table-box" style="flex:1; min-width:280px;">
-            <h1>Zadnja aktivnost</h1>
+            <h1>Najnovejše rezervacije</h1>
             <div class="line"></div>
             {% if zadnja_aktivnost %}
             {% for z in zadnja_aktivnost %}

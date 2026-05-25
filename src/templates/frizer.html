@@ -14,20 +14,15 @@
             <div style="font-size:2rem; font-weight:700;">{{ stats.rezervacije_teden if stats else '—' }}</div>
             <div style="font-size:12px; color:#A75F37;">{{ stats.rezervacije_danes if stats else '0' }} rezervacij je danes</div>
         </div>
-        <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Prosti termini danes</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.prosti_termini if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">razpoložljivi</div>
-        </div>
+
         <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
             <div style="font-size:12px; font-weight:700;">Stranke ta teden</div>
             <div style="font-size:2rem; font-weight:700;">{{ stats.stranke_teden if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">unikatnih strank</div>
         </div>
         <div style="flex:1; min-width:160px; background:#fff; border-radius:10px; padding:16px 20px;">
-            <div style="font-size:12px; font-weight:700;">Opravljene storitve</div>
-            <div style="font-size:2rem; font-weight:700;">{{ stats.opravljene if stats else '—' }}</div>
-            <div style="font-size:12px; color:#A75F37;">ta mesec</div>
+            <div style="font-size:12px; font-weight:700;">Moje rezervacije</div>
+            <div style="font-size:2rem; font-weight:700;">{{ stats.vse_rezervacije if stats else '—' }}</div>
+            <div style="font-size:12px; color:#A75F37;">Vse rezervacije</div>
         </div>
     </div>
 

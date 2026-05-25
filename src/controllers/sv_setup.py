@@ -130,7 +130,7 @@ def frizer():
     danes_str = str(danes)
     zacetek_tedna = danes - timedelta(days=danes.weekday())
     konec_tedna = zacetek_tedna + timedelta(days=6)
-
+    vse_skupaj = len(vse)
     rezervacije = []
     for r in vse:
         try:
@@ -167,7 +167,7 @@ def frizer():
         "rezervacije_danes":  sum(1 for r in rezervacije if r["datum"] == danes_str),
         "prosti_termini":     "—",
         "stranke_teden":      len(set(r["stranka"] for r in rezervacije if r["stranka"] != "—")),
-        "opravljene":         sum(1 for r in vse if r[6] == "active"),
+        "vse_rezervacije":    vse_skupaj,
     }
 
     zadnja_aktivnost = []
