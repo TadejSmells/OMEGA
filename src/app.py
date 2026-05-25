@@ -63,7 +63,6 @@ def inject_global_notifications():
         try:
             vse = _mrs.get_preklicane_rezervacije_uporabnika(_session['user_id'])
             videne = _session.get('videne_preklicane', [])
-            # r[0] = id_rezervacije (confirmed from model_obvestilo_preklic.py)
             preklicane = [r for r in vse if r[0] not in videne]
         except Exception:
             preklicane = []
