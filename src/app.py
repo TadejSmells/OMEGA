@@ -167,7 +167,7 @@ def dodaj_salon():
 
 @f_app.get('/prosti_termini')
 def prosti_termini():
-    return controllers.sv_salon.prosti_termini()
+    return controllers.prosti_termini_controller.prosti_termini()
 
 @f_app.get('/priljubljeni_saloni')
 @login_required
