@@ -1,27 +1,32 @@
 {% extends "base.html" %}
-{% block title %}Seznam strank{% endblock %}
+{% block title %}Stranke{% endblock %}
 
 {% block content %}
 
-<div class="main-wrap">
-    <div class="panel">
-        <a href="/" class="back-btn">&#8617;</a>
-        <h1>STRANKE</h1>
-        <div class="line"></div>
+<div class="admin-page">
+    <a href="/" class="back-btn">&#8617;</a>
+
+    <div class="small-form-box">
+        <h1>Stranke</h1>
+        <div class="form-line"></div>
+
         <form method="POST" action="/stranke">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-row">
                 <label>Stranka</label>
                 <select name="stranka_id" required>
-                    <option value="" disabled selected>-izberi stranko-</option>
+                    <option value="" disabled selected>— izberi stranko —</option>
                     {% for s in stranke %}
                         <option value="{{ s[0] }}">{{ s[1] }} {{ s[2] }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="line"></div>
-            <label class="check-row"><input type="checkbox" required> Potrdi</label>
+            <div class="form-row" style="grid-template-columns:90px 1fr; margin-top:8px;">
+                <label></label>
+                <button type="submit" class="mini-btn">Potrdi</button>
+            </div>
         </form>
     </div>
 </div>
+
 {% endblock %}

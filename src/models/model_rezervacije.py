@@ -167,3 +167,30 @@ def preklic_rezervacije(id_rezervacije):
         raise
     finally:
         session.close()
+
+def get_rezervacije_za_frizerja(frizer_id):
+    session = db.get_session()
+    try:
+        rows = (
+            session.query(
+                Rezervacija.id_rezervacije,
+                (Stranka.ime + ' ' + Stranka.priimek).label('stranka'),
+                Frizer.ime.label('frizer'),
+                Salon.ime.label('salon'),
+                Storitev.ime_storitve.label('storitev'),
+                Rezervacija.datum,
+                Rezervacija.ura,
+                Storitev.cena.label('cena'),
+                Rezervacija.status,
+            )
+            .outerjoin(Stranka,  Rezervacija.id_stranke  == Stranka.id_stranke)
+            .outerjoin(Frizer,   Rezervacija.id_frizerja == Frizer.id_frizer)
+            .outerjoin(Salon,    Rezervacija.id_salona   == Salon.id)
+            .outerjoin(Storitev, Rezervacija.id_storitve == Storitev.id_storitve)
+            .filter(Rezervacija.id_frizerja == frizer_id)
+            .order_by(Rezervacija.datum.desc(), Rezervacija.ura.desc())
+            .all()
+        )
+        return rows
+    finally:
+        session.close()

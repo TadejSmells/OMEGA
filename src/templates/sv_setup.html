@@ -1,35 +1,44 @@
 {% extends "base.html" %}
-
 {% block title %}Nastavitev baze{% endblock %}
 
 {% block content %}
-<h1>Nastavitev podatkovne baze</h1>
-<p>Spodaj je seznam tabel, ki so bile preverjene ali ustvarjene v bazi po tvojem ER diagramu.</p>
 
-<table border="1" cellpadding="10" style="border-collapse: collapse;">
-    <thead>
-        <tr>
-            <th>Ime komponente / tabele</th>
-            <th>Status (Uspešno?)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for table, success in tables.items() %}
-        <tr>
-            <td>{{ table }}</td>
-            <td>
-                {% if success %}
-                <span style="color: green;">✔ Da</span>
-                {% else %}
-                <span style="color: red;">✘ Napaka</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="admin-page">
+    <a href="/admin" class="back-btn">&#8617;</a>
 
-<p style="margin-top: 20px;">
-    <a href="/salon">Pojdi na pregled salona</a>
-</p>
+    <div class="small-form-box">
+        <h1>Nastavitev baze</h1>
+        <div class="form-line"></div>
+
+        <div class="table-scroll">
+            <table class="simple-table">
+                <thead>
+                    <tr>
+                        <th>Tabela</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for table, success in tables.items() %}
+                    <tr>
+                        <td>{{ table }}</td>
+                        <td>
+                            {% if success %}
+                                <span style="color:#2E7D32; font-weight:700;">✔ OK</span>
+                            {% else %}
+                                <span style="color:#c0392b; font-weight:700;">✘ Napaka</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top:16px; text-align:center;">
+            <a href="/admin" class="mini-btn">← Nazaj na admin panel</a>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

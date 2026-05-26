@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Urejanje rezervacije{% endblock %}
+{% block title %}Uredi rezervacijo{% endblock %}
 
 {% block content %}
 
-<div class="uredi-page">
+<div class="admin-page">
     <a href="/rezervacije" class="back-btn">&#8617;</a>
 
-    <div class="panel">
+    <div class="small-form-box">
         <h1>Uredi rezervacijo</h1>
-        <div class="line"></div>
+        <div class="form-line"></div>
 
         <form method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -17,19 +17,21 @@
             {% endif %}
 
             <div class="form-row">
-                <label for="datum">Datum</label>
-                <input type="date" id="datum" name="datum" value="{% if rezervacija is defined %}{{ rezervacija[5] }}{% endif %}" required>
+                <label>Datum</label>
+                <input type="date" name="datum"
+                       value="{% if rezervacija is defined %}{{ rezervacija[5] }}{% endif %}" required>
             </div>
 
             <div class="form-row">
-                <label for="ura">Ura</label>
-                <input type="time" id="ura" name="ura" value="{% if rezervacija is defined %}{{ rezervacija[6] }}{% endif %}" required>
+                <label>Ura</label>
+                <input type="time" name="ura"
+                       value="{% if rezervacija is defined %}{{ rezervacija[6] }}{% endif %}" required>
             </div>
 
             <div class="form-row">
-                <label for="frizer_id">Frizer/ka</label>
-                <select name="frizer_id" id="frizer_id" required>
-                    <option value="">-izberi-</option>
+                <label>Frizer</label>
+                <select name="frizer_id" required>
+                    <option value="">— izberi —</option>
                     {% for f in frizerji %}
                         <option value="{{ f[0] }}" {% if rezervacija is defined and f[0] == rezervacija[2] %}selected{% endif %}>
                             {{ f[2] }}
@@ -39,9 +41,9 @@
             </div>
 
             <div class="form-row">
-                <label for="salon_id">Salon</label>
-                <select name="salon_id" id="salon_id">
-                    <option value="">-izberi-</option>
+                <label>Salon</label>
+                <select name="salon_id">
+                    <option value="">— izberi —</option>
                     {% for s in saloni %}
                         <option value="{{ s[0] }}" {% if rezervacija is defined and s[0] == rezervacija[3] %}selected{% endif %}>
                             {{ s[1] }}
@@ -51,9 +53,9 @@
             </div>
 
             <div class="form-row">
-                <label for="storitev_id">Storitve</label>
-                <select name="storitev_id" id="storitev_id">
-                    <option value="">-izberi-</option>
+                <label>Storitev</label>
+                <select name="storitev_id">
+                    <option value="">— izberi —</option>
                     {% for st in storitve %}
                         <option value="{{ st[0] }}" {% if rezervacija is defined and st[0] == rezervacija[4] %}selected{% endif %}>
                             {{ st[1] }}{% if st[2] %} ({{ st[2] }} €){% endif %}
@@ -62,10 +64,12 @@
                 </select>
             </div>
 
-            <div class="button-row">
-                <span class="check-box"></span>
-                <button type="submit" class="submit-btn">Shrani</button>
-                <a href="/rezervacije" class="cancel-link">Prekliči</a>
+            <div class="form-line" style="margin-top:12px;"></div>
+
+            <div class="form-row" style="grid-template-columns:90px 1fr 1fr;">
+                <label></label>
+                <button type="submit" class="mini-btn">Shrani</button>
+                <a href="/rezervacije" class="mini-btn" style="text-align:center;">Prekliči</a>
             </div>
         </form>
     </div>

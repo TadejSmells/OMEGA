@@ -126,28 +126,6 @@
             <div class="empty">Ni nedavne aktivnosti.</div>
             {% endif %}
         </div>
-
-        <div class="table-box" style="flex:1; min-width:280px;">
-            <h1>Sporočila strank</h1>
-            <div class="line"></div>
-            {% if sporocila %}
-            {% for s in sporocila %}
-            <div style="display:flex; gap:10px; margin-bottom:12px; font-size:13px;">
-                <div>
-                    <div><strong>{{ s.stranka or '—' }}</strong></div>
-                    <div style="font-size:12px;">{{ s.vsebina | truncate(60) if s.vsebina else '—' }}</div>
-                    <div style="font-size:11px; color:#A75F37;">{{ s.datum.strftime('%d.%m.%Y %H:%M') if s.datum else '' }}</div>
-                </div>
-            </div>
-            {% endfor %}
-            <div style="text-align:right; margin-top:10px;">
-                <a href="/sporocila" class="mini-btn">Vsa sporočila →</a>
-            </div>
-            {% else %}
-            <div class="empty">Ni novih sporočil.</div>
-            {% endif %}
-        </div>
-
     </div>
 
 </div>

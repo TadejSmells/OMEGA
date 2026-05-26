@@ -3,71 +3,72 @@
 
 {% block content %}
 
-<div class="main-wrap">
-    <div class="form-panel">
-        <div class="form-panel-header">
-            Rezervacija #{{ rezervacija[0] }}
-            <a href="/moje_rezervacije">← Nazaj</a>
-        </div>
-        <div class="form-panel-body">
-            <form method="POST" action="/moje_rezervacije/uredi/{{ rezervacija[0] }}">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="admin-page">
+    <a href="/moje" class="back-btn">&#8617;</a>
 
-                <div class="polje">
-                    <label>Datum</label>
-                    <input type="date" name="datum"
-                           value="{{ rezervacija[5] or '' }}" required>
-                </div>
+    <div class="small-form-box">
+        <h1>Rezervacija #{{ rezervacija[0] }}</h1>
+        <div class="form-line"></div>
 
-                <div class="polje">
-                    <label>Ura</label>
-                    <input type="time" name="ura"
-                           value="{{ rezervacija[6].strftime('%H:%M') if rezervacija[6] else '' }}" required>
-                </div>
+        <form method="POST" action="/moje/uredi/{{ rezervacija[0] }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="polje">
-                    <label>Frizer</label>
-                    <select name="frizer_id">
-                        <option value="">— brez frizerja —</option>
-                        {% for f in frizerji %}
-                        <option value="{{ f[0] }}" {% if f[0] == rezervacija[2] %}selected{% endif %}>
-                            {{ f[1] }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="form-row">
+                <label>Datum</label>
+                <input type="date" name="datum" value="{{ rezervacija[5] or '' }}" required>
+            </div>
 
-                <div class="polje">
-                    <label>Salon</label>
-                    <select name="salon_id">
-                        <option value="">— brez salona —</option>
-                        {% for s in saloni %}
-                        <option value="{{ s[0] }}" {% if s[0] == rezervacija[3] %}selected{% endif %}>
-                            {{ s[1] }} — {{ s[3] }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="form-row">
+                <label>Ura</label>
+                <input type="time" name="ura"
+                       value="{{ rezervacija[6].strftime('%H:%M') if rezervacija[6] else '' }}" required>
+            </div>
 
-                <div class="polje">
-                    <label>Storitev</label>
-                    <select name="storitev_id">
-                        <option value="">— brez storitve —</option>
-                        {% for st in storitve %}
-                        <option value="{{ st[0] }}" {% if st[0] == rezervacija[4] %}selected{% endif %}>
-                            {{ st[1] }} — {{ st[2] }} €
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
+            <div class="form-row">
+                <label>Frizer</label>
+                <select name="frizer_id">
+                    <option value="">— brez frizerja —</option>
+                    {% for f in frizerji %}
+                    <option value="{{ f[0] }}" {% if f[0] == rezervacija[2] %}selected{% endif %}>
+                        {{ f[1] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                <div class="divider"></div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-shrani">Shrani</button>
-                    <a href="/moje_rezervacije" class="btn-preklic">Prekliči</a>
-                </div>
-            </form>
-        </div>
+            <div class="form-row">
+                <label>Salon</label>
+                <select name="salon_id">
+                    <option value="">— brez salona —</option>
+                    {% for s in saloni %}
+                    <option value="{{ s[0] }}" {% if s[0] == rezervacija[3] %}selected{% endif %}>
+                        {{ s[1] }} — {{ s[3] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Storitev</label>
+                <select name="storitev_id">
+                    <option value="">— brez storitve —</option>
+                    {% for st in storitve %}
+                    <option value="{{ st[0] }}" {% if st[0] == rezervacija[4] %}selected{% endif %}>
+                        {{ st[1] }} — {{ st[2] }} €
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-line" style="margin-top:12px;"></div>
+
+            <div class="form-row" style="grid-template-columns:90px 1fr 1fr;">
+                <label></label>
+                <button type="submit" class="mini-btn">Shrani</button>
+                <a href="/moje" class="mini-btn" style="text-align:center;">Prekliči</a>
+            </div>
+        </form>
     </div>
 </div>
+
 {% endblock %}

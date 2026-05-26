@@ -3,68 +3,78 @@
 
 {% block content %}
 
-<div class="flash-wrap">
-    {% with messages = get_flashed_messages(with_categories=true) %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-area">
         {% for category, message in messages %}
         <div class="flash flash-{{ category }}">{{ message }}</div>
         {% endfor %}
-    {% endwith %}
-</div>
-
-<div class="main-wrap">
-    <h1>Moje rezervacije</h1>
-    <div class="line"></div>
-
-    {% if rezervacije %}
-    <table class="rez-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Datum</th>
-                <th>Ura</th>
-                <th>Frizer</th>
-                <th>Salon</th>
-                <th>Storitev</th>
-                <th>Cena</th>
-                <th>Status</th>
-                <th>Akcije</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for r in rezervacije %}
-            <tr>
-                <td class="text-muted">{{ r.id_rezervacije }}</td>
-                <td>{{ r.datum or '—' }}</td>
-                <td>{{ r.ura or '—' }}</td>
-                <td>{{ r.frizer or '—' }}</td>
-                <td>{{ r.salon or '—' }}</td>
-                <td>{{ r.storitev or '—' }}</td>
-                <td>{% if r.cena %}{{ r.cena }} €{% else %}—{% endif %}</td>
-                <td>
-                    {% if r.status == 'active' %}
-                        <span class="badge badge-active">Aktivna</span>
-                    {% else %}
-                        <span class="badge badge-cancelled">Preklicana</span>
-                    {% endif %}
-                </td>
-                <td style="display:flex; gap:6px; flex-wrap:wrap;">
-                    {% if r.status == 'active' %}
-                        <a href="/moje/uredi/{{ r.id_rezervacije }}" class="btn btn-uredi">Uredi</a>
-                        <form method="POST" action="/moje/preklic/{{ r.id_rezervacije }}"
-                              onsubmit="return confirm('Res želiš preklicati rezervacijo #{{ r.id_rezervacije }}?')" style="display:inline;">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-preklic">Prekliči</button>
-                        </form>
-                    {% else %}
-                        <span class="btn btn-disabled">Zaprto</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="empty">Nimate še nobene rezervacije.</div>
+    </div>
     {% endif %}
+{% endwith %}
+
+<div class="admin-page">
+    <a href="/" class="back-btn">&#8617;</a>
+
+    <div class="table-box" style="width:100%; padding-top:0;">
+        <h1>Moje rezervacije</h1>
+        <div class="line"></div>
+
+        {% if rezervacije %}
+        <div class="table-wrap" style="max-height:none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Datum</th>
+                        <th>Ura</th>
+                        <th>Frizer</th>
+                        <th>Salon</th>
+                        <th>Storitev</th>
+                        <th>Cena</th>
+                        <th>Status</th>
+                        <th>Akcije</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in rezervacije %}
+                    <tr>
+                        <td>{{ r.id_rezervacije }}</td>
+                        <td>{{ r.datum or '—' }}</td>
+                        <td>{{ r.ura or '—' }}</td>
+                        <td>{{ r.frizer or '—' }}</td>
+                        <td>{{ r.salon or '—' }}</td>
+                        <td>{{ r.storitev or '—' }}</td>
+                        <td>{% if r.cena %}{{ r.cena }} €{% else %}—{% endif %}</td>
+                        <td>
+                            {% if r.status == 'active' %}
+                                <span class="badge badge-active">Aktivna</span>
+                            {% else %}
+                                <span class="badge badge-cancelled">Preklicana</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if r.status == 'active' %}
+                                <a href="/moje/uredi/{{ r.id_rezervacije }}" class="mini-btn" style="padding:6px 14px; font-size:12px;">Uredi</a>
+                                <form method="POST" action="/moje/preklic/{{ r.id_rezervacije }}"
+                                      onsubmit="return confirm('Res želiš preklicati rezervacijo #{{ r.id_rezervacije }}?')"
+                                      style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="mini-btn" style="padding:6px 14px; font-size:12px; color:#c0392b; border-color:#c0392b;">Prekliči</button>
+                                </form>
+                            {% else %}
+                                <span style="font-size:12px; color:#aaa;">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty">Nimate še nobene rezervacije.</div>
+        {% endif %}
+    </div>
 </div>
+
 {% endblock %}

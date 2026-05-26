@@ -182,6 +182,11 @@ main {
     top: 18px;
     right: 34px;
 }
+.zgodovina-page .back-btn {   /* ← add this line */
+    position: absolute;
+    top: 18px;
+    right: 34px;
+}
 
 /* ── FLASH MESSAGES ─────────────────────────────────────────── */
 .flash,
@@ -1867,4 +1872,255 @@ main {
 @media (max-width: 1000px) {
     .saloni-page .card { flex-basis: 100%; min-height: 340px; }
     .filter-panel { left: 32px; }
+}
+
+/* ── STORITEV DETAIL ────────────────────────────────────────── */
+.storitev-info {
+    background: var(--white);
+    border: 1px solid var(--peach);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-vrstica {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    font-size: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--peach);
+}
+
+.info-vrstica:last-child { border-bottom: none; padding-bottom: 0; }
+
+.info-vrstica .oznaka {
+    min-width: 130px;
+    margin: 0;
+}
+
+.komentarji-naslov {
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin: 8px 0 16px;
+}
+
+/* ── KOMENTAR aliases (template uses -glava/-zvezde) ────────── */
+.komentar-glava {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.komentar-zvezde {
+    color: var(--brown);
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+/* ── SALON DETAIL PAGE ──────────────────────────────────────── */
+.salon-page {
+    flex: 1;
+    background: var(--light);
+    padding: 28px 44px 40px;
+    position: relative;
+}
+
+.back-wrap {
+    margin-bottom: 12px;
+}
+
+.salon-levo {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.salon-slika {
+    width: 220px;
+    height: 220px;
+    border-radius: 14px;
+    background: #D9D9D9;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.salon-slika img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.salon-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.salon-info h2 {
+    font-family: var(--font-head);
+    font-size: 1.6rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-icon {
+    font-size: 16px;
+    color: var(--rose);
+    text-decoration: none;
+}
+
+.edit-icon:hover { color: var(--brown); }
+
+.opis-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #5c5550;
+    margin-top: 6px;
+    max-width: 560px;
+}
+
+/* ── KOMENTAR FORM (salon-page inline) ──────────────────────── */
+.komentar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.zvezdice-input {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2px;
+    width: fit-content;
+}
+
+.zvezdice-input input[type="radio"] { display: none; }
+
+.zvezdice-input label {
+    font-size: 26px;
+    color: var(--peach);
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.zvezdice-input input:checked ~ label,
+.zvezdice-input label:hover,
+.zvezdice-input label:hover ~ label {
+    color: var(--brown);
+}
+
+.komentar-form textarea {
+    width: 100%;
+    max-width: 420px;
+    height: 80px;
+    border: 1px solid var(--beige);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    resize: vertical;
+    outline: none;
+}
+
+.komentar-form textarea:focus { border-color: var(--brown); }
+
+.gumb-komentar {
+    align-self: flex-start;
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 24px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.gumb-komentar:hover { background: var(--rose); }
+
+/* ── RATINGS / REVIEWS (right column) ──────────────────────── */
+.salon-desno {
+    width: 340px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ratings-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--brown);
+    padding-bottom: 8px;
+}
+
+.ratings-header h3 {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+    color: var(--dark);
+}
+
+.ratings-score {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brown);
+}
+
+.review-card {
+    display: flex;
+    gap: 12px;
+    background: var(--white);
+    border: 1px solid var(--peach);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.review-avatar {
+    font-size: 28px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.review-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.review-username { font-weight: 700; font-size: 14px; color: var(--dark); }
+.review-date     { font-size: 11px; color: var(--rose); }
+.review-stars    { color: var(--brown); font-size: 15px; }
+.review-text     { font-size: 13px; color: #7A958F; line-height: 1.5; margin-top: 4px; }
+
+.zgodovina-page .table-box {
+    width: 100%;
+    max-width: 1000px;
+    padding: 24px 0;
+}
+
+.zgodovina-page .table-wrap {
+    max-height: 520px;
+}
+
+.form-row:last-of-type {
+    grid-template-columns: 90px 1fr auto;
+}
+
+.form-row .mini-btn {
+    justify-self: start;
+    grid-column: 2;
 }

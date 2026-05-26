@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Rezervacije{% endblock %}
+{% block title %}Nova rezervacija{% endblock %}
 
 {% block content %}
 
-<div class="rezervacije-page">
-    <div class="rezervacije-panel">
-        <div class="profil-ikona">&#128197;</div>
+<div class="admin-page">
+    <a href="/" class="back-btn">&#8617;</a>
 
-        <h2>Nova rezervacija</h2>
+    <div class="small-form-box">
+        <h1>Nova rezervacija</h1>
+        <div class="form-line"></div>
 
-        <form method="POST" action="/rezervacije" class="obrazec">
+        <form method="POST" action="/rezervacije">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-            <div class="polje">
-                <label for="stranka_id">Stranka</label>
-                <select name="stranka_id" id="stranka_id" required>
+            <div class="form-row">
+                <label>Stranka</label>
+                <select name="stranka_id" required>
                     {% if stranke|length > 1 %}
                         <option value="" disabled selected>— izberi stranko —</option>
                     {% endif %}
-                    
                     {% for stranka in stranke %}
                         <option value="{{ stranka[0] }}" {% if stranke|length == 1 %}selected{% endif %}>
                             {{ stranka[1] }} {{ stranka[2] }}
@@ -27,9 +27,9 @@
                 </select>
             </div>
 
-            <div class="polje">
-                <label for="frizer_id">Frizer</label>
-                <select name="frizer_id" id="frizer_id" required>
+            <div class="form-row">
+                <label>Frizer</label>
+                <select name="frizer_id" required>
                     <option value="" disabled selected>— izberi frizerja —</option>
                     {% for frizer in frizerji %}
                         <option value="{{ frizer[0] }}">{{ frizer[2] }}</option>
@@ -37,9 +37,9 @@
                 </select>
             </div>
 
-            <div class="polje">
-                <label for="salon_id">Salon</label>
-                <select name="salon_id" id="salon_id">
+            <div class="form-row">
+                <label>Salon</label>
+                <select name="salon_id">
                     <option value="">— brez salona —</option>
                     {% for salon in saloni %}
                         <option value="{{ salon[0] }}">{{ salon[1] }}</option>
@@ -47,32 +47,33 @@
                 </select>
             </div>
 
-            <div class="polje">
-                <label for="storitev_id">Storitev</label>
-                <select name="storitev_id" id="storitev_id">
+            <div class="form-row">
+                <label>Storitev</label>
+                <select name="storitev_id">
                     <option value="">— brez storitve —</option>
                     {% for storitev in storitve %}
                         <option value="{{ storitev[0] }}">
-                            {{ storitev[1] }} — {{ storitev[2] }} € ({{ storitev[3] }} min)
+                            {{ storitev[1] }} — {{ storitev[2] }} €
                         </option>
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="datum-ura">
-                <div class="polje">
-                    <label for="datum">Datum</label>
-                    <input type="date" id="datum" name="datum" required>
-                </div>
+            <div class="form-line" style="margin-top:12px;"></div>
 
-                <div class="polje">
-                    <label for="ura">Ura</label>
-                    <input type="time" id="ura" name="ura" required>
-                </div>
+            <div class="form-row">
+                <label>Datum</label>
+                <input type="date" name="datum" required>
             </div>
 
-            <div class="submit-wrap">
-                <button type="submit" class="gumb">＋ Dodaj rezervacijo</button>
+            <div class="form-row">
+                <label>Ura</label>
+                <input type="time" name="ura" required>
+            </div>
+
+            <div class="form-row" style="grid-template-columns:90px 1fr; margin-top:10px;">
+                <label></label>
+                <button type="submit" class="mini-btn">＋ Dodaj rezervacijo</button>
             </div>
         </form>
     </div>

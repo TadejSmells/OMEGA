@@ -1,40 +1,46 @@
 {% extends "base.html" %}
+{% block title %}Moje rezervacije{% endblock %}
+
 {% block content %}
 
-<h2>Moje rezervacije</h2>
+<div class="admin-page">
+    <a href="/" class="back-btn">&#8617;</a>
 
-{% if rezervacije %}
+    <div class="table-box" style="width:100%; padding-top:0;">
+        <h1>Moje rezervacije</h1>
+        <div class="line"></div>
 
-<table border="1" cellpadding="6">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Frizer</th>
-            <th>Salon</th>
-            <th>Storitev</th>
-            <th>Cena</th>
-            <th>Trajanje</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for r in rezervacije %}
-        <tr>
-            <td>{{ r.id_rezervacije }}</td>
-            <td>{{ r.frizer }}</td>
-            <td>{{ r.salon }}</td>
-            <td>{{ r.storitev }}</td>
-            <td>{{ r.cena }}</td>
-            <td>{{ r.trajanje }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% else %}
-
-<p>Nimate nobenih rezervacij.</p>
-
-{% endif %}
+        {% if rezervacije %}
+        <div class="table-wrap" style="max-height:none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Frizer</th>
+                        <th>Salon</th>
+                        <th>Storitev</th>
+                        <th>Cena</th>
+                        <th>Trajanje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in rezervacije %}
+                    <tr>
+                        <td>{{ r.id_rezervacije }}</td>
+                        <td>{{ r.frizer or '—' }}</td>
+                        <td>{{ r.salon or '—' }}</td>
+                        <td>{{ r.storitev or '—' }}</td>
+                        <td>{{ r.cena or '—' }}</td>
+                        <td>{{ r.trajanje or '—' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty">Nimate nobenih rezervacij.</div>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock %}

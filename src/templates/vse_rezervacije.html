@@ -3,90 +3,107 @@
 
 {% block content %}
 
-<div class="rezervacije-page">
-    <a href="/rezervacije" class="back-btn">&#8617;</a>
+<div class="admin-page">
+    <a href="/admin" class="back-btn">&#8617;</a>
 
-    <div class="summary-row">
-        <div class="summary-card">
-            <div class="label">Skupaj</div>
-            <div class="value">{{ skupaj if skupaj is defined else rezervacije|length }}</div>
+    <div style="display:flex; gap:16px; margin-bottom:22px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:150px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div
+                style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#CA8E82;">
+                Skupaj</div>
+            <div style="font-family:Georgia,serif; font-size:2rem; font-weight:700;">{{ skupaj if skupaj is defined else
+                rezervacije|length }}</div>
         </div>
-
-        <div class="summary-card">
-            <div class="label">Aktivnih</div>
-            <div class="value">{{ aktivnih if aktivnih is defined else '—' }}</div>
+        <div style="flex:1; min-width:150px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div
+                style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#CA8E82;">
+                Aktivnih</div>
+            <div style="font-family:Georgia,serif; font-size:2rem; font-weight:700;">{{ aktivnih if aktivnih is defined
+                else '—' }}</div>
         </div>
-
-        <div class="summary-card">
-            <div class="label">Preklicanih</div>
-            <div class="value">{{ preklicanih if preklicanih is defined else '—' }}</div>
+        <div style="flex:1; min-width:150px; background:#fff; border-radius:10px; padding:16px 20px;">
+            <div
+                style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#CA8E82;">
+                Preklicanih</div>
+            <div style="font-family:Georgia,serif; font-size:2rem; font-weight:700;">{{ preklicanih if preklicanih is
+                defined else '—' }}</div>
         </div>
     </div>
 
-    <div class="table-box">
-        <h2>Seznam rezervacij</h2>
+    <div class="table-box" style="width:100%; padding-top:0;">
+        <h1>Seznam rezervacij</h1>
         <div class="line"></div>
 
         {% if rezervacije %}
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Stranka</th>
-                            <th>Frizer</th>
-                            <th>Salon</th>
-                            <th>Storitev</th>
-                            <th>Cena</th>
-                            <th>Datum</th>
-                            <th>Ura</th>
-                            <th>Status</th>
-                            <th>Možnosti</th>
-                        </tr>
-                    </thead>
+        <div class="table-wrap" style="max-height:none; overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Stranka</th>
+                        <th>Frizer</th>
+                        <th>Salon</th>
+                        <th>Storitev</th>
+                        <th>Cena</th>
+                        <th>Datum</th>
+                        <th>Ura</th>
+                        <th>Status</th>
+                        <th>Možnosti</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in rezervacije %}
+                    <tr>
+                        <td>{{ r[0] }}</td>
+                        <td>{{ r[1] or '—' }}</td>
+                        <td>{{ r[2] or '—' }}</td>
+                        <td>{{ r[3] or '—' }}</td>
+                        <td>{{ r[4] or '—' }}</td>
+                        <td>{% if r[7] %}{{ "%.2f"|format(r[7]|float) }} €{% else %}—{% endif %}</td>
+                        <td>{{ r[5] or '—' }}</td>
+                        <td>{{ r[6] or '—' }}</td>
+                        <td>
+                            {% if r[8] == 'cancelled' %}
+                            <span class="badge badge-cancelled">Preklicana</span>
+                            {% elif r[8] == 'active' %}
+                            <span class="badge badge-active">Aktivna</span>
+                            {% else %}
+                            <span>{{ r[8] or '—' }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="white-space:nowrap;">
+                            {% if not je_frizer %}
+                            <a href="/rezervacije/uredi/{{ r[0] }}" class="mini-btn"
+                                style="padding:5px 12px; font-size:11px;">Uredi</a>
+                            {% endif %}
 
-                    <tbody>
-                        {% for r in rezervacije %}
-                            <tr>
-                                <td class="muted">{{ r[0] }}</td>
-                                <td>{{ r[1] or '—' }}</td>
-                                <td>{{ r[2] or '—' }}</td>
-                                <td>{{ r[3] or '—' }}</td>
-                                <td>{{ r[4] or '—' }}</td>
-                                <td>{% if r[7] %}{{ "%.2f"|format(r[7]|float) }} €{% else %}—{% endif %}</td>
-                                <td>{{ r[5] or '—' }}</td>
-                                <td>{{ r[6] or '—' }}</td>
-                                <td>
-                                    {% if r[8] == 'cancelled' %}
-                                        <span class="status cancelled">Preklicana</span>
-                                    {% elif r[8] == 'active' %}
-                                        <span class="status active">Aktivna</span>
-                                    {% else %}
-                                        <span class="status">{{ r[8] or '—' }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="/rezervacije/uredi/{{ r[0] }}" class="btn-link">Uredi</a>
+                            {% if r[8] != 'cancelled' %}
+                            <form method="POST" action="/rezervacije/preklic/{{ r[0] }}?path=/vse_rezervacije"
+                                style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="mini-btn"
+                                    style="padding:5px 12px; font-size:11px; color:#A75F37;"
+                                    onclick="return confirm('Prekliči rezervacijo #{{ r[0] }}?')">Prekliči</button>
+                            </form>
+                            {% endif %}
 
-                                    {% if r[8] != 'cancelled' %}
-                                        <form method="POST" action="/rezervacije/preklic/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
-                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                            <button type="submit" class="btn-action" onclick="return confirm('Preklic?')">Prekliči</button>
-                                        </form>
-                                    {% endif %}
-
-                                    <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}?path=/vse_rezervacije" style="display:inline;">
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                        <button type="submit" class="btn-action delete" onclick="return confirm('Izbris?')">Izbriši</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                            {% if not je_frizer %}
+                            <form method="POST" action="/rezervacije/izbrisi/{{ r[0] }}?path=/vse_rezervacije"
+                                style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="mini-btn"
+                                    style="padding:5px 12px; font-size:11px; color:#c0392b; border-color:#c0392b;"
+                                    onclick="return confirm('Izbriši rezervacijo #{{ r[0] }}?')">Izbriši</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-            <div class="empty">Ni še nobene rezervacije.</div>
+        <div class="empty">Ni še nobene rezervacije.</div>
         {% endif %}
     </div>
 </div>
